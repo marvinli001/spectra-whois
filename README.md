@@ -90,15 +90,32 @@ For production deployments, set these in your hosting platform's environment var
 
 ## 🏗️ Architecture
 
-### RDAP Integration
+### Dual Query System: RDAP + WHOIS Fallback
 
-The application uses RDAP (RFC 7483) instead of traditional WHOIS for several advantages:
+The application implements a robust dual-query system:
 
+#### Primary: RDAP Protocol (RFC 7483)
 - **Modern Protocol**: RDAP is the successor to WHOIS, designed for the modern internet
 - **Structured Data**: Returns JSON instead of plain text
 - **HTTP/HTTPS**: Works over standard web protocols, perfect for edge computing
-- **Global Coverage**: IANA bootstrap registry covers all TLDs
+- **Global Coverage**: IANA bootstrap registry covers most TLDs
 - **Privacy Compliant**: Built-in privacy protections and rate limiting
+
+#### Fallback: Traditional WHOIS via Cloudflare Workers
+- **Complete Coverage**: Handles domains/TLDs not supported by RDAP
+- **TCP Proxy**: Cloudflare Workers handle port 43 connections
+- **Vercel Compatibility**: Bypasses Vercel's function limitations (timeout, IP restrictions)
+- **Legacy Support**: Supports older TLDs and regional registries
+- **Structured Parsing**: Converts WHOIS text to structured JSON format
+
+#### Query Flow
+```
+Domain Query → RDAP Query → Success ✅
+                     ↓
+                   Failed → Traditional WHOIS → Success ✅
+                                            ↓
+                                          Error ❌
+```
 
 ### Tech Stack
 

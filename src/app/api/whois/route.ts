@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { queryRdap, parseRdapResponse } from '@/services/rdap'
 import { isValidDomain, normalizeDomain } from '@/lib/domain-utils'
 import { WhoisError } from '@/types/rdap'
+import { queryTraditionalWhois, convertWhoisToRdap, needsTraditionalWhois } from '@/services/whois/traditional'
 
 export const runtime = 'nodejs'
 
@@ -28,9 +29,41 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(error, { status: 400 })
     }
 
-    // Query RDAP
-    const rdapResponse = await queryRdap(normalizedDomain)
-    const whoisResult = parseRdapResponse(rdapResponse)
+    let whoisResult
+    let source = 'rdap'
+
+    try {
+      // Try RDAP first (unless domain is known to need traditional WHOIS)
+      if (!needsTraditionalWhois(normalizedDomain)) {
+        const rdapResponse = await queryRdap(normalizedDomain)
+        whoisResult = parseRdapResponse(rdapResponse)
+      } else {
+        throw new Error('Domain requires traditional WHOIS lookup')
+      }
+    } catch (rdapError) {
+      console.log(`RDAP failed for ${normalizedDomain}, trying traditional WHOIS:`, rdapError)
+
+      // Fallback to traditional WHOIS
+      try {
+        const whoisResponse = await queryTraditionalWhois(normalizedDomain)
+
+        if (whoisResponse.success) {
+          whoisResult = convertWhoisToRdap(whoisResponse)
+          source = 'whois'
+        } else {
+          throw new Error(whoisResponse.error || 'Traditional WHOIS query failed')
+        }
+      } catch (whoisError) {
+        console.error(`Both RDAP and WHOIS failed for ${normalizedDomain}:`, whoisError)
+        // Re-throw the original RDAP error if both methods fail
+        throw rdapError
+      }
+    }
+
+    // Add source information to result
+    if (whoisResult) {
+      whoisResult.source = source
+    }
 
     // Set cache headers
     const headers = new Headers()
@@ -61,13 +94,13 @@ export async function GET(request: NextRequest) {
       if (error.message.includes('TLD')) {
         whoisError = {
           code: 'TLD_NOT_SUPPORTED',
-          message: 'TLD not supported or not found in RDAP bootstrap registry'
+          message: 'TLD not supported by RDAP or traditional WHOIS'
         }
         return NextResponse.json(whoisError, { status: 400 })
       }
 
       whoisError = {
-        code: 'RDAP_ERROR',
+        code: 'QUERY_ERROR',
         message: error.message,
         details: process.env.NODE_ENV === 'development' ? error.stack : undefined
       }

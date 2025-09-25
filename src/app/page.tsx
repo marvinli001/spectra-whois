@@ -258,6 +258,7 @@ export default function Home() {
                         {error.code === 'INVALID_DOMAIN' && t.errors.domainNotFound}
                         {error.code === 'TLD_NOT_SUPPORTED' && t.errors.tldNotSupported}
                         {error.code === 'RDAP_ERROR' && t.errors.rdapError}
+                        {error.code === 'QUERY_ERROR' && t.errors.queryError}
                         {error.code === 'RATE_LIMITED' && t.errors.rateLimited}
                         {error.code === 'NETWORK_ERROR' && t.errors.networkError}
                       </h3>
