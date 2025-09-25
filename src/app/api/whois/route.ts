@@ -3,7 +3,7 @@ import { queryRdap, parseRdapResponse } from '@/services/rdap'
 import { isValidDomain, normalizeDomain } from '@/lib/domain-utils'
 import { WhoisError } from '@/types/rdap'
 
-export const runtime = 'edge'
+export const runtime = 'nodejs'
 
 export async function GET(request: NextRequest) {
   try {
