@@ -7,15 +7,12 @@ import { LiquidGlass, LiquidCard } from '@/components/ui/liquid-glass'
 import { SearchForm } from '@/components/whois/search-form'
 import { ResultDisplay } from '@/components/whois/result-display'
 import { WhoisResult, WhoisError } from '@/types/rdap'
-import { useLanguage } from '@/contexts/language-context'
-import { LanguageSwitcher } from '@/components/ui/language-switcher'
 
 export default function Home() {
   const [result, setResult] = useState<WhoisResult | null>(null)
   const [error, setError] = useState<WhoisError | null>(null)
   const [loading, setLoading] = useState(false)
   const [hasSearched, setHasSearched] = useState(false)
-  const { t } = useLanguage()
 
   const handleSearch = async (domain: string) => {
     setHasSearched(true)
@@ -35,7 +32,7 @@ export default function Home() {
     } catch {
       setError({
         code: 'NETWORK_ERROR',
-        message: t.errors.failedToConnect
+        message: 'Failed to connect to the service. Please try again.'
       })
     } finally {
       setLoading(false)
@@ -51,8 +48,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      {/* Language Switcher */}
-      <LanguageSwitcher />
       {/* Background Effects */}
       <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900" />
       <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
@@ -94,7 +89,7 @@ export default function Home() {
         <AnimatePresence>
           {!hasSearched && (
             <motion.div
-              className="fixed inset-0 flex items-center justify-center p-4"
+              className="fixed inset-0 flex items-center justify-center"
               initial={{ opacity: 1, y: 0 }}
               exit={{
                 opacity: 0,
@@ -102,8 +97,8 @@ export default function Home() {
                 transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] }
               }}
             >
-              <div className="max-w-3xl w-full mx-auto">
-                <LiquidGlass className="p-6 md:p-8 lg:p-12 text-center" blur="lg" opacity={0.12}>
+              <div className="max-w-3xl w-full mx-auto px-6">
+                <LiquidGlass className="p-8 md:p-12 text-center" blur="lg" opacity={0.12}>
                   {/* Logo and Title */}
                   <motion.div
                     className="mb-8 md:mb-10"
@@ -111,16 +106,16 @@ export default function Home() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                   >
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-6">
-                      <div className="p-3 md:p-4 rounded-2xl bg-gradient-to-br from-blue-500/30 to-purple-600/30 border border-white/30 shadow-xl backdrop-blur-sm">
-                        <Globe className="w-8 sm:w-10 md:w-12 h-8 sm:h-10 md:h-12 text-white" />
+                    <div className="flex items-center justify-center gap-4 mb-6">
+                      <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-500/30 to-purple-600/30 border border-white/30 shadow-xl backdrop-blur-sm">
+                        <Globe className="w-12 h-12 text-white" />
                       </div>
-                      <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent text-center">
-                        {t.title}
+                      <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent text-center">
+                        SpectraWHOIS
                       </h1>
                     </div>
-                    <p className="text-base sm:text-lg md:text-xl text-white/70 max-w-xl mx-auto leading-relaxed text-center px-2">
-                      {t.subtitle}
+                    <p className="text-xl text-white/70 max-w-xl mx-auto leading-relaxed text-center">
+                      Modern domain lookup powered by RDAP with support for all global TLDs and internationalized domain names
                     </p>
                   </motion.div>
 
@@ -133,40 +128,40 @@ export default function Home() {
                     <SearchForm onSearch={handleSearch} loading={loading} />
                   </motion.div>
 
-                  {/* Features - Hidden on mobile */}
+                  {/* Features */}
                   <motion.div
-                    className="hidden sm:grid grid-cols-3 gap-3 md:gap-4 mt-8 md:mt-10"
+                    className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-10"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                   >
-                    <LiquidCard className="text-center" padding="sm" hover={true}>
-                      <div className="w-10 sm:w-12 h-10 sm:h-12 mx-auto mb-3 sm:mb-4 p-2 sm:p-2.5 rounded-xl bg-gradient-to-br from-blue-500/30 to-blue-600/30 border border-white/30 shadow-lg">
+                    <LiquidCard className="text-center" padding="md" hover={true}>
+                      <div className="w-12 h-12 mx-auto mb-4 p-2.5 rounded-xl bg-gradient-to-br from-blue-500/30 to-blue-600/30 border border-white/30 shadow-lg">
                         <Zap className="w-full h-full text-blue-200" />
                       </div>
-                      <h3 className="text-xs sm:text-sm font-bold text-white mb-2">{t.features.fastTitle}</h3>
+                      <h3 className="text-sm font-bold text-white mb-2">Lightning Fast</h3>
                       <p className="text-white/70 text-xs leading-relaxed">
-                        {t.features.fastDesc}
+                        Edge-cached RDAP queries with global CDN distribution for instant results
                       </p>
                     </LiquidCard>
 
-                    <LiquidCard className="text-center" padding="sm" hover={true}>
-                      <div className="w-10 sm:w-12 h-10 sm:h-12 mx-auto mb-3 sm:mb-4 p-2 sm:p-2.5 rounded-xl bg-gradient-to-br from-green-500/30 to-green-600/30 border border-white/30 shadow-lg">
+                    <LiquidCard className="text-center" padding="md" hover={true}>
+                      <div className="w-12 h-12 mx-auto mb-4 p-2.5 rounded-xl bg-gradient-to-br from-green-500/30 to-green-600/30 border border-white/30 shadow-lg">
                         <Globe className="w-full h-full text-green-200" />
                       </div>
-                      <h3 className="text-xs sm:text-sm font-bold text-white mb-2">{t.features.globalTitle}</h3>
+                      <h3 className="text-sm font-bold text-white mb-2">Global Coverage</h3>
                       <p className="text-white/70 text-xs leading-relaxed">
-                        {t.features.globalDesc}
+                        Supports all TLDs via IANA bootstrap registry with full IDN conversion
                       </p>
                     </LiquidCard>
 
-                    <LiquidCard className="text-center" padding="sm" hover={true}>
-                      <div className="w-10 sm:w-12 h-10 sm:h-12 mx-auto mb-3 sm:mb-4 p-2 sm:p-2.5 rounded-xl bg-gradient-to-br from-purple-500/30 to-purple-600/30 border border-white/30 shadow-lg">
+                    <LiquidCard className="text-center" padding="md" hover={true}>
+                      <div className="w-12 h-12 mx-auto mb-4 p-2.5 rounded-xl bg-gradient-to-br from-purple-500/30 to-purple-600/30 border border-white/30 shadow-lg">
                         <Shield className="w-full h-full text-purple-200" />
                       </div>
-                      <h3 className="text-xs sm:text-sm font-bold text-white mb-2">{t.features.privacyTitle}</h3>
+                      <h3 className="text-sm font-bold text-white mb-2">Privacy First</h3>
                       <p className="text-white/70 text-xs leading-relaxed">
-                        {t.features.privacyDesc}
+                        RDAP compliant with modern privacy standards and structured data
                       </p>
                     </LiquidCard>
                   </motion.div>
@@ -180,7 +175,7 @@ export default function Home() {
         <AnimatePresence>
           {hasSearched && (
             <motion.div
-              className="fixed top-1 sm:top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-4xl px-2 sm:px-4"
+              className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-4xl px-4"
               initial={{ opacity: 0, y: -50, scale: 0.95 }}
               animate={{
                 opacity: 1,
@@ -190,20 +185,20 @@ export default function Home() {
               }}
               exit={{ opacity: 0, y: -50, scale: 0.95 }}
             >
-              <LiquidGlass className="p-2 sm:p-4 md:p-6" blur="xl" opacity={0.15}>
-                <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-2 sm:gap-4 md:gap-6">
+              <LiquidGlass className="p-4 md:p-6" blur="xl" opacity={0.15}>
+                <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-4 sm:gap-6">
                   <button
                     onClick={handleNewSearch}
-                    className="flex items-center gap-1.5 sm:gap-3 text-white/90 hover:text-white transition-all duration-300 hover:scale-105 shrink-0"
+                    className="flex items-center gap-3 text-white/90 hover:text-white transition-all duration-300 hover:scale-105"
                   >
-                    <div className="p-1 sm:p-2 rounded-xl bg-gradient-to-br from-blue-500/30 to-purple-600/30 border border-white/30 shadow-lg">
-                      <Globe className="w-4 sm:w-5 md:w-6 h-4 sm:h-5 md:h-6" />
+                    <div className="p-2 rounded-xl bg-gradient-to-br from-blue-500/30 to-purple-600/30 border border-white/30 shadow-lg">
+                      <Globe className="w-6 h-6" />
                     </div>
-                    <span className="text-base sm:text-xl md:text-2xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent text-center">
-                      {t.title}
+                    <span className="text-2xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent text-center">
+                      SpectraWHOIS
                     </span>
                   </button>
-                  <div className="w-full sm:flex-1 max-w-sm sm:max-w-md flex justify-center">
+                  <div className="w-full sm:flex-1 max-w-md flex justify-center">
                     <SearchForm onSearch={handleSearch} loading={loading} compact />
                   </div>
                 </div>
@@ -216,7 +211,7 @@ export default function Home() {
         <AnimatePresence>
           {hasSearched && (
             <motion.div
-              className="pt-28 sm:pt-32 md:pt-36 pb-12"
+              className="pt-28 pb-12"
               initial={{ opacity: 0 }}
               animate={{
                 opacity: 1,
@@ -228,16 +223,14 @@ export default function Home() {
                 {/* Loading State */}
                 {loading && (
                   <motion.div
-                    className="flex justify-center items-center mb-12 w-full"
+                    className="flex justify-center mb-12"
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ type: "spring", stiffness: 400, damping: 17 }}
                   >
-                    <LiquidGlass className="px-8 py-6">
-                      <div className="flex items-center justify-center gap-3">
-                        <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                        <span className="text-white/90">{t.queryingServers}</span>
-                      </div>
+                    <LiquidGlass className="inline-flex items-center gap-3 px-8 py-6">
+                      <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <span className="text-white/90 text-center">Querying RDAP servers...</span>
                     </LiquidGlass>
                   </motion.div>
                 )}
@@ -255,11 +248,11 @@ export default function Home() {
                         <Search className="w-full h-full text-red-300" />
                       </div>
                       <h3 className="text-xl font-semibold text-red-300 mb-2">
-                        {error.code === 'INVALID_DOMAIN' && t.errors.domainNotFound}
-                        {error.code === 'TLD_NOT_SUPPORTED' && t.errors.tldNotSupported}
-                        {error.code === 'RDAP_ERROR' && t.errors.rdapError}
-                        {error.code === 'RATE_LIMITED' && t.errors.rateLimited}
-                        {error.code === 'NETWORK_ERROR' && t.errors.networkError}
+                        {error.code === 'INVALID_DOMAIN' && 'Domain Not Found'}
+                        {error.code === 'TLD_NOT_SUPPORTED' && 'TLD Not Supported'}
+                        {error.code === 'RDAP_ERROR' && 'RDAP Query Error'}
+                        {error.code === 'RATE_LIMITED' && 'Rate Limited'}
+                        {error.code === 'NETWORK_ERROR' && 'Network Error'}
                       </h3>
                       <p className="text-white/70">{error.message}</p>
                       {process.env.NODE_ENV === 'development' && error.details && (
@@ -293,7 +286,7 @@ export default function Home() {
               exit={{ opacity: 0 }}
               transition={{ delay: 0.8 }}
             >
-              <p>{t.footer}</p>
+              <p>Powered by RDAP • Built with Next.js 15 • Liquid Glass Design</p>
             </motion.footer>
           )}
         </AnimatePresence>

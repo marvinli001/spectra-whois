@@ -1,0 +1,20 @@
+name = "spectra-whois"
+compatibility_date = "2024-09-25"
+compatibility_flags = ["nodejs_compat"]
+
+[build]
+command = "npm run build"
+cwd = "."
+
+[env.production.vars]
+NODE_ENV = "production"
+
+[[env.production.kv_namespaces]]
+binding = "CACHE"
+id = "your-kv-namespace-id"
+
+[env.staging]
+name = "spectra-whois-staging"
+
+[env.staging.vars]
+NODE_ENV = "staging"
