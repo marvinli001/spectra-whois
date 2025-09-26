@@ -5,6 +5,8 @@
  * for domains that don't support RDAP protocol.
  */
 
+import { connect } from 'cloudflare:sockets';
+
 // WHOIS server mappings for different TLDs
 const WHOIS_SERVERS = {
   // Generic TLDs
@@ -20,36 +22,163 @@ const WHOIS_SERVERS = {
   'museum': 'whois.museum',
   'coop': 'whois.nic.coop',
   'aero': 'whois.information.aero',
+  'edu': 'whois.educause.edu',
+  'gov': 'whois.dotgov.gov',
+  'mil': 'whois.nic.mil',
 
-  // Country code TLDs
-  'uk': 'whois.nic.uk',
-  'de': 'whois.denic.de',
-  'fr': 'whois.afnic.fr',
-  'it': 'whois.nic.it',
-  'jp': 'whois.jprs.jp',
-  'kr': 'whois.kr',
+  // Country code TLDs (alphabetical order)
+  'ae': 'whois.aeda.net.ae',
+  'af': 'whois.nic.af',
+  'ag': 'whois.nic.ag',
+  'ai': 'whois.nic.ai',
+  'al': 'whois.ripe.net',
+  'am': 'whois.amnic.net',
+  'ao': 'whois.nic.ao',
+  'ar': 'whois.nic.ar',
+  'at': 'whois.nic.at',
   'au': 'whois.auda.org.au',
-  'ca': 'whois.cira.ca',
-  'eu': 'whois.eu',
-  'ru': 'whois.tcinet.ru',
-  'br': 'whois.registro.br',
-  'mx': 'whois.mx',
-  'tw': 'whois.twnic.net.tw',
-  'hk': 'whois.hkirc.hk',
-  'sg': 'whois.sgnic.sg',
-  'th': 'whois.thnic.co.th',
-  'my': 'whois.mynic.my',
-  'ph': 'whois.nic.ph',
-  'vn': 'whois.nic.vn',
-  'id': 'whois.pandi.or.id',
+  'az': 'whois.ripe.net',
 
-  // New gTLDs (examples)
-  'io': 'whois.nic.io',
-  'co': 'whois.nic.co',
-  'me': 'whois.nic.me',
-  'tv': 'whois.nic.tv',
+  'ba': 'whois.ripe.net',
+  'bd': 'whois.btcl.net.bd',
+  'be': 'whois.dns.be',
+  'bg': 'whois.register.bg',
+  'bh': 'whois.nic.bh',
+  'bn': 'whois.bnnic.bn',
+  'bo': 'whois.nic.bo',
+  'br': 'whois.registro.br',
+  'by': 'whois.cctld.by',
+  'bz': 'whois.belizenic.bz',
+
+  'ca': 'whois.cira.ca',
   'cc': 'whois.nic.cc',
+  'ch': 'whois.nic.ch',
+  'cl': 'whois.nic.cl',
+  'cn': 'whois.cnnic.net.cn',
+  'co': 'whois.nic.co',
+  'cr': 'whois.nic.cr',
+  'cu': 'whois.nic.cu',
+  'cy': 'whois.ripe.net',
+  'cz': 'whois.nic.cz',
+
+  'de': 'whois.denic.de',
+  'dk': 'whois.dk-hostmaster.dk',
+  'do': 'whois.nic.do',
+  'dz': 'whois.nic.dz',
+
+  'ec': 'whois.nic.ec',
+  'ee': 'whois.tld.ee',
+  'eg': 'whois.ripe.net',
+  'es': 'whois.nic.es',
+  'eu': 'whois.eu',
+
+  'fi': 'whois.fi',
+  'fk': 'whois.nic.fk',
+  'fr': 'whois.afnic.fr',
+
+  'ga': 'whois.nic.ga',
+  'gh': 'whois.nic.gh',
+  'gr': 'whois.ripe.net',
+  'gt': 'whois.gt',
+
+  'hk': 'whois.hkirc.hk',
+  'hm': 'whois.registry.hm',
+  'hr': 'whois.dns.hr',
+  'hu': 'whois.nic.hu',
+
+  'id': 'whois.pandi.or.id',
+  'ie': 'whois.weare.ie',
+  'il': 'whois.isoc.org.il',
+  'in': 'whois.registry.in',
+  'io': 'whois.nic.io',
+  'iq': 'whois.cmc.iq',
+  'ir': 'whois.nic.ir',
+  'is': 'whois.isnic.is',
+  'it': 'whois.nic.it',
+
+  'jm': 'whois.nic.jm',
+  'jo': 'whois.nic.jo',
+  'jp': 'whois.jprs.jp',
+
+  'ke': 'whois.kenic.or.ke',
+  'kh': 'whois.nic.kh',
+  'kr': 'whois.kr',
+  'kw': 'whois.nic.kw',
+  'kz': 'whois.nic.kz',
+
+  'li': 'whois.nic.li',
+  'lk': 'whois.nic.lk',
+  'lt': 'whois.domreg.lt',
+  'lu': 'whois.dns.lu',
+  'lv': 'whois.nic.lv',
+  'ly': 'whois.nic.ly',
+
+  'ma': 'whois.registre.ma',
+  'me': 'whois.nic.me',
+  'mm': 'whois.nic.mm',
+  'mn': 'whois.nic.mn',
+  'mo': 'whois.monic.mo',
+  'mt': 'whois.nic.org.mt',
+  'mx': 'whois.mx',
+  'my': 'whois.mynic.my',
+
+  'ng': 'whois.nic.net.ng',
+  'ni': 'whois.nic.ni',
+  'nl': 'whois.domain-registry.nl',
+  'no': 'whois.norid.no',
+  'np': 'whois.mos.com.np',
+  'nz': 'whois.srs.net.nz',
+
+  'pe': 'kero.yachay.pe',
+  'ph': 'whois.nic.ph',
+  'pk': 'whois.pknic.net.pk',
+  'pl': 'whois.dns.pl',
+  'pt': 'whois.dns.pt',
+
+  'qa': 'whois.registry.qa',
+
+  'ro': 'whois.rotld.ro',
+  'rs': 'whois.rnids.rs',
+  'ru': 'whois.tcinet.ru',
+
+  'sa': 'whois.nic.net.sa',
+  'se': 'whois.iis.se',
+  'sg': 'whois.sgnic.sg',
+  'si': 'whois.arnes.si',
+  'sk': 'whois.sk-nic.sk',
+  'st': 'whois.nic.st',
+  'su': 'whois.tcinet.ru',
+
+  'tg': 'whois.nic.tg',
+  'th': 'whois.thnic.co.th',
   'tk': 'whois.dot.tk',
+  'tr': 'whois.nic.tr',
+  'tv': 'whois.nic.tv',
+  'tw': 'whois.twnic.net.tw',
+
+  'ua': 'whois.ua',
+  'uk': 'whois.nic.uk',
+  'uy': 'whois.nic.org.uy',
+  'uz': 'whois.cctld.uz',
+
+  've': 'whois.nic.ve',
+  'vn': 'whois.nic.vn',
+
+  'ws': 'whois.website.ws',
+
+  // IDN ccTLDs
+  '中国': 'cwhois.cnnic.cn',
+  '中國': 'cwhois.cnnic.cn',
+  'рф': 'whois.tcinet.ru',
+  'укр': 'whois.ua',
+  'الاردن': 'whois.dns.jo',
+  'قطر': 'whois.registry.qa',
+  '新加坡': 'whois.sgnic.sg',
+  'мкд': 'whois.marnet.mk',
+  'فلسطين': 'whois.pnina.ps',
+  'سورية': 'whois.tld.sy',
+  'ලංකා': 'whois.nic.lk',
+  'ભારત': 'whois.registry.in',
 
   // Default fallback
   'default': 'whois.iana.org'
@@ -96,7 +225,7 @@ export default {
 
       console.log(`Querying WHOIS for ${domain} via ${whoisServer}`);
 
-      // Connect to WHOIS server
+      // Connect to WHOIS server using Cloudflare's connect API
       const socket = connect({
         hostname: whoisServer,
         port: 43,

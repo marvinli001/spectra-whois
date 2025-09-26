@@ -31,12 +31,44 @@ export interface WhoisParsedData {
 
 /**
  * TLDs that typically don't support RDAP and need traditional WHOIS
+ * Based on RDAP.ORG deployment panel showing "RDAP = No"
  */
 export const NON_RDAP_TLDS = new Set([
-  // Some older or regional TLDs that may not have RDAP
-  'tk', 'ml', 'ga', 'cf', 'ws', 'nu', 'co.uk', 'org.uk', 'me.uk',
+  // Legacy/special use TLDs
   'edu', 'gov', 'mil', 'int', 'arpa',
-  // Add more as needed
+
+  // Free TLDs that don't support RDAP
+  'tk', 'ml', 'ga', 'cf', 'ws', 'nu',
+
+  // UK second-level domains
+  'co.uk', 'org.uk', 'me.uk', 'ac.uk', 'gov.uk',
+
+  // Country code TLDs without RDAP (alphabetical order)
+  'ae', 'af', 'ag', 'al', 'am', 'ao', 'at', 'au', 'az',
+  'ba', 'bd', 'be', 'bg', 'bh', 'bn', 'bo', 'by', 'bz',
+  'ch', 'cl', 'cn', 'co', 'cr', 'cu', 'cy',
+  'de', 'dk', 'do', 'dz',
+  'ec', 'ee', 'eg', 'es', 'eu',
+  'fk',
+  'gh', 'gr', 'gt',
+  'hk', 'hm', 'hr', 'hu',
+  'ie', 'il', 'io', 'iq', 'ir', 'it',
+  'jm', 'jo', 'jp',
+  'kh', 'kr', 'kw', 'kz',
+  'li', 'lk', 'lt', 'lu', 'lv',
+  'ma', 'mm', 'mn', 'mo', 'mt', 'mx', 'my',
+  'ng', 'ni', 'np', 'nz',
+  'pe', 'ph', 'pk', 'pt',
+  'qa',
+  'ro', 'rs', 'ru',
+  'sa', 'se', 'sg', 'sk', 'st', 'su',
+  'tg', 'tr', 'tv',
+  'uy', 'uz',
+  've', 'vn',
+
+  // IDN ccTLD variants
+  '中国', '中國', 'рф', 'укр', 'الاردن', 'قطر', '新加坡',
+  'мкд', 'فلسطين', 'سورية', 'ලංකා', 'ભારત'
 ]);
 
 /**
