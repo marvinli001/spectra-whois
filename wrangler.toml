@@ -1,7 +1,0 @@
-name = "whois-workers"
-main = "whois-workers/worker.js"
-compatibility_date = "2024-09-25"
-compatibility_flags = ["nodejs_compat"]
-
-# TCP sockets are enabled by default in Workers
-# No additional configuration needed for cloudflare:sockets

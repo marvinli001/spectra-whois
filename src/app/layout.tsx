@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/contexts/language-context";
+import { EnvDebugPanel } from "@/components/debug/env-debug";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -24,6 +25,7 @@ export default function RootLayout({
       <body className={`${inter.variable} antialiased bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 min-h-screen`}>
         <LanguageProvider>
           {children}
+          <EnvDebugPanel />
         </LanguageProvider>
       </body>
     </html>

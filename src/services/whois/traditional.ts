@@ -2,7 +2,7 @@
  * Traditional WHOIS Service
  *
  * Handles WHOIS queries for domains that don't support RDAP
- * by proxying through Cloudflare Workers TCP connections.
+ * by proxying through Railway Node.js plugin with native TCP connections.
  */
 
 export interface WhoisResponse {
@@ -82,22 +82,22 @@ export function needsTraditionalWhois(domain: string): boolean {
 }
 
 /**
- * Query traditional WHOIS via Cloudflare Workers
+ * Query traditional WHOIS via Railway Plugin
  */
 export async function queryTraditionalWhois(domain: string): Promise<WhoisResponse> {
-  const workerUrl = process.env.WHOIS_WORKER_URL || process.env.NEXT_PUBLIC_WHOIS_WORKER_URL;
+  const pluginUrl = process.env.NEXT_PUBLIC_WHOIS_PLUGIN_URL || process.env.NEXT_PUBLIC_WHOIS_API_URL;
 
-  if (!workerUrl) {
+  if (!pluginUrl) {
     return {
       success: false,
       domain,
       timestamp: new Date().toISOString(),
-      error: 'WHOIS Worker URL not configured. Please set WHOIS_WORKER_URL environment variable.'
+      error: 'WHOIS Plugin URL not configured. Please set NEXT_PUBLIC_WHOIS_PLUGIN_URL environment variable.'
     };
   }
 
   try {
-    const url = new URL(workerUrl);
+    const url = new URL(pluginUrl);
     url.searchParams.set('domain', domain);
 
     const response = await fetch(url.toString(), {
