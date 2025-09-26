@@ -200,17 +200,15 @@ export function getConfigDebugInfo(): {
 /**
  * Check if WHOIS tab should be shown for a given domain
  * @param domain - The domain to check
- * @param needsTraditionalWhois - Function to check if domain needs traditional WHOIS
+ * @param needsTraditionalWhois - Function to check if domain needs traditional WHOIS (unused, kept for compatibility)
  */
 export function shouldShowWhoisTab(
   domain: string,
-  needsTraditionalWhois: (domain: string) => boolean
+  needsTraditionalWhois?: (domain: string) => boolean
 ): boolean {
   const config = checkWhoisWorkerConfig()
-  const supportsRdap = !needsTraditionalWhois(domain)
 
-  // Show WHOIS tab only if:
-  // 1. Workers URL is configured
-  // 2. Domain supports RDAP (so we can show both tabs)
-  return config.hasWorkerUrl && supportsRdap
+  // Show WHOIS tab if WHOIS plugin URL is configured
+  // This allows users to compare RDAP vs traditional WHOIS results
+  return config.hasWorkerUrl
 }

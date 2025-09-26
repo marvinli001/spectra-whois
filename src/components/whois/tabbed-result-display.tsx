@@ -25,18 +25,22 @@ export function TabbedResultDisplay({ rdapResult, domain }: TabbedResultDisplayP
   const [showWhoisTab, setShowWhoisTab] = useState(false)
   const { t } = useLanguage()
 
-  // Check if Workers URL is configured and if domain supports RDAP
+  // Check if WHOIS plugin URL is configured
   useEffect(() => {
-    const shouldShow = shouldShowWhoisTab(domain, needsTraditionalWhois)
+    const shouldShow = shouldShowWhoisTab(domain)
     setShowWhoisTab(shouldShow)
 
-    // Debug logging in development
-    if (process.env.NODE_ENV === 'development') {
-      const config = checkWhoisWorkerConfig()
-      console.log('WHOIS Worker Config:', config)
-      console.log('Domain:', domain)
-      console.log('Needs Traditional WHOIS:', needsTraditionalWhois(domain))
-      console.log('Show WHOIS tab:', shouldShow)
+    // Debug logging (always enabled to help troubleshoot production issues)
+    const config = checkWhoisWorkerConfig()
+    console.log('[SpectraWHOIS Debug] WHOIS Worker Config:', config)
+    console.log('[SpectraWHOIS Debug] Domain:', domain)
+    console.log('[SpectraWHOIS Debug] Needs Traditional WHOIS:', needsTraditionalWhois(domain))
+    console.log('[SpectraWHOIS Debug] Show WHOIS tab:', shouldShow)
+
+    if (!shouldShow) {
+      console.log('[SpectraWHOIS Debug] WHOIS tab not shown - reason:',
+        !config.hasWorkerUrl ? 'WHOIS plugin URL not configured' : 'Unknown reason'
+      )
     }
   }, [domain])
 
@@ -94,55 +98,47 @@ export function TabbedResultDisplay({ rdapResult, domain }: TabbedResultDisplayP
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
     >
-      {/* Header with Domain and Tabs */}
-      <LiquidCard className="text-center" padding="lg">
-        <div className="flex items-center justify-center gap-3 mb-6">
-          <Globe className="w-8 h-8 text-blue-400" />
-          <h1 className="text-3xl font-bold text-white">{domain}</h1>
+      {/* Simple Tab Navigation */}
+      <div className="flex justify-center mb-6">
+        <div className="relative flex bg-white/5 rounded-lg p-1">
+          {/* Active tab background */}
+          <motion.div
+            className="absolute inset-y-1 bg-white/10 rounded-md"
+            initial={false}
+            animate={{
+              x: activeTab === 'rdap' ? 4 : '100%',
+              width: activeTab === 'rdap' ? 'calc(50% - 8px)' : 'calc(50% - 8px)',
+            }}
+            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+          />
+
+          {/* RDAP Tab */}
+          <button
+            onClick={() => handleTabSwitch('rdap')}
+            className={`relative z-10 flex items-center gap-2 px-6 py-3 rounded-md font-medium transition-colors ${
+              activeTab === 'rdap'
+                ? 'text-white'
+                : 'text-white/60 hover:text-white/80'
+            }`}
+          >
+            <Globe className="w-4 h-4" />
+            RDAP
+          </button>
+
+          {/* WHOIS Tab */}
+          <button
+            onClick={() => handleTabSwitch('whois')}
+            className={`relative z-10 flex items-center gap-2 px-6 py-3 rounded-md font-medium transition-colors ${
+              activeTab === 'whois'
+                ? 'text-white'
+                : 'text-white/60 hover:text-white/80'
+            }`}
+          >
+            <Server className="w-4 h-4" />
+            WHOIS
+          </button>
         </div>
-
-        {/* Tab Navigation */}
-        <div className="flex justify-center">
-          <div className="relative flex bg-white/5 rounded-lg p-1">
-            {/* Active tab background */}
-            <motion.div
-              className="absolute inset-y-1 bg-white/10 rounded-md"
-              initial={false}
-              animate={{
-                x: activeTab === 'rdap' ? 4 : '100%',
-                width: activeTab === 'rdap' ? 'calc(50% - 8px)' : 'calc(50% - 8px)',
-              }}
-              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            />
-
-            {/* RDAP Tab */}
-            <button
-              onClick={() => handleTabSwitch('rdap')}
-              className={`relative z-10 flex items-center gap-2 px-6 py-3 rounded-md font-medium transition-colors ${
-                activeTab === 'rdap'
-                  ? 'text-white'
-                  : 'text-white/60 hover:text-white/80'
-              }`}
-            >
-              <Globe className="w-4 h-4" />
-              RDAP
-            </button>
-
-            {/* WHOIS Tab */}
-            <button
-              onClick={() => handleTabSwitch('whois')}
-              className={`relative z-10 flex items-center gap-2 px-6 py-3 rounded-md font-medium transition-colors ${
-                activeTab === 'whois'
-                  ? 'text-white'
-                  : 'text-white/60 hover:text-white/80'
-              }`}
-            >
-              <Server className="w-4 h-4" />
-              WHOIS
-            </button>
-          </div>
-        </div>
-      </LiquidCard>
+      </div>
 
       {/* Tab Content */}
       <motion.div

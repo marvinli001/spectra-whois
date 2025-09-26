@@ -1,17 +1,59 @@
 # SpectraWHOIS
 
-A modern, fast WHOIS lookup service built with Next.js 15 and powered by RDAP (Registration Data Access Protocol). Features a beautiful Liquid Glass UI design inspired by iOS 18 and supports all global TLDs including internationalized domain names (IDN).
+[中文](./README_CN.md) | **English**
+
+A modern, fast WHOIS lookup service built with Next.js 15 and powered by RDAP (Registration Data Access Protocol). Features a beautiful Liquid Glass UI design and supports traditional WHOIS queries through Railway Node.js plugin.
 
 ## ✨ Features
 
 - 🌍 **Global TLD Support**: Supports all TLDs via IANA bootstrap registry
 - 🌐 **IDN Support**: Full support for internationalized domain names with Punycode conversion
-- ⚡ **Edge Computing**: Optimized for Vercel Edge Runtime and Cloudflare Workers
+- 🔄 **Dual Protocol Support**: RDAP for modern domains + traditional WHOIS via Railway plugin
+- ⚡ **IANA Discovery**: Dynamic WHOIS server discovery with 24-hour caching
 - 🎨 **Liquid Glass UI**: Modern design language with Framer Motion animations
 - 📱 **Responsive Design**: Works perfectly on all devices
 - 🔒 **Privacy Compliant**: Uses RDAP for modern privacy standards
-- ⚡ **Fast Caching**: Edge-cached responses for instant results
-- 🔍 **Structured Data**: Clean, structured WHOIS information display
+- 🚀 **Railway Plugin**: Native Node.js TCP connections for traditional WHOIS
+- 🛠️ **Developer Experience**: Built-in debug panel and environment detection
+
+## 🔌 WHOIS Plugin
+
+For domains that don't support RDAP, SpectraWHOIS uses a dedicated Node.js plugin that runs on Railway to handle traditional WHOIS queries.
+
+### Quick Deploy Plugin
+
+[![Deploy WHOIS Plugin on Railway](https://railway.app/button.svg)](https://railway.app/template/8YKvEb?referralCode=alphasec)
+
+**Setup Instructions:**
+1. Click the deploy button above
+2. Set **Root Directory** to `whois-plugin` in Railway dashboard
+3. Copy the deployed URL (e.g., `https://your-app.railway.app`)
+4. Add to your frontend env: `NEXT_PUBLIC_WHOIS_PLUGIN_URL=https://your-app.railway.app/whois`
+
+### Plugin Features
+
+- 🔍 **IANA Discovery**: Automatically finds authoritative WHOIS servers
+- 🚀 **Native TCP**: Direct socket connections without Cloudflare Workers limitations
+- 📊 **Batch Processing**: Handle multiple domains simultaneously
+- 🛡️ **Error Categorization**: Detailed error handling and troubleshooting
+- 📈 **Health Monitoring**: Built-in health checks and monitoring endpoints
+
+**📚 [Plugin Documentation](./whois-plugin/README.md)** | **📚 [中文文档](./whois-plugin/README_CN.md)**
+
+## 🏗️ Architecture
+
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Frontend      │───▶│  Railway API    │───▶│  WHOIS Servers  │
+│  (Next.js)      │    │   (Node.js)     │    │  (Port 43)      │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+        │                       │
+        ▼                       ▼
+┌─────────────────┐    ┌─────────────────┐
+│  RDAP Servers   │    │  IANA Discovery │
+│  (HTTPS API)    │    │ whois.iana.org  │
+└─────────────────┘    └─────────────────┘
+```
 
 ## 🚀 Quick Start
 
@@ -20,176 +62,258 @@ A modern, fast WHOIS lookup service built with Next.js 15 and powered by RDAP (R
 - Node.js 18+
 - npm, yarn, or pnpm
 
-### Installation
+### Frontend Setup
 
-1. Clone the repository:
+1. **Clone the repository:**
 ```bash
-git clone https://github.com/yourusername/spectra-whois.git
+git clone https://github.com/marvinli001/spectra-whois.git
 cd spectra-whois
 ```
 
-2. Install dependencies:
+2. **Install dependencies:**
 ```bash
 npm install
-# or
-yarn install
-# or
-pnpm install
 ```
 
-3. Run the development server:
+3. **Set up environment variables:**
+```bash
+cp .env.example .env.local
+```
+
+Edit `.env.local`:
+```bash
+# For WHOIS plugin support (optional)
+NEXT_PUBLIC_WHOIS_PLUGIN_URL=https://your-railway-app.railway.app/whois
+```
+
+4. **Run the development server:**
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+### Railway Plugin Setup
 
-## 🌐 Deployment
+#### Option 1: One-Click Deploy (Recommended)
 
-### Deploy to Vercel
+[![Deploy WHOIS Plugin on Railway](https://railway.app/button.svg)](https://railway.app/template/8YKvEb?referralCode=alphasec)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fyourusername%2Fspectra-whois)
+**Important**: When deploying, make sure to:
+1. Set the **Root Directory** to `whois-plugin`
+2. Railway will auto-detect Node.js and deploy
+3. Copy the deployed URL for frontend integration
 
-1. Connect your GitHub repository to Vercel
-2. Vercel will automatically detect Next.js and configure the build settings
-3. Deploy! The edge functions will automatically be optimized for global distribution
+#### Option 2: Manual Setup
 
-### Deploy to Cloudflare Workers
-
-1. Install Wrangler CLI:
+1. **Navigate to the plugin directory:**
 ```bash
-npm install -g wrangler
+cd whois-plugin
 ```
 
-2. Authenticate with Cloudflare:
+2. **Install dependencies:**
 ```bash
-wrangler auth login
+npm install
 ```
 
-3. Deploy:
+3. **Run locally for testing:**
 ```bash
-wrangler publish
+npm run dev
 ```
+
+4. **Deploy to Railway:**
+   - Connect your GitHub repository to Railway
+   - Set **Root Directory** to `whois-plugin`
+   - Railway will automatically detect the Node.js project
+
+## 📦 Deployment
+
+### Frontend (Vercel)
+
+1. **Connect to Vercel:**
+   - Import your GitHub repository in Vercel
+   - Vercel will automatically detect Next.js
+
+2. **Set Environment Variables:**
+   ```
+   NEXT_PUBLIC_WHOIS_PLUGIN_URL=https://your-railway-app.railway.app/whois
+   ```
+
+3. **Deploy:**
+   - Push to main branch triggers automatic deployment
+
+### Backend (Railway)
+
+1. **Connect Repository:**
+   - Link your GitHub repository to Railway
+   - Select the `whois-plugin` directory
+
+2. **Auto Deploy:**
+   - Railway automatically detects Node.js and deploys
+   - No additional configuration needed
+
+## 🎛️ Environment Variables
+
+### Frontend (.env.local)
+
+| Variable | Description | Default | Required |
+|----------|-------------|---------|----------|
+| `NEXT_PUBLIC_WHOIS_PLUGIN_URL` | Railway WHOIS plugin URL | - | Optional* |
+| `NEXT_PUBLIC_WHOIS_API_URL` | Alternative plugin URL | - | Optional* |
+| `DEBUG_ENV_CHECKER` | Show environment debug logs | `false` | No |
+
+*Required only for traditional WHOIS tab functionality
+
+### Railway Plugin
+
+| Variable | Description | Default | Required |
+|----------|-------------|---------|----------|
+| `PORT` | Server port | `3001` | Auto-set by Railway |
+| `NODE_ENV` | Environment mode | `production` | Auto-set by Railway |
+| `ALLOWED_ORIGINS` | CORS origins | `*` | No |
 
 ## 🔧 Configuration
 
-### Environment Variables
+### WHOIS Tab Display
 
-Create a `.env.local` file in the root directory:
+The traditional WHOIS tab appears when:
+1. ✅ WHOIS plugin URL is configured
+2. ✅ Domain supports RDAP (so both tabs can be shown)
+3. ✅ Frontend can reach the Railway plugin
 
-```env
-NODE_ENV=development
-NEXT_PUBLIC_APP_URL=http://localhost:3000
+### Debug Panel (Development)
+
+In development mode, a debug panel appears in the bottom-right corner showing:
+- Configuration status (green = configured, yellow = not configured)
+- Environment variables detection
+- Platform detection (local/Vercel/other)
+- Configuration suggestions
+
+## 📡 API Endpoints
+
+### WHOIS Plugin (Railway)
+
+#### Single Domain Query
+```http
+GET /whois?domain=example.com
 ```
 
-For production deployments, set these in your hosting platform's environment variables.
+#### Batch Query
+```http
+POST /whois/batch
+Content-Type: application/json
 
-## 🏗️ Architecture
-
-### Dual Query System: RDAP + WHOIS Fallback
-
-The application implements a robust dual-query system:
-
-#### Primary: RDAP Protocol (RFC 7483)
-- **Modern Protocol**: RDAP is the successor to WHOIS, designed for the modern internet
-- **Structured Data**: Returns JSON instead of plain text
-- **HTTP/HTTPS**: Works over standard web protocols, perfect for edge computing
-- **Global Coverage**: IANA bootstrap registry covers most TLDs
-- **Privacy Compliant**: Built-in privacy protections and rate limiting
-
-#### Fallback: Traditional WHOIS via Cloudflare Workers
-- **Complete Coverage**: Handles domains/TLDs not supported by RDAP
-- **TCP Proxy**: Cloudflare Workers handle port 43 connections
-- **Vercel Compatibility**: Bypasses Vercel's function limitations (timeout, IP restrictions)
-- **Legacy Support**: Supports older TLDs and regional registries
-- **Structured Parsing**: Converts WHOIS text to structured JSON format
-
-#### Query Flow
-```
-Domain Query → RDAP Query → Success ✅
-                     ↓
-                   Failed → Traditional WHOIS → Success ✅
-                                            ↓
-                                          Error ❌
+{
+  "domains": ["example.com", "github.com", "vercel.com"]
+}
 ```
 
-### Tech Stack
+#### Health Check
+```http
+GET /health
+```
 
-- **Framework**: Next.js 15 with App Router
-- **Runtime**: Edge Runtime for maximum performance
-- **Styling**: Tailwind CSS with custom Liquid Glass components
-- **Animations**: Framer Motion for smooth interactions
-- **Typography**: Inter font for modern readability
-- **Icons**: Lucide React for consistent iconography
+### Response Format
 
-### Liquid Glass Design
+#### Success Response
+```json
+{
+  "success": true,
+  "domain": "example.com",
+  "whoisServer": "whois.verisign-grs.com",
+  "rawData": "Domain Name: EXAMPLE.COM...",
+  "parsedData": {
+    "domain": "example.com",
+    "registrar": "Reserved Domain",
+    "registrationDate": "1995-08-14",
+    "expirationDate": "2024-08-13",
+    "nameServers": ["a.iana-servers.net", "b.iana-servers.net"]
+  },
+  "timestamp": "2024-01-01T00:00:00.000Z"
+}
+```
 
-The UI implements a modern "Liquid Glass" design language featuring:
-
-- **Glassmorphism**: Backdrop blur effects with transparency
-- **Fluid Animations**: Spring-based animations with realistic physics
-- **Dynamic Gradients**: Subtle color transitions and depth
-- **Interactive Elements**: Responsive hover and touch states
-- **Accessibility**: WCAG compliant with proper contrast and focus states
+#### Error Response
+```json
+{
+  "success": false,
+  "domain": "example.com",
+  "error": "Connection timeout",
+  "source": "whois",
+  "reason": "timeout",
+  "troubleshooting": {
+    "description": "Query timed out waiting for response",
+    "suggestions": ["Server may be experiencing high load", "Try again later"]
+  }
+}
+```
 
 ## 🛠️ Development
 
 ### Project Structure
 
 ```
-src/
-├── app/                    # Next.js App Router
-│   ├── api/whois/         # RDAP API endpoint
-│   ├── layout.tsx         # Root layout
-│   └── page.tsx           # Main page
-├── components/
-│   ├── ui/                # Reusable UI components
-│   └── whois/             # WHOIS-specific components
-├── lib/                   # Utility functions
-├── services/              # External service integrations
-└── types/                 # TypeScript type definitions
+spectra-whois/
+├── src/                          # Next.js frontend
+│   ├── app/                      # App Router pages
+│   ├── components/               # React components
+│   │   ├── debug/               # Debug panel
+│   │   ├── ui/                  # UI components
+│   │   └── whois/               # WHOIS-specific components
+│   ├── contexts/                # React contexts
+│   ├── services/                # API services
+│   └── utils/                   # Utilities
+├── whois-plugin/                # Railway Node.js plugin
+│   ├── lib/                     # WHOIS client library
+│   ├── server.js               # Express server
+│   ├── test.js                 # Basic tests
+│   └── package.json            # Plugin dependencies
+└── public/                      # Static assets
 ```
-
-### Adding New Features
-
-1. **New TLD Support**: The system automatically supports all TLDs via IANA bootstrap
-2. **Custom Styling**: Extend the Liquid Glass components in `src/components/ui/`
-3. **Additional Data**: Modify the RDAP parsing in `src/services/rdap.ts`
 
 ### Testing
 
-Run the development server and test with various domains:
+#### Frontend
+```bash
+npm run build    # Test build
+npm run lint     # Lint check
+npm run dev      # Development server
+```
 
-- Standard domains: `google.com`, `github.com`
-- IDN domains: `中国.cn`, `москва.рф`
-- New TLDs: `example.tech`, `company.app`
+#### WHOIS Plugin
+```bash
+cd whois-plugin
+npm test         # Run basic tests
+npm start        # Production server
+npm run dev      # Development server with watch
+```
+
+## 🌟 Key Technologies
+
+- **Frontend**: Next.js 15, React 18, Tailwind CSS, Framer Motion
+- **Backend**: Node.js, Express.js, Native TCP Sockets
+- **Deployment**: Vercel (Frontend) + Railway (Backend)
+- **Protocols**: RDAP (HTTPS), Traditional WHOIS (TCP Port 43)
+- **Discovery**: IANA Bootstrap Registry
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Commit changes: `git commit -m 'Add amazing feature'`
-4. Push to branch: `git push origin feature/amazing-feature`
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📄 License
+## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
-- [IANA](https://www.iana.org/) for RDAP bootstrap registry
-- [Framer Motion](https://www.framer.com/motion/) for animations
-- [Lucide](https://lucide.dev/) for icons
-- [Tailwind CSS](https://tailwindcss.com/) for styling
-- [Next.js](https://nextjs.org/) for the framework
+- [IANA](https://www.iana.org/) for maintaining the WHOIS server registry
+- [Vercel](https://vercel.com/) for excellent Next.js hosting
+- [Railway](https://railway.app/) for reliable backend deployment
+- [Tailwind CSS](https://tailwindcss.com/) for the utility-first CSS framework
+- [Framer Motion](https://www.framer.com/motion/) for beautiful animations
 
-## 🔗 Links
+---
 
-- [RDAP Specification (RFC 7483)](https://tools.ietf.org/html/rfc7483)
-- [IANA RDAP Bootstrap Registry](https://data.iana.org/rdap/)
-- [Next.js Edge Runtime Documentation](https://nextjs.org/docs/app/building-your-application/rendering/edge-and-nodejs-runtimes)
+**Built with ❤️ using Next.js 15 and Railway**
