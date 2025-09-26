@@ -54,11 +54,11 @@ export default function Home() {
       {/* Language Switcher */}
       <LanguageSwitcher />
       {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900" />
-      <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
+      <div className="fixed inset-0 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900" />
+      <div className="fixed inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
 
       {/* Animated background orbs */}
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="fixed inset-0 overflow-hidden">
         <motion.div
           className="absolute -top-40 -left-40 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl"
           animate={{
@@ -103,23 +103,23 @@ export default function Home() {
               }}
             >
               <div className="max-w-3xl w-full mx-auto">
-                <LiquidGlass className="p-6 md:p-8 lg:p-12 text-center" blur="lg" opacity={0.12}>
+                <LiquidGlass className="p-4 sm:p-6 md:p-8 lg:p-12 text-center" blur={'none'} opacity={0.12}>
                   {/* Logo and Title */}
                   <motion.div
-                    className="mb-8 md:mb-10"
+                    className="mb-4 sm:mb-6 md:mb-8 lg:mb-10"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                   >
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-6">
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 md:gap-4 mb-3 sm:mb-4 md:mb-6">
                       <div className="p-3 md:p-4 rounded-2xl bg-gradient-to-br from-blue-500/30 to-purple-600/30 border border-white/30 shadow-xl backdrop-blur-sm">
                         <Globe className="w-8 sm:w-10 md:w-12 h-8 sm:h-10 md:h-12 text-white" />
                       </div>
-                      <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent text-center">
+                      <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent text-center">
                         {t.title}
                       </h1>
                     </div>
-                    <p className="text-base sm:text-lg md:text-xl text-white/70 max-w-xl mx-auto leading-relaxed text-center px-2">
+                    <p className="text-sm sm:text-base md:text-lg text-white/70 max-w-xl mx-auto leading-relaxed text-center px-2">
                       {t.subtitle}
                     </p>
                   </motion.div>
@@ -190,7 +190,7 @@ export default function Home() {
               }}
               exit={{ opacity: 0, y: -50, scale: 0.95 }}
             >
-              <LiquidGlass className="p-2 sm:p-4 md:p-6" blur="xl" opacity={0.15}>
+              <LiquidGlass className="p-2 sm:p-4 md:p-6" blur={'none'} opacity={0.12}>
                 <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-2 sm:gap-4 md:gap-6">
                   <button
                     onClick={handleNewSearch}
@@ -233,7 +233,7 @@ export default function Home() {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ type: "spring", stiffness: 400, damping: 17 }}
                   >
-                    <LiquidGlass className="px-8 py-6">
+                    <LiquidGlass className="px-8 py-6" blur={'none'}>
                       <div className="flex items-center justify-center gap-3">
                         <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                         <span className="text-white/90">{t.queryingServers}</span>
