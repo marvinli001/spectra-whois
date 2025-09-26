@@ -186,6 +186,7 @@ export interface WhoisResult {
   expires?: string
   notices?: Notice[]
   raw?: DomainResponse
+  source?: 'rdap' | 'whois'
 }
 
 export interface ContactInfo {
@@ -199,7 +200,7 @@ export interface ContactInfo {
 
 // Error types
 export interface WhoisError {
-  code: 'INVALID_DOMAIN' | 'TLD_NOT_SUPPORTED' | 'RDAP_ERROR' | 'RATE_LIMITED' | 'NETWORK_ERROR'
+  code: 'INVALID_DOMAIN' | 'TLD_NOT_SUPPORTED' | 'RDAP_ERROR' | 'QUERY_ERROR' | 'RATE_LIMITED' | 'NETWORK_ERROR'
   message: string
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   details?: any
