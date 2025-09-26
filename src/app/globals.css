@@ -3,47 +3,25 @@
 html {
   max-width: 100vw;
   overflow-x: hidden;
-  /* 防止移动端滚动时出现白色背景 */
+  /* 防止移动端滚动超调和白边 */
   overscroll-behavior: none;
-  background: linear-gradient(135deg, #0c0a1e 0%, #1a1332 50%, #2d1b4e 100%);
 }
 
 body {
   max-width: 100vw;
   overflow-x: hidden;
-  /* 防止滚动弹性和白色背景闪现 */
+  /* 防止垂直滚动弹性效果 */
   overscroll-behavior-y: none;
-  background: linear-gradient(135deg, #0c0a1e 0%, #1a1332 50%, #2d1b4e 100%);
-  background-attachment: fixed;
+  /* 设置默认背景色防止白边闪现 */
+  background: #0c0a1e;
   min-height: 100vh;
 }
 
-/* GPU 加速优化 - 移动端动画性能提升 */
-*:not(.animate-spin) {
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-}
-
-/* 确保 animate-spin 正常工作 */
-.animate-spin {
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* 针对 Framer Motion 组件的 GPU 加速 */
-[data-framer-component],
-[class*="motion-"] {
+/* 仅为 Framer Motion 动画组件启用 GPU 加速 - 避免影响 fixed 定位 */
+[class*="motion-"]:not([class*="fixed"]) {
   will-change: transform, opacity;
   transform: translateZ(0);
   -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
