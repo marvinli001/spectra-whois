@@ -269,11 +269,20 @@ export default {
       // Send domain query
       const writer = socket.writable.getWriter();
       const encoder = new TextEncoder();
-      await writer.write(encoder.encode(query + '\r\n'));
 
-      // Don't close the writer immediately, give it time to flush
-      await writer.ready;
-      await writer.close();
+      try {
+        await writer.write(encoder.encode(query + '\r\n'));
+        console.log('Query written, closing writer');
+        await writer.close();
+        console.log('Writer closed successfully');
+      } catch (error) {
+        console.error('Error writing query:', error);
+        await writer.abort();
+        throw error;
+      }
+
+      // Wait a moment for server to process the query
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       // Read response with timeout and better stream handling
       const reader = socket.readable.getReader();
@@ -281,17 +290,21 @@ export default {
       let response = '';
       let totalBytesRead = 0;
 
+      console.log('Starting to read response...');
+
       // Set up a timeout for reading - longer timeout for slow servers
       const readTimeout = setTimeout(() => {
-        console.log('WHOIS query timeout after 30 seconds');
+        console.log('WHOIS query timeout after 20 seconds');
         reader.cancel();
-      }, 30000); // 30 second timeout
+      }, 20000); // 20 second timeout
 
       try {
+        let consecutiveEmptyReads = 0;
+        const maxEmptyReads = 10;
+
         // Keep reading until stream is done or timeout
         while (true) {
-          const readPromise = reader.read();
-          const { done, value } = await readPromise;
+          const { done, value } = await reader.read();
 
           if (done) {
             console.log('Stream ended naturally');
@@ -302,11 +315,17 @@ export default {
             const chunk = decoder.decode(value, { stream: true });
             response += chunk;
             totalBytesRead += value.length;
+            consecutiveEmptyReads = 0; // Reset empty read counter
             console.log(`Received chunk: ${value.length} bytes (total: ${totalBytesRead})`);
+          } else {
+            consecutiveEmptyReads++;
+            if (consecutiveEmptyReads >= maxEmptyReads) {
+              console.log(`No more data after ${maxEmptyReads} empty reads, ending`);
+              break;
+            }
+            // Small delay when no data received
+            await new Promise(resolve => setTimeout(resolve, 50));
           }
-
-          // Small delay to prevent overwhelming the connection
-          await new Promise(resolve => setTimeout(resolve, 10));
         }
 
         // Final decode to handle any remaining bytes
@@ -324,7 +343,7 @@ export default {
         try {
           await reader.releaseLock();
         } catch (e) {
-          console.log('Reader already released');
+          console.log('Reader already released or cancelled');
         }
       }
 

@@ -25,8 +25,8 @@ export function checkWhoisWorkerConfig(): EnvCheck {
   }
 
   // Fallback: check if running in browser and URL was injected at runtime
-  if (typeof window !== 'undefined' && (window as any).NEXT_PUBLIC_WHOIS_WORKER_URL) {
-    const url = ((window as any).NEXT_PUBLIC_WHOIS_WORKER_URL as string).trim()
+  if (typeof window !== 'undefined' && (window as { NEXT_PUBLIC_WHOIS_WORKER_URL?: string }).NEXT_PUBLIC_WHOIS_WORKER_URL) {
+    const url = ((window as { NEXT_PUBLIC_WHOIS_WORKER_URL?: string }).NEXT_PUBLIC_WHOIS_WORKER_URL as string).trim()
     return {
       hasWorkerUrl: url.length > 0,
       workerUrl: url.length > 0 ? url : undefined,
