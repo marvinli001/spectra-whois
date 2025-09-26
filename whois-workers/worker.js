@@ -127,7 +127,7 @@ const WHOIS_SERVERS = {
   'nl': 'whois.domain-registry.nl',
   'no': 'whois.norid.no',
   'np': 'whois.mos.com.np',
-  'nz': 'whois.srs.net.nz',
+  'nz': 'whois.dnc.org.nz',
 
   'pe': 'kero.yachay.pe',
   'ph': 'whois.nic.ph',
@@ -237,26 +237,59 @@ export default {
       await writer.write(encoder.encode(domain + '\r\n'));
       await writer.close();
 
-      // Read response
+      // Read response with timeout
       const reader = socket.readable.getReader();
       const decoder = new TextDecoder();
       let response = '';
+
+      // Set up a timeout for reading
+      const readTimeout = setTimeout(() => {
+        console.log('WHOIS query timeout, closing connection');
+        reader.cancel();
+      }, 15000); // 15 second timeout
 
       try {
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
-          response += decoder.decode(value, { stream: true });
+
+          if (value) {
+            const chunk = decoder.decode(value, { stream: true });
+            response += chunk;
+            console.log(`Received chunk: ${chunk.length} bytes`);
+          }
         }
       } catch (error) {
         console.error('Error reading WHOIS response:', error);
+        throw error;
       } finally {
+        clearTimeout(readTimeout);
         await reader.releaseLock();
       }
+
+      console.log(`Total response length: ${response.length} bytes`);
 
       // Parse and clean the response
       const cleanedResponse = cleanWhoisResponse(response);
       const parsedData = parseWhoisResponse(cleanedResponse, domain);
+
+      // Check if we got a meaningful response
+      if (!response || response.trim().length === 0) {
+        console.log('Empty response received from WHOIS server');
+        return new Response(JSON.stringify({
+          success: false,
+          domain: domain,
+          whoisServer: whoisServer,
+          error: 'No data received from WHOIS server',
+          timestamp: new Date().toISOString()
+        }), {
+          status: 200,
+          headers: {
+            'Content-Type': 'application/json',
+            ...CORS_HEADERS
+          }
+        });
+      }
 
       return new Response(JSON.stringify({
         success: true,
