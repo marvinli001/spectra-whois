@@ -73,7 +73,21 @@ export const translations = {
       registryNotices: '注册表通知',
       viewRawResponse: '查看原始RDAP响应',
       copied: '已复制',
-      copyToClipboard: '复制到剪贴板'
+      copyToClipboard: '复制到剪贴板',
+      // WHOIS 特有翻译
+      noDataAvailable: 'WHOIS数据不可用',
+      rawWhoisData: '原始WHOIS数据',
+      domainStatus: '域名状态',
+      showRawData: '显示原始数据',
+      hideRawData: '隐藏原始数据',
+      loadingWhoisData: '正在加载WHOIS数据...',
+      failedToLoadWhois: '加载WHOIS数据失败',
+      whoisQueryFailed: 'WHOIS查询失败',
+      retry: '重试',
+      whoisRestricted: 'WHOIS查询受限',
+      manualCheckAvailable: '您可以手动查询：',
+      manualCheck: '手动查询',
+      restrictionNotice: '的注册局实施了严格的WHOIS查询限制，阻止了自动化API访问。这是为了防止滥用和保护隐私。'
     },
 
     // 域名状态翻译
@@ -181,7 +195,21 @@ export const translations = {
       registryNotices: 'Registry Notices',
       viewRawResponse: 'View Raw RDAP Response',
       copied: 'Copied',
-      copyToClipboard: 'Copy to clipboard'
+      copyToClipboard: 'Copy to clipboard',
+      // WHOIS specific translations
+      noDataAvailable: 'No WHOIS data available',
+      rawWhoisData: 'Raw WHOIS Data',
+      domainStatus: 'Domain Status',
+      showRawData: 'Show Raw Data',
+      hideRawData: 'Hide Raw Data',
+      loadingWhoisData: 'Loading WHOIS data...',
+      failedToLoadWhois: 'Failed to load WHOIS data',
+      whoisQueryFailed: 'WHOIS query failed',
+      retry: 'Retry',
+      whoisRestricted: 'WHOIS Query Restricted',
+      manualCheckAvailable: 'You can check manually:',
+      manualCheck: 'Manual Check',
+      restrictionNotice: ' registry implements strict WHOIS query restrictions that block automated API access. This is to prevent abuse and protect privacy.'
     },
 
     // Domain status translations

@@ -7,6 +7,13 @@
 
 import { connect } from 'cloudflare:sockets';
 
+// TLDs with known WHOIS restrictions or blocks
+const RESTRICTED_TLDS = new Set([
+  'nz', // New Zealand has strict API restrictions
+  'au', // Australia may have restrictions
+  'uk', // Some UK domains have restrictions
+]);
+
 // WHOIS server mappings for different TLDs
 const WHOIS_SERVERS = {
   // Generic TLDs
@@ -182,6 +189,19 @@ const WHOIS_SERVERS = {
   'default': 'whois.iana.org'
 };
 
+/**
+ * Get manual check URL for restricted TLDs
+ */
+function getManualCheckUrl(tld) {
+  const urls = {
+    'nz': 'https://whois.srs.net.nz',
+    'au': 'https://whois.auda.org.au',
+    'uk': 'https://whois.nic.uk',
+  };
+
+  return urls[tld] || null;
+}
+
 // CORS headers
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -221,6 +241,11 @@ export default {
       const tld = domain.split('.').pop().toLowerCase();
       const whoisServer = WHOIS_SERVERS[tld] || WHOIS_SERVERS['default'];
 
+      // Check if this TLD has known restrictions
+      if (RESTRICTED_TLDS.has(tld)) {
+        console.log(`Warning: ${tld} TLD has known WHOIS API restrictions`);
+      }
+
       console.log(`Querying WHOIS for ${domain} via ${whoisServer}`);
 
       // Connect to WHOIS server using Cloudflare's connect API
@@ -229,40 +254,78 @@ export default {
         port: 43,
       });
 
+      // Prepare query with proper format for different registries
+      let query = domain;
+
+      // Special query formats for specific registries
+      if (whoisServer === 'whois.verisign-grs.com') {
+        query = `domain ${domain}`;
+      } else if (whoisServer === 'whois.nic.uk') {
+        query = domain;
+      }
+
+      console.log(`Sending query: "${query}"`);
+
       // Send domain query
       const writer = socket.writable.getWriter();
       const encoder = new TextEncoder();
-      await writer.write(encoder.encode(domain + '\r\n'));
+      await writer.write(encoder.encode(query + '\r\n'));
+
+      // Don't close the writer immediately, give it time to flush
+      await writer.ready;
       await writer.close();
 
-      // Read response with timeout
+      // Read response with timeout and better stream handling
       const reader = socket.readable.getReader();
       const decoder = new TextDecoder();
       let response = '';
+      let totalBytesRead = 0;
 
-      // Set up a timeout for reading
+      // Set up a timeout for reading - longer timeout for slow servers
       const readTimeout = setTimeout(() => {
-        console.log('WHOIS query timeout, closing connection');
+        console.log('WHOIS query timeout after 30 seconds');
         reader.cancel();
-      }, 15000); // 15 second timeout
+      }, 30000); // 30 second timeout
 
       try {
+        // Keep reading until stream is done or timeout
         while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
+          const readPromise = reader.read();
+          const { done, value } = await readPromise;
 
-          if (value) {
+          if (done) {
+            console.log('Stream ended naturally');
+            break;
+          }
+
+          if (value && value.length > 0) {
             const chunk = decoder.decode(value, { stream: true });
             response += chunk;
-            console.log(`Received chunk: ${chunk.length} bytes`);
+            totalBytesRead += value.length;
+            console.log(`Received chunk: ${value.length} bytes (total: ${totalBytesRead})`);
           }
+
+          // Small delay to prevent overwhelming the connection
+          await new Promise(resolve => setTimeout(resolve, 10));
         }
+
+        // Final decode to handle any remaining bytes
+        const finalChunk = decoder.decode();
+        if (finalChunk) {
+          response += finalChunk;
+          console.log(`Final chunk: ${finalChunk.length} chars`);
+        }
+
       } catch (error) {
         console.error('Error reading WHOIS response:', error);
         throw error;
       } finally {
         clearTimeout(readTimeout);
-        await reader.releaseLock();
+        try {
+          await reader.releaseLock();
+        } catch (e) {
+          console.log('Reader already released');
+        }
       }
 
       console.log(`Total response length: ${response.length} bytes`);
@@ -274,11 +337,29 @@ export default {
       // Check if we got a meaningful response
       if (!response || response.trim().length === 0) {
         console.log('Empty response received from WHOIS server');
+
+        let errorMessage = 'No data received from WHOIS server';
+
+        // Provide specific error messages for known restricted TLDs
+        if (RESTRICTED_TLDS.has(tld)) {
+          if (tld === 'nz') {
+            errorMessage = 'New Zealand (.nz) domains have strict WHOIS API restrictions that block automated queries. Please check manually at whois.srs.net.nz';
+          } else if (tld === 'au') {
+            errorMessage = 'Australian (.au) domains may have WHOIS API restrictions. Please check manually at whois.auda.org.au';
+          } else if (tld === 'uk') {
+            errorMessage = 'UK domains may have WHOIS API restrictions. Please check manually at whois.nic.uk';
+          } else {
+            errorMessage = `${tld.toUpperCase()} domains may have WHOIS API restrictions that block automated queries`;
+          }
+        }
+
         return new Response(JSON.stringify({
           success: false,
           domain: domain,
           whoisServer: whoisServer,
-          error: 'No data received from WHOIS server',
+          error: errorMessage,
+          restricted: RESTRICTED_TLDS.has(tld),
+          manualCheckUrl: getManualCheckUrl(tld),
           timestamp: new Date().toISOString()
         }), {
           status: 200,

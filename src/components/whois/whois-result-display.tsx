@@ -6,26 +6,30 @@ import {
   Globe,
   Shield,
   Building,
-  Mail,
-  Phone,
-  MapPin,
   Server,
   CheckCircle,
-  XCircle,
   AlertCircle,
   Copy,
-  ExternalLink,
   Eye,
   EyeOff
 } from 'lucide-react'
 import { LiquidCard } from '@/components/ui/liquid-glass'
 import { WhoisResponse } from '@/services/whois/traditional'
-import { formatDate, formatRelativeTime } from '@/lib/utils'
 import { useLanguage } from '@/contexts/language-context'
 import { useState } from 'react'
 
 interface WhoisResultDisplayProps {
   result: WhoisResponse
+}
+
+interface RestrictedWhoisError {
+  success: false
+  domain: string
+  whoisServer: string
+  error: string
+  restricted?: boolean
+  manualCheckUrl?: string
+  timestamp: string
 }
 
 export function WhoisResultDisplay({ result }: WhoisResultDisplayProps) {
@@ -51,13 +55,53 @@ export function WhoisResultDisplay({ result }: WhoisResultDisplayProps) {
     }
   }
 
+  // Handle failed WHOIS queries (including restricted domains)
+  if (!result.success) {
+    const errorResult = result as unknown as RestrictedWhoisError
+    return (
+      <LiquidCard className="text-center">
+        <div className="space-y-4">
+          <div className="text-yellow-400 flex items-center justify-center gap-2 mb-4">
+            <AlertCircle className="w-6 h-6" />
+            <span className="font-medium">{t.results.whoisRestricted}</span>
+          </div>
+
+          <div className="text-white/80 space-y-2">
+            <p>{errorResult.error}</p>
+
+            {errorResult.manualCheckUrl && (
+              <div className="mt-4">
+                <p className="text-white/70 text-sm mb-2">{t.results.manualCheckAvailable}</p>
+                <a
+                  href={errorResult.manualCheckUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 rounded-lg transition-colors text-blue-300 hover:text-blue-200"
+                >
+                  <Globe className="w-4 h-4" />
+                  {t.results.manualCheck} {errorResult.domain}
+                </a>
+              </div>
+            )}
+          </div>
+
+          {errorResult.restricted && (
+            <div className="text-xs text-white/50 bg-white/5 p-3 rounded-lg">
+              {errorResult.domain.split('.').pop()?.toUpperCase()}{t.results.restrictionNotice}
+            </div>
+          )}
+        </div>
+      </LiquidCard>
+    )
+  }
+
   const data = result.parsedData
 
   if (!data) {
     return (
       <LiquidCard className="text-center">
         <div className="text-white/60">
-          {t.results.noDataAvailable || 'No WHOIS data available'}
+          {t.results.noDataAvailable}
         </div>
       </LiquidCard>
     )
@@ -170,7 +214,7 @@ export function WhoisResultDisplay({ result }: WhoisResultDisplayProps) {
         <LiquidCard>
           <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
             <Shield className="w-5 h-5" />
-            Domain Status
+            {t.results.domainStatus}
           </h2>
 
           <div className="space-y-2">
@@ -207,14 +251,14 @@ export function WhoisResultDisplay({ result }: WhoisResultDisplayProps) {
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold text-white flex items-center gap-2">
             <AlertCircle className="w-5 h-5" />
-            {t.results.rawWhoisData || 'Raw WHOIS Data'}
+            {t.results.rawWhoisData}
           </h2>
           <button
             onClick={() => setShowRawData(!showRawData)}
             className="flex items-center gap-2 px-3 py-1 rounded-lg bg-white/10 hover:bg-white/20 transition-colors text-white/80 hover:text-white"
           >
             {showRawData ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-            {showRawData ? 'Hide' : 'Show'} Raw Data
+            {showRawData ? t.results.hideRawData : t.results.showRawData}
           </button>
         </div>
 

@@ -10,6 +10,7 @@ import { WhoisResult } from '@/types/rdap'
 import { WhoisResponse } from '@/services/whois/traditional'
 import { useLanguage } from '@/contexts/language-context'
 import { needsTraditionalWhois } from '@/services/whois/traditional'
+import { getWhoisWorkerUrl, shouldShowWhoisTab, checkWhoisWorkerConfig } from '@/utils/env-checker'
 
 interface TabbedResultDisplayProps {
   rdapResult: WhoisResult
@@ -26,18 +27,22 @@ export function TabbedResultDisplay({ rdapResult, domain }: TabbedResultDisplayP
 
   // Check if Workers URL is configured and if domain supports RDAP
   useEffect(() => {
-    const workerUrl = process.env.NEXT_PUBLIC_WHOIS_WORKER_URL
-    const supportsRdap = !needsTraditionalWhois(domain)
+    const shouldShow = shouldShowWhoisTab(domain, needsTraditionalWhois)
+    setShowWhoisTab(shouldShow)
 
-    // Show WHOIS tab only if:
-    // 1. Workers URL is configured
-    // 2. Domain supports RDAP (so we can show both tabs)
-    setShowWhoisTab(!!workerUrl && supportsRdap)
+    // Debug logging in development
+    if (process.env.NODE_ENV === 'development') {
+      const config = checkWhoisWorkerConfig()
+      console.log('WHOIS Worker Config:', config)
+      console.log('Domain:', domain)
+      console.log('Needs Traditional WHOIS:', needsTraditionalWhois(domain))
+      console.log('Show WHOIS tab:', shouldShow)
+    }
   }, [domain])
 
   const fetchWhoisData = async () => {
-    const workerUrl = process.env.NEXT_PUBLIC_WHOIS_WORKER_URL
-    if (!workerUrl) return
+    const workerUrl = getWhoisWorkerUrl()
+    if (!workerUrl || workerUrl.trim() === '') return
 
     setLoading(true)
     setError(null)
@@ -159,7 +164,7 @@ export function TabbedResultDisplay({ rdapResult, domain }: TabbedResultDisplayP
               <LiquidCard className="text-center">
                 <div className="flex items-center justify-center gap-3">
                   <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white/60"></div>
-                  <span className="text-white/80">Loading WHOIS data...</span>
+                  <span className="text-white/80">{t.results.loadingWhoisData}</span>
                 </div>
               </LiquidCard>
             )}
@@ -167,13 +172,13 @@ export function TabbedResultDisplay({ rdapResult, domain }: TabbedResultDisplayP
             {error && (
               <LiquidCard className="text-center">
                 <div className="text-red-400">
-                  <p className="font-medium">Failed to load WHOIS data</p>
+                  <p className="font-medium">{t.results.failedToLoadWhois}</p>
                   <p className="text-sm text-white/60 mt-2">{error}</p>
                   <button
                     onClick={fetchWhoisData}
                     className="mt-4 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors text-white/80 hover:text-white"
                   >
-                    Retry
+                    {t.results.retry}
                   </button>
                 </div>
               </LiquidCard>
