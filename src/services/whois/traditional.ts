@@ -23,10 +23,10 @@ export interface WhoisParsedData {
   updatedDate: string | null;
   nameServers: string[];
   status: string[];
-  registrant: Record<string, any>;
-  admin: Record<string, any>;
-  tech: Record<string, any>;
-  billing: Record<string, any>;
+  registrant: Record<string, string | null>;
+  admin: Record<string, string | null>;
+  tech: Record<string, string | null>;
+  billing: Record<string, string | null>;
 }
 
 /**

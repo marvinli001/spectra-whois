@@ -1,7 +1,49 @@
 @import "tailwindcss";
 
-html,
+html {
+  max-width: 100vw;
+  overflow-x: hidden;
+  /* 防止移动端滚动时出现白色背景 */
+  overscroll-behavior: none;
+  background: linear-gradient(135deg, #0c0a1e 0%, #1a1332 50%, #2d1b4e 100%);
+}
+
 body {
   max-width: 100vw;
   overflow-x: hidden;
+  /* 防止滚动弹性和白色背景闪现 */
+  overscroll-behavior-y: none;
+  background: linear-gradient(135deg, #0c0a1e 0%, #1a1332 50%, #2d1b4e 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/* GPU 加速优化 - 移动端动画性能提升 */
+*:not(.animate-spin) {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+/* 确保 animate-spin 正常工作 */
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 针对 Framer Motion 组件的 GPU 加速 */
+[data-framer-component],
+[class*="motion-"] {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
