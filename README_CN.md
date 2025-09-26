@@ -4,6 +4,16 @@
 
 基于 Next.js 15 构建的现代化、高速 WHOIS 查询服务，采用 RDAP（注册数据访问协议）技术。具有精美的液体玻璃 UI 设计，并通过 Railway Node.js 插件支持传统 WHOIS 查询。
 
+## 🚀 快速部署
+
+### 部署到 Vercel（前端）
+
+[![使用 Vercel 部署](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmarvinli001%2Fspectra-whois)
+
+1. **一键部署**：点击上方按钮部署到 Vercel
+2. **环境变量**：可选择设置 `NEXT_PUBLIC_WHOIS_PLUGIN_URL` 以支持传统 WHOIS
+3. **完成**：你的 WHOIS 查询服务已上线！
+
 ## ✨ 特性
 
 - 🌍 **全球 TLD 支持**：通过 IANA 引导注册表支持所有 TLD
@@ -15,30 +25,6 @@
 - 🔒 **隐私合规**：使用 RDAP 实现现代隐私标准
 - 🚀 **Railway 插件**：原生 Node.js TCP 连接处理传统 WHOIS
 - 🛠️ **开发者体验**：内置调试面板和环境检测
-
-## 🔌 WHOIS 插件
-
-对于不支持 RDAP 的域名，SpectraWHOIS 使用专门运行在 Railway 上的 Node.js 插件来处理传统 WHOIS 查询。
-
-### 快速部署插件
-
-[![在 Railway 上部署 WHOIS 插件](https://railway.app/button.svg)](https://railway.app/template/8YKvEb?referralCode=alphasec)
-
-**设置说明：**
-1. 点击上方的部署按钮
-2. 在 Railway 控制台中设置 **根目录** 为 `whois-plugin`
-3. 复制部署的 URL（例如：`https://your-app.railway.app`）
-4. 添加到前端环境变量：`NEXT_PUBLIC_WHOIS_PLUGIN_URL=https://your-app.railway.app/whois`
-
-### 插件特性
-
-- 🔍 **IANA 发现**：自动查找权威 WHOIS 服务器
-- 🚀 **原生 TCP**：直接 Socket 连接，无 Cloudflare Workers 限制
-- 📊 **批量处理**：同时处理多个域名
-- 🛡️ **错误分类**：详细的错误处理和故障排除
-- 📈 **健康监控**：内置健康检查和监控端点
-
-**📚 [插件文档](./whois-plugin/README_CN.md)** | **📚 [English Docs](./whois-plugin/README.md)**
 
 ## 🏗️ 架构图
 
@@ -113,6 +99,22 @@ npm run dev
    - Railway 会自动检测 Node.js 项目
    - 如需要，在 Railway 控制台设置环境变量
 
+## 🔌 传统 WHOIS 插件（可选）
+
+为了增强传统 WHOIS 查询功能，你可以选择部署 Railway 插件：
+
+### 部署 WHOIS 插件到 Railway
+
+[![在 Railway 上部署 WHOIS 插件](https://railway.app/button.svg)](https://railway.app/template/8YKvEb?referralCode=QluM1X)
+
+**设置说明：**
+1. 点击上方的部署按钮
+2. 在 Railway 控制台中设置 **根目录** 为 `whois-plugin`
+3. 复制部署的 URL（例如：`https://your-app.railway.app`）
+4. 添加到你的 Vercel 环境变量：`NEXT_PUBLIC_WHOIS_PLUGIN_URL=https://your-app.railway.app/whois`
+
+**📚 [插件文档](./whois-plugin/README_CN.md)** | **📚 [English Docs](./whois-plugin/README.md)**
+
 ## 📦 部署
 
 ### 前端（Vercel）
@@ -121,23 +123,13 @@ npm run dev
    - 在 Vercel 中导入你的 GitHub 仓库
    - Vercel 会自动检测 Next.js
 
-2. **设置环境变量：**
+2. **设置环境变量（可选）：**
    ```
    NEXT_PUBLIC_WHOIS_PLUGIN_URL=https://your-railway-app.railway.app/whois
    ```
 
 3. **部署：**
    - 推送到主分支会触发自动部署
-
-### 后端（Railway）
-
-1. **连接仓库：**
-   - 将 GitHub 仓库链接到 Railway
-   - 选择 `whois-plugin` 目录
-
-2. **自动部署：**
-   - Railway 自动检测 Node.js 并部署
-   - 无需额外配置
 
 ## 🎛️ 环境变量
 

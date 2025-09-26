@@ -4,7 +4,7 @@
 
 Traditional WHOIS query service for SpectraWHOIS - Node.js implementation for Railway deployment. This plugin handles WHOIS queries for domains that don't support RDAP using native TCP connections.
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/8YKvEb?referralCode=alphasec)
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/8YKvEb?referralCode=QluM1X)
 
 ## ✨ Features
 
@@ -21,7 +21,7 @@ Traditional WHOIS query service for SpectraWHOIS - Node.js implementation for Ra
 
 ### One-Click Railway Deployment
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/8YKvEb?referralCode=alphasec)
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/8YKvEb?referralCode=QluM1X)
 
 **Important**: When deploying on Railway, make sure to:
 1. Set the **Root Directory** to `whois-plugin`

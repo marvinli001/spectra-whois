@@ -4,6 +4,16 @@
 
 A modern, fast WHOIS lookup service built with Next.js 15 and powered by RDAP (Registration Data Access Protocol). Features a beautiful Liquid Glass UI design and supports traditional WHOIS queries through Railway Node.js plugin.
 
+## 🚀 Quick Deploy
+
+### Deploy to Vercel (Frontend)
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmarvinli001%2Fspectra-whois)
+
+1. **One-Click Deploy**: Click the button above to deploy to Vercel
+2. **Environment Variables**: Optionally set `NEXT_PUBLIC_WHOIS_PLUGIN_URL` for traditional WHOIS support
+3. **Done**: Your WHOIS lookup service is live!
+
 ## ✨ Features
 
 - 🌍 **Global TLD Support**: Supports all TLDs via IANA bootstrap registry
@@ -15,30 +25,6 @@ A modern, fast WHOIS lookup service built with Next.js 15 and powered by RDAP (R
 - 🔒 **Privacy Compliant**: Uses RDAP for modern privacy standards
 - 🚀 **Railway Plugin**: Native Node.js TCP connections for traditional WHOIS
 - 🛠️ **Developer Experience**: Built-in debug panel and environment detection
-
-## 🔌 WHOIS Plugin
-
-For domains that don't support RDAP, SpectraWHOIS uses a dedicated Node.js plugin that runs on Railway to handle traditional WHOIS queries.
-
-### Quick Deploy Plugin
-
-[![Deploy WHOIS Plugin on Railway](https://railway.app/button.svg)](https://railway.app/template/8YKvEb?referralCode=alphasec)
-
-**Setup Instructions:**
-1. Click the deploy button above
-2. Set **Root Directory** to `whois-plugin` in Railway dashboard
-3. Copy the deployed URL (e.g., `https://your-app.railway.app`)
-4. Add to your frontend env: `NEXT_PUBLIC_WHOIS_PLUGIN_URL=https://your-app.railway.app/whois`
-
-### Plugin Features
-
-- 🔍 **IANA Discovery**: Automatically finds authoritative WHOIS servers
-- 🚀 **Native TCP**: Direct socket connections without Cloudflare Workers limitations
-- 📊 **Batch Processing**: Handle multiple domains simultaneously
-- 🛡️ **Error Categorization**: Detailed error handling and troubleshooting
-- 📈 **Health Monitoring**: Built-in health checks and monitoring endpoints
-
-**📚 [Plugin Documentation](./whois-plugin/README.md)** | **📚 [中文文档](./whois-plugin/README_CN.md)**
 
 ## 🏗️ Architecture
 
@@ -95,7 +81,7 @@ npm run dev
 
 #### Option 1: One-Click Deploy (Recommended)
 
-[![Deploy WHOIS Plugin on Railway](https://railway.app/button.svg)](https://railway.app/template/8YKvEb?referralCode=alphasec)
+[![Deploy WHOIS Plugin on Railway](https://railway.app/button.svg)](https://railway.app/template/8YKvEb?referralCode=QluM1X)
 
 **Important**: When deploying, make sure to:
 1. Set the **Root Directory** to `whois-plugin`
@@ -124,6 +110,22 @@ npm run dev
    - Set **Root Directory** to `whois-plugin`
    - Railway will automatically detect the Node.js project
 
+## 🔌 Traditional WHOIS Plugin (Optional)
+
+For enhanced functionality with traditional WHOIS queries, you can optionally deploy the Railway plugin:
+
+### Deploy WHOIS Plugin to Railway
+
+[![Deploy WHOIS Plugin on Railway](https://railway.app/button.svg)](https://railway.app/template/8YKvEb?referralCode=QluM1X)
+
+**Setup Instructions:**
+1. Click the deploy button above
+2. Set **Root Directory** to `whois-plugin` in Railway dashboard
+3. Copy the deployed URL (e.g., `https://your-app.railway.app`)
+4. Add to your Vercel environment: `NEXT_PUBLIC_WHOIS_PLUGIN_URL=https://your-app.railway.app/whois`
+
+**📚 [Plugin Documentation](./whois-plugin/README.md)** | **📚 [中文文档](./whois-plugin/README_CN.md)**
+
 ## 📦 Deployment
 
 ### Frontend (Vercel)
@@ -132,23 +134,13 @@ npm run dev
    - Import your GitHub repository in Vercel
    - Vercel will automatically detect Next.js
 
-2. **Set Environment Variables:**
+2. **Set Environment Variables (Optional):**
    ```
    NEXT_PUBLIC_WHOIS_PLUGIN_URL=https://your-railway-app.railway.app/whois
    ```
 
 3. **Deploy:**
    - Push to main branch triggers automatic deployment
-
-### Backend (Railway)
-
-1. **Connect Repository:**
-   - Link your GitHub repository to Railway
-   - Select the `whois-plugin` directory
-
-2. **Auto Deploy:**
-   - Railway automatically detects Node.js and deploys
-   - No additional configuration needed
 
 ## 🎛️ Environment Variables
 

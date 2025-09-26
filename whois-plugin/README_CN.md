@@ -4,7 +4,7 @@
 
 SpectraWHOIS 的传统 WHOIS 查询服务 - 为 Railway 部署而设计的 Node.js 实现。此插件使用原生 TCP 连接处理不支持 RDAP 的域名 WHOIS 查询。
 
-[![部署到 Railway](https://railway.app/button.svg)](https://railway.app/template/8YKvEb?referralCode=alphasec)
+[![部署到 Railway](https://railway.app/button.svg)](https://railway.app/template/8YKvEb?referralCode=QluM1X)
 
 ## ✨ 特性
 
@@ -21,7 +21,7 @@ SpectraWHOIS 的传统 WHOIS 查询服务 - 为 Railway 部署而设计的 Node.
 
 ### 一键 Railway 部署
 
-[![部署到 Railway](https://railway.app/button.svg)](https://railway.app/template/8YKvEb?referralCode=alphasec)
+[![部署到 Railway](https://railway.app/button.svg)](https://railway.app/template/8YKvEb?referralCode=QluM1X)
 
 **重要提示**：在 Railway 上部署时，请确保：
 1. 将 **根目录** 设置为 `whois-plugin`
