@@ -12,32 +12,30 @@ const WHOIS_SERVERS = {
   // Generic TLDs
   'com': 'whois.verisign-grs.com',
   'net': 'whois.verisign-grs.com',
-  'org': 'whois.pir.org',
-  'info': 'whois.afilias.net',
+  'org': 'whois.publicinterestregistry.org',
   'biz': 'whois.nic.biz',
   'name': 'whois.nic.name',
-  'mobi': 'whois.dotmobiregistry.net',
-  'pro': 'whois.registrypro.pro',
+  'mobi': 'whois.nic.mobi',
   'travel': 'whois.nic.travel',
-  'museum': 'whois.museum',
+  'museum': 'whois.nic.museum',
   'coop': 'whois.nic.coop',
-  'aero': 'whois.information.aero',
+  'aero': 'whois.aero',
   'edu': 'whois.educause.edu',
-  'gov': 'whois.dotgov.gov',
-  'mil': 'whois.nic.mil',
+  'gov': 'whois.nic.gov',
+  // Note: 'info', 'pro', 'mil' no longer have official WHOIS servers per IANA
 
   // Country code TLDs (alphabetical order)
   'ae': 'whois.aeda.net.ae',
   'af': 'whois.nic.af',
   'ag': 'whois.nic.ag',
   'ai': 'whois.nic.ai',
-  'al': 'whois.ripe.net',
+  // 'al': No official WHOIS server per IANA
   'am': 'whois.amnic.net',
   'ao': 'whois.nic.ao',
   'ar': 'whois.nic.ar',
   'at': 'whois.nic.at',
   'au': 'whois.auda.org.au',
-  'az': 'whois.ripe.net',
+  // 'az': No official WHOIS server per IANA
 
   'ba': 'whois.ripe.net',
   'bd': 'whois.btcl.net.bd',
@@ -58,11 +56,11 @@ const WHOIS_SERVERS = {
   'co': 'whois.nic.co',
   'cr': 'whois.nic.cr',
   'cu': 'whois.nic.cu',
-  'cy': 'whois.ripe.net',
+  // 'cy': No official WHOIS server per IANA (web-based only)
   'cz': 'whois.nic.cz',
 
   'de': 'whois.denic.de',
-  'dk': 'whois.dk-hostmaster.dk',
+  'dk': 'whois.punktum.dk',
   'do': 'whois.nic.do',
   'dz': 'whois.nic.dz',
 
@@ -78,7 +76,7 @@ const WHOIS_SERVERS = {
 
   'ga': 'whois.nic.ga',
   'gh': 'whois.nic.gh',
-  'gr': 'whois.ripe.net',
+  // 'gr': No official WHOIS server per IANA (web-based only)
   'gt': 'whois.gt',
 
   'hk': 'whois.hkirc.hk',
@@ -86,7 +84,7 @@ const WHOIS_SERVERS = {
   'hr': 'whois.dns.hr',
   'hu': 'whois.nic.hu',
 
-  'id': 'whois.pandi.or.id',
+  'id': 'whois.id',
   'ie': 'whois.weare.ie',
   'il': 'whois.isoc.org.il',
   'in': 'whois.registry.in',
@@ -127,7 +125,7 @@ const WHOIS_SERVERS = {
   'nl': 'whois.domain-registry.nl',
   'no': 'whois.norid.no',
   'np': 'whois.mos.com.np',
-  'nz': 'whois.dnc.org.nz',
+  'nz': 'whois.irs.net.nz',
 
   'pe': 'kero.yachay.pe',
   'ph': 'whois.nic.ph',
@@ -152,7 +150,7 @@ const WHOIS_SERVERS = {
   'tg': 'whois.nic.tg',
   'th': 'whois.thnic.co.th',
   'tk': 'whois.dot.tk',
-  'tr': 'whois.nic.tr',
+  'tr': 'whois.trabis.gov.tr',
   'tv': 'whois.nic.tv',
   'tw': 'whois.twnic.net.tw',
 

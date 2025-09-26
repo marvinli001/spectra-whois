@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Globe, Zap, Shield, Search } from 'lucide-react'
 import { LiquidGlass, LiquidCard } from '@/components/ui/liquid-glass'
 import { SearchForm } from '@/components/whois/search-form'
-import { ResultDisplay } from '@/components/whois/result-display'
+import { TabbedResultDisplay } from '@/components/whois/tabbed-result-display'
 import { WhoisResult, WhoisError } from '@/types/rdap'
 import { useLanguage } from '@/contexts/language-context'
 import { LanguageSwitcher } from '@/components/ui/language-switcher'
@@ -15,6 +15,7 @@ export default function Home() {
   const [error, setError] = useState<WhoisError | null>(null)
   const [loading, setLoading] = useState(false)
   const [hasSearched, setHasSearched] = useState(false)
+  const [searchedDomain, setSearchedDomain] = useState<string>('')
   const { t } = useLanguage()
 
   const handleSearch = async (domain: string) => {
@@ -22,6 +23,7 @@ export default function Home() {
     setLoading(true)
     setResult(null)
     setError(null)
+    setSearchedDomain(domain)
 
     try {
       const response = await fetch(`/api/whois?domain=${encodeURIComponent(domain)}`)
@@ -47,6 +49,7 @@ export default function Home() {
     setResult(null)
     setError(null)
     setLoading(false)
+    setSearchedDomain('')
   }
 
   return (
@@ -278,7 +281,7 @@ export default function Home() {
                 )}
 
                 {/* Results */}
-                {result && <ResultDisplay result={result} />}
+                {result && <TabbedResultDisplay rdapResult={result} domain={searchedDomain} />}
               </div>
             </motion.div>
           )}
