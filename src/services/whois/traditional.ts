@@ -18,6 +18,9 @@ export interface WhoisResponse {
 export interface WhoisParsedData {
   domain: string;
   registrar: string | null;
+  registrarUrl: string | null;
+  registrarEmail: string | null;
+  registrarPhone: string | null;
   registrationDate: string | null;
   expirationDate: string | null;
   updatedDate: string | null;

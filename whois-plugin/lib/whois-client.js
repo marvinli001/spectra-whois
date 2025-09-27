@@ -412,6 +412,9 @@ export class WhoisClient {
     const data = {
       domain: domain,
       registrar: null,
+      registrarUrl: null,
+      registrarEmail: null,
+      registrarPhone: null,
       registrationDate: null,
       expirationDate: null,
       updatedDate: null,
@@ -435,9 +438,15 @@ export class WhoisClient {
       const value = valueParts.join(':').trim();
       const lowerKey = key.toLowerCase().trim();
 
-      // Parse common WHOIS fields
-      if (lowerKey.includes('registrar') && !lowerKey.includes('whois')) {
+      // Parse common WHOIS fields with improved registrar handling
+      if (lowerKey === 'registrar' && !lowerKey.includes('whois') && !lowerKey.includes('abuse') && !lowerKey.includes('url') && !lowerKey.includes('iana')) {
         data.registrar = value;
+      } else if (lowerKey === 'registrar url') {
+        data.registrarUrl = value;
+      } else if (lowerKey === 'registrar abuse contact email' || lowerKey === 'registrar abuse email') {
+        data.registrarEmail = value;
+      } else if (lowerKey === 'registrar abuse contact phone' || lowerKey === 'registrar abuse phone') {
+        data.registrarPhone = value;
       } else if (lowerKey.includes('creation') || lowerKey.includes('created') || lowerKey.includes('registration date')) {
         data.registrationDate = value;
       } else if (lowerKey.includes('expir') || lowerKey.includes('expires')) {

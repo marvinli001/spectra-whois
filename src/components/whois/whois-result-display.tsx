@@ -142,9 +142,32 @@ export function WhoisResultDisplay({ result }: WhoisResultDisplayProps) {
               <InfoRow
                 label={t.results.registrar}
                 value={data.registrar}
+                subValue={data.registrarUrl ? `URL: ${data.registrarUrl}` : undefined}
                 icon={<Building className="w-4 h-4" />}
                 onCopy={() => copyToClipboard(data.registrar!, 'registrar')}
                 copied={copiedField === 'registrar'}
+                copyButtonTitle={t.results.copyToClipboard}
+              />
+            )}
+
+            {data.registrarEmail && (
+              <InfoRow
+                label="Registrar Abuse Email"
+                value={data.registrarEmail}
+                icon={<Building className="w-4 h-4" />}
+                onCopy={() => copyToClipboard(data.registrarEmail!, 'registrar-email')}
+                copied={copiedField === 'registrar-email'}
+                copyButtonTitle={t.results.copyToClipboard}
+              />
+            )}
+
+            {data.registrarPhone && (
+              <InfoRow
+                label="Registrar Abuse Phone"
+                value={data.registrarPhone}
+                icon={<Building className="w-4 h-4" />}
+                onCopy={() => copyToClipboard(data.registrarPhone!, 'registrar-phone')}
+                copied={copiedField === 'registrar-phone'}
                 copyButtonTitle={t.results.copyToClipboard}
               />
             )}

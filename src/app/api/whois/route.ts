@@ -32,31 +32,41 @@ export async function GET(request: NextRequest) {
     let whoisResult
     let source = 'rdap'
 
-    try {
-      // Try RDAP first (unless domain is known to need traditional WHOIS)
-      if (!needsTraditionalWhois(normalizedDomain)) {
+    // Check if domain needs traditional WHOIS first
+    if (needsTraditionalWhois(normalizedDomain)) {
+      console.log(`${normalizedDomain} requires traditional WHOIS, skipping RDAP`)
+
+      const whoisResponse = await queryTraditionalWhois(normalizedDomain)
+
+      if (whoisResponse.success) {
+        whoisResult = convertWhoisToRdap(whoisResponse)
+        source = 'whois'
+      } else {
+        throw new Error(whoisResponse.error || 'Traditional WHOIS query failed')
+      }
+    } else {
+      // Try RDAP first for domains that support it
+      try {
         const rdapResponse = await queryRdap(normalizedDomain)
         whoisResult = parseRdapResponse(rdapResponse)
-      } else {
-        throw new Error('Domain requires traditional WHOIS lookup')
-      }
-    } catch (rdapError) {
-      console.log(`RDAP failed for ${normalizedDomain}, trying traditional WHOIS:`, rdapError)
+      } catch (rdapError) {
+        console.log(`RDAP failed for ${normalizedDomain}, trying traditional WHOIS:`, rdapError)
 
-      // Fallback to traditional WHOIS
-      try {
-        const whoisResponse = await queryTraditionalWhois(normalizedDomain)
+        // Fallback to traditional WHOIS
+        try {
+          const whoisResponse = await queryTraditionalWhois(normalizedDomain)
 
-        if (whoisResponse.success) {
-          whoisResult = convertWhoisToRdap(whoisResponse)
-          source = 'whois'
-        } else {
-          throw new Error(whoisResponse.error || 'Traditional WHOIS query failed')
+          if (whoisResponse.success) {
+            whoisResult = convertWhoisToRdap(whoisResponse)
+            source = 'whois'
+          } else {
+            throw new Error(whoisResponse.error || 'Traditional WHOIS query failed')
+          }
+        } catch (whoisError) {
+          console.error(`Both RDAP and WHOIS failed for ${normalizedDomain}:`, whoisError)
+          // Re-throw the original RDAP error if both methods fail
+          throw rdapError
         }
-      } catch (whoisError) {
-        console.error(`Both RDAP and WHOIS failed for ${normalizedDomain}:`, whoisError)
-        // Re-throw the original RDAP error if both methods fail
-        throw rdapError
       }
     }
 
