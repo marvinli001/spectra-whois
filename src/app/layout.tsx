@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/contexts/language-context";
 import { EnvDebugPanel } from "@/components/debug/env-debug";
+import { getBrandName } from "@/lib/i18n";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -10,8 +11,10 @@ const inter = Inter({
   display: 'swap',
 });
 
+const brandName = getBrandName();
+
 export const metadata: Metadata = {
-  title: "SpectraWHOIS - Modern Domain Lookup",
+  title: `${brandName} - Modern Domain Lookup`,
   description: "A modern, fast WHOIS lookup service using RDAP with liquid glass design",
 };
 

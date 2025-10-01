@@ -1,9 +1,17 @@
 export type Language = 'zh' | 'en'
 
+/**
+ * Get custom brand name from environment variable
+ * Falls back to 'SpectraWHOIS' if not configured
+ */
+export function getBrandName(): string {
+  return process.env.NEXT_PUBLIC_BRAND_NAME || 'SpectraWHOIS'
+}
+
 export const translations = {
   zh: {
     // 主标题和描述
-    title: 'SpectraWHOIS',
+    title: getBrandName(),
     description: '基于RDAP协议的现代域名查询服务，支持全球TLD和国际化域名',
     subtitle: '基于RDAP协议的现代域名查询，支持全球TLD和国际化域名',
 
@@ -125,7 +133,7 @@ export const translations = {
   },
   en: {
     // Main title and description
-    title: 'SpectraWHOIS',
+    title: getBrandName(),
     description: 'A modern, fast WHOIS lookup service using RDAP with support for all global TLDs and internationalized domain names',
     subtitle: 'Modern domain lookup powered by RDAP with support for all global TLDs and internationalized domain names',
 

@@ -21,10 +21,12 @@ A modern, fast WHOIS lookup service built with Next.js 15 and powered by RDAP (R
 - 🔄 **Dual Protocol Support**: RDAP for modern domains + traditional WHOIS via Railway plugin
 - ⚡ **IANA Discovery**: Dynamic WHOIS server discovery with 24-hour caching
 - 🎨 **Liquid Glass UI**: Modern design language with Framer Motion animations
-- 📱 **Responsive Design**: Works perfectly on all devices
+- 📱 **Responsive Design**: Optimized for mobile with smooth performance
 - 🔒 **Privacy Compliant**: Uses RDAP for modern privacy standards
 - 🚀 **Railway Plugin**: Native Node.js TCP connections for traditional WHOIS
+- 🏷️ **Brand Customization**: Easily customize the brand name via environment variables
 - 🛠️ **Developer Experience**: Built-in debug panel and environment detection
+- 🌐 **Internationalization**: Full support for English and Chinese languages
 
 ## 🏗️ Architecture
 
@@ -68,6 +70,9 @@ cp .env.example .env.local
 
 Edit `.env.local`:
 ```bash
+# Brand Customization (optional)
+NEXT_PUBLIC_BRAND_NAME=SpectraWHOIS
+
 # For WHOIS plugin support (optional)
 NEXT_PUBLIC_WHOIS_PLUGIN_URL=https://your-railway-app.railway.app/whois
 ```
@@ -148,11 +153,29 @@ For enhanced functionality with traditional WHOIS queries, you can optionally de
 
 | Variable | Description | Default | Required |
 |----------|-------------|---------|----------|
+| `NEXT_PUBLIC_BRAND_NAME` | Custom brand name | `SpectraWHOIS` | No |
 | `NEXT_PUBLIC_WHOIS_PLUGIN_URL` | Railway WHOIS plugin URL | - | Optional* |
 | `NEXT_PUBLIC_WHOIS_API_URL` | Alternative plugin URL | - | Optional* |
 | `DEBUG_ENV_CHECKER` | Show environment debug logs | `false` | No |
 
 *Required only for traditional WHOIS tab functionality
+
+#### Brand Customization
+
+You can customize the brand name displayed throughout the application:
+
+```bash
+# .env.local or Vercel Environment Variables
+NEXT_PUBLIC_BRAND_NAME=YourCustomName
+```
+
+This will update:
+- Homepage title and logo
+- Floating search bar header
+- Browser tab title
+- All UI references
+
+If not set, defaults to "SpectraWHOIS"
 
 ### Railway Plugin
 
@@ -285,6 +308,50 @@ npm run dev      # Development server with watch
 - **Deployment**: Vercel (Frontend) + Railway (Backend)
 - **Protocols**: RDAP (HTTPS), Traditional WHOIS (TCP Port 43)
 - **Discovery**: IANA Bootstrap Registry
+
+## 🎨 Customization Guide
+
+### Brand Name
+
+Change the brand name displayed throughout the application:
+
+1. **Local Development:**
+   ```bash
+   # .env.local
+   NEXT_PUBLIC_BRAND_NAME=YourBrandName
+   ```
+
+2. **Vercel Deployment:**
+   - Go to your project settings
+   - Navigate to "Environment Variables"
+   - Add `NEXT_PUBLIC_BRAND_NAME=YourBrandName`
+   - Redeploy your application
+
+### Styling
+
+The project uses Tailwind CSS 4. Key customization points:
+
+- **Colors**: Edit `tailwind.config.ts` for theme colors
+- **Animations**: Modify Framer Motion variants in components
+- **Glass Effects**: Adjust `LiquidGlass` component in `src/components/ui/liquid-glass.tsx`
+
+## 🚀 Performance Optimizations
+
+### Implemented
+
+- ✅ Mobile-specific performance optimizations
+- ✅ Static gradients on mobile (animated on desktop)
+- ✅ Reduced motion for better mobile experience
+- ✅ Fixed positioning optimizations
+- ✅ Responsive spacing and layout
+
+### Recommendations
+
+- 📊 Add Service Worker for offline support
+- 🔄 Implement virtual scrolling for large lists
+- 💾 Add localStorage for query history
+- 📦 Code splitting for better initial load
+- 🖼️ Image optimization with Next.js Image
 
 ## 🤝 Contributing
 
