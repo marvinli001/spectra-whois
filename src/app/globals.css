@@ -17,11 +17,52 @@ body {
   min-height: 100vh;
 }
 
-/* 仅为 Framer Motion 动画组件启用 GPU 加速 - 避免影响 fixed 定位 */
-[class*="motion-"]:not([class*="fixed"]) {
-  will-change: transform, opacity;
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+/* 移动端性能优化 - 简化动画和GPU加速策略 */
+@media (max-width: 768px) {
+  /* 移动端：只对正在变换的元素启用will-change，避免过度使用GPU */
+  [class*="motion-"] {
+    /* 不使用全局will-change，让浏览器自动优化 */
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  /* 移动端：禁用复杂的3D变换和滤镜效果 */
+  [class*="motion-"] [style*="perspective"],
+  [class*="motion-"] [style*="blur"] {
+    perspective: none !important;
+    filter: none !important;
+  }
+
+  /* 移动端：减少阴影复杂度 */
+  [class*="shadow-2xl"] {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3) !important;
+  }
+
+  /* 移动端：禁用hover效果，避免触摸时的额外重绘 */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* 桌面端：保持完整的GPU加速和动画效果 */
+@media (min-width: 769px) {
+  [class*="motion-"]:not([class*="fixed"]) {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+}
+
+/* 系统级动画偏好支持 - 用户设置了减少动画时自动简化 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

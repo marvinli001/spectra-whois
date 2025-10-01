@@ -27,19 +27,19 @@ export function EnvDebugPanel() {
       <button
         onClick={() => setIsVisible(!isVisible)}
         className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-          config.hasWorkerUrl
+          config.hasPluginUrl
             ? 'bg-green-500/20 text-green-300 border border-green-500/30'
             : 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30'
         }`}
-        title={config.hasWorkerUrl ? 'WHOIS Plugin Configured' : 'WHOIS Plugin Not Configured'}
+        title={config.hasPluginUrl ? 'WHOIS Plugin Configured' : 'WHOIS Plugin Not Configured'}
       >
-        {config.hasWorkerUrl ? (
+        {config.hasPluginUrl ? (
           <CheckCircle className="w-4 h-4" />
         ) : (
           <AlertCircle className="w-4 h-4" />
         )}
         <span className="hidden sm:inline">
-          WHOIS: {config.hasWorkerUrl ? 'ON' : 'OFF'}
+          WHOIS: {config.hasPluginUrl ? 'ON' : 'OFF'}
         </span>
         {isVisible ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
       </button>
@@ -50,7 +50,7 @@ export function EnvDebugPanel() {
             {/* Configuration Status */}
             <div>
               <h3 className="font-semibold text-white mb-2 flex items-center gap-2">
-                {config.hasWorkerUrl ? (
+                {config.hasPluginUrl ? (
                   <CheckCircle className="w-4 h-4 text-green-400" />
                 ) : (
                   <AlertCircle className="w-4 h-4 text-yellow-400" />
@@ -60,7 +60,7 @@ export function EnvDebugPanel() {
               <div className="space-y-1 text-white/70">
                 <div>Platform: <span className="text-white">{config.platform}</span></div>
                 <div>Source: <span className="text-white">{config.source}</span></div>
-                <div>URL: <span className="text-white">{config.workerUrl || 'Not configured'}</span></div>
+                <div>URL: <span className="text-white">{config.pluginUrl || 'Not configured'}</span></div>
               </div>
             </div>
 
@@ -94,7 +94,7 @@ export function EnvDebugPanel() {
             )}
 
             {/* Quick Actions */}
-            {config.platform === 'local' && !config.hasWorkerUrl && (
+            {config.platform === 'local' && !config.hasPluginUrl && (
               <div>
                 <h4 className="font-semibold text-white mb-2">Quick Setup</h4>
                 <div className="space-y-2">

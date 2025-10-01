@@ -60,14 +60,17 @@ export default function Home() {
       <div className="fixed inset-0 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900" />
       <div className="fixed inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
 
-      {/* Animated background orbs */}
-      <div className="fixed inset-0 overflow-hidden">
+      {/* Animated background orbs - 优化移动端性能 */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        {/* 移动端使用静态渐变,桌面端使用动画 */}
+        <div className="md:hidden absolute -top-40 -left-40 w-80 h-80 bg-blue-500/15 rounded-full blur-2xl" />
+        <div className="md:hidden absolute -bottom-40 -right-40 w-96 h-96 bg-purple-500/15 rounded-full blur-2xl" />
+
         <motion.div
-          className="absolute -top-40 -left-40 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl"
+          className="hidden md:block absolute -top-40 -left-40 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl"
           animate={{
             x: [0, 100, 0],
             y: [0, -50, 0],
-            scale: [1, 1.1, 1],
           }}
           transition={{
             duration: 20,
@@ -76,11 +79,10 @@ export default function Home() {
           }}
         />
         <motion.div
-          className="absolute -bottom-40 -right-40 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"
+          className="hidden md:block absolute -bottom-40 -right-40 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"
           animate={{
             x: [0, -120, 0],
             y: [0, 80, 0],
-            scale: [1, 0.9, 1],
           }}
           transition={{
             duration: 25,
@@ -131,7 +133,7 @@ export default function Home() {
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                    transition={{ delay: 0.1, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                   >
                     <SearchForm onSearch={handleSearch} loading={loading} />
                   </motion.div>
@@ -183,7 +185,11 @@ export default function Home() {
         <AnimatePresence>
           {hasSearched && (
             <motion.div
-              className="fixed top-1 sm:top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-4xl px-2 sm:px-4"
+              className="fixed top-3 sm:top-4 left-1/2 z-50 w-full max-w-4xl px-3 sm:px-4"
+              style={{
+                x: '-50%', // 使用framer-motion的x属性来居中
+                willChange: 'auto', // 移除will-change避免影响fixed定位
+              }}
               initial={{ opacity: 0, y: -50, scale: 0.95 }}
               animate={{
                 opacity: 1,
@@ -193,7 +199,7 @@ export default function Home() {
               }}
               exit={{ opacity: 0, y: -50, scale: 0.95 }}
             >
-              <LiquidGlass className="p-2 sm:p-4 md:p-6" blur={'none'} opacity={0.12}>
+              <LiquidGlass className="p-3 sm:p-4 md:p-6" blur={'none'} opacity={0.12}>
                 <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-2 sm:gap-4 md:gap-6">
                   <button
                     onClick={handleNewSearch}
@@ -219,7 +225,7 @@ export default function Home() {
         <AnimatePresence>
           {hasSearched && (
             <motion.div
-              className="pt-28 sm:pt-32 md:pt-36 pb-12"
+              className="pt-32 sm:pt-32 md:pt-36 pb-8 sm:pb-12"
               initial={{ opacity: 0 }}
               animate={{
                 opacity: 1,

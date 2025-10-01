@@ -78,7 +78,7 @@ export function ResultDisplay({ result }: ResultDisplayProps) {
 
   return (
     <motion.div
-      className="w-full max-w-6xl mx-auto space-y-6 text-center"
+      className="w-full max-w-6xl mx-auto space-y-4 sm:space-y-6 text-center"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
@@ -98,7 +98,7 @@ export function ResultDisplay({ result }: ResultDisplayProps) {
         </div>
       </LiquidCard>
 
-      <div className="grid lg:grid-cols-2 gap-6">
+      <div className="grid lg:grid-cols-2 gap-4 sm:gap-6">
         {/* Domain Info */}
         <LiquidCard>
           <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
@@ -191,7 +191,7 @@ export function ResultDisplay({ result }: ResultDisplayProps) {
       </div>
 
       {/* Contacts Grid */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {result.registrant && (
           <ContactCard title={t.results.registrant} contact={result.registrant} />
         )}

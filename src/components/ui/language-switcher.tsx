@@ -14,7 +14,7 @@ export function LanguageSwitcher() {
 
   return (
     <motion.div
-      className="fixed top-4 right-4 z-50"
+      className="fixed top-3 right-3 sm:top-4 sm:right-4 z-50"
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: 0.5, duration: 0.3 }}

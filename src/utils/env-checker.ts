@@ -5,8 +5,8 @@
  */
 
 export interface EnvCheck {
-  hasWorkerUrl: boolean
-  workerUrl: string | undefined
+  hasPluginUrl: boolean
+  pluginUrl: string | undefined
   source: 'build-time' | 'runtime' | 'vercel-env' | 'none'
   platform?: 'local' | 'vercel' | 'other'
 }
@@ -47,8 +47,8 @@ export function checkWhoisWorkerConfig(): EnvCheck {
       console.log('[SpectraWHOIS] Found NEXT_PUBLIC_WHOIS_PLUGIN_URL:', url)
     }
     return {
-      hasWorkerUrl: url.length > 0,
-      workerUrl: url.length > 0 ? url : undefined,
+      hasPluginUrl: url.length > 0,
+      pluginUrl: url.length > 0 ? url : undefined,
       source: 'build-time',
       platform
     }
@@ -68,8 +68,8 @@ export function checkWhoisWorkerConfig(): EnvCheck {
         console.log(`[SpectraWHOIS] Found ${envVar}:`, url)
       }
       return {
-        hasWorkerUrl: url.length > 0,
-        workerUrl: url.length > 0 ? url : undefined,
+        hasPluginUrl: url.length > 0,
+        pluginUrl: url.length > 0 ? url : undefined,
         source: 'build-time',
         platform
       }
@@ -101,8 +101,8 @@ export function checkWhoisWorkerConfig(): EnvCheck {
       if (windowEnv[envVar as keyof typeof windowEnv]) {
         const url = (windowEnv[envVar as keyof typeof windowEnv] as string).trim()
         return {
-          hasWorkerUrl: url.length > 0,
-          workerUrl: url.length > 0 ? url : undefined,
+          hasPluginUrl: url.length > 0,
+          pluginUrl: url.length > 0 ? url : undefined,
           source: 'runtime',
           platform
         }
@@ -116,8 +116,8 @@ export function checkWhoisWorkerConfig(): EnvCheck {
         if (envData[envVar]) {
           const url = envData[envVar].trim()
           return {
-            hasWorkerUrl: url.length > 0,
-            workerUrl: url.length > 0 ? url : undefined,
+            hasPluginUrl: url.length > 0,
+            pluginUrl: url.length > 0 ? url : undefined,
             source: 'vercel-env',
             platform
           }
@@ -131,8 +131,8 @@ export function checkWhoisWorkerConfig(): EnvCheck {
     // Check if local WHOIS plugin is running
     const defaultLocalUrl = 'http://localhost:3001/whois'
     return {
-      hasWorkerUrl: false, // Don't assume it's available
-      workerUrl: undefined, // User needs to configure explicitly
+      hasPluginUrl: false, // Don't assume it's available
+      pluginUrl: undefined, // User needs to configure explicitly
       source: 'none',
       platform
     }
@@ -146,8 +146,8 @@ export function checkWhoisWorkerConfig(): EnvCheck {
   }
 
   return {
-    hasWorkerUrl: false,
-    workerUrl: undefined,
+    hasPluginUrl: false,
+    pluginUrl: undefined,
     source: 'none',
     platform
   }
@@ -156,9 +156,9 @@ export function checkWhoisWorkerConfig(): EnvCheck {
 /**
  * Get the WHOIS Plugin URL (simplified version)
  */
-export function getWhoisWorkerUrl(): string | undefined {
+export function getWhoisPluginUrl(): string | undefined {
   const config = checkWhoisWorkerConfig()
-  return config.workerUrl
+  return config.pluginUrl
 }
 
 /**
@@ -180,7 +180,7 @@ export function getConfigDebugInfo(): {
 
   const suggestions = []
 
-  if (!config.hasWorkerUrl) {
+  if (!config.hasPluginUrl) {
     suggestions.push('Configure WHOIS plugin URL in environment variables')
 
     if (config.platform === 'local') {
@@ -210,5 +210,5 @@ export function shouldShowWhoisTab(
 
   // Show WHOIS tab if WHOIS plugin URL is configured
   // This allows users to compare RDAP vs traditional WHOIS results
-  return config.hasWorkerUrl
+  return config.hasPluginUrl
 }

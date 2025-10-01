@@ -10,7 +10,7 @@ import { WhoisResult } from '@/types/rdap'
 import { WhoisResponse } from '@/services/whois/traditional'
 import { useLanguage } from '@/contexts/language-context'
 import { needsTraditionalWhois } from '@/services/whois/traditional'
-import { getWhoisWorkerUrl, shouldShowWhoisTab, checkWhoisWorkerConfig } from '@/utils/env-checker'
+import { getWhoisPluginUrl, shouldShowWhoisTab, checkWhoisWorkerConfig } from '@/utils/env-checker'
 
 interface TabbedResultDisplayProps {
   rdapResult: WhoisResult
@@ -44,20 +44,23 @@ export function TabbedResultDisplay({ rdapResult, domain }: TabbedResultDisplayP
     if (!shouldShow) {
       console.log('[SpectraWHOIS Debug] WHOIS tab not shown - reason:',
         needsWhoisOnly ? 'Domain requires traditional WHOIS only' :
-        !config.hasWorkerUrl ? 'WHOIS plugin URL not configured' : 'Unknown reason'
+        !config.hasPluginUrl ? 'WHOIS plugin URL not configured' : 'Unknown reason'
       )
     }
   }, [domain, needsWhoisOnly])
 
   const fetchWhoisData = async () => {
-    const workerUrl = getWhoisWorkerUrl()
-    if (!workerUrl || workerUrl.trim() === '') return
+    const pluginUrl = getWhoisPluginUrl()
+    if (!pluginUrl || pluginUrl.trim() === '') {
+      console.warn('[SpectraWHOIS] WHOIS plugin URL not configured, skipping fetch')
+      return
+    }
 
     setLoading(true)
     setError(null)
 
     try {
-      const response = await fetch(`${workerUrl}?domain=${encodeURIComponent(domain)}`, {
+      const response = await fetch(`${pluginUrl}?domain=${encodeURIComponent(domain)}`, {
         headers: {
           'Accept': 'application/json',
         },
@@ -87,7 +90,13 @@ export function TabbedResultDisplay({ rdapResult, domain }: TabbedResultDisplayP
 
     // Fetch WHOIS data when switching to WHOIS tab for the first time
     if (tab === 'whois' && !whoisResult && !loading) {
-      fetchWhoisData()
+      const pluginUrl = getWhoisPluginUrl()
+      if (pluginUrl && pluginUrl.trim() !== '') {
+        fetchWhoisData()
+      } else {
+        console.warn('[SpectraWHOIS] Cannot fetch WHOIS data: plugin URL not configured')
+        setError('WHOIS plugin is not configured. Please set NEXT_PUBLIC_WHOIS_PLUGIN_URL environment variable.')
+      }
     }
   }
 
@@ -99,13 +108,13 @@ export function TabbedResultDisplay({ rdapResult, domain }: TabbedResultDisplayP
 
   return (
     <motion.div
-      className="w-full max-w-6xl mx-auto space-y-6"
+      className="w-full max-w-6xl mx-auto space-y-4 sm:space-y-6"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
     >
       {/* Simple Tab Navigation */}
-      <div className="flex justify-center mb-6">
+      <div className="flex justify-center mb-4 sm:mb-6">
         <div className="relative flex bg-white/5 rounded-lg p-1">
           {/* Active tab background */}
           <motion.div
