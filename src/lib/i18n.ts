@@ -123,6 +123,17 @@ export const translations = {
       'expired': '已过期'
     },
 
+    // 搜索历史
+    searchHistory: {
+      title: '最近搜索',
+      clearAll: '清空',
+      remove: '删除',
+      justNow: '刚刚',
+      minutesAgo: '分钟前',
+      hoursAgo: '小时前',
+      daysAgo: '天前'
+    },
+
     // 页脚
     footer: '基于RDAP • 使用Next.js 15构建 • 液体玻璃设计',
 
@@ -243,6 +254,17 @@ export const translations = {
       'active': 'Active',
       'inactive': 'Inactive',
       'expired': 'Expired'
+    },
+
+    // Search history
+    searchHistory: {
+      title: 'Recent Searches',
+      clearAll: 'Clear all',
+      remove: 'Remove',
+      justNow: 'Just now',
+      minutesAgo: 'm ago',
+      hoursAgo: 'h ago',
+      daysAgo: 'd ago'
     },
 
     // Footer

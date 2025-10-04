@@ -6,9 +6,11 @@ import { Globe, Zap, Shield, Search } from 'lucide-react'
 import { LiquidGlass, LiquidCard } from '@/components/ui/liquid-glass'
 import { SearchForm } from '@/components/whois/search-form'
 import { TabbedResultDisplay } from '@/components/whois/tabbed-result-display'
+import { SearchHistory } from '@/components/whois/search-history'
 import { WhoisResult, WhoisError } from '@/types/rdap'
 import { useLanguage } from '@/contexts/language-context'
 import { LanguageSwitcher } from '@/components/ui/language-switcher'
+import { useSearchHistory } from '@/hooks/use-search-history'
 
 export default function Home() {
   const [result, setResult] = useState<WhoisResult | null>(null)
@@ -17,6 +19,7 @@ export default function Home() {
   const [hasSearched, setHasSearched] = useState(false)
   const [searchedDomain, setSearchedDomain] = useState<string>('')
   const { t } = useLanguage()
+  const { addSearch, recentSearches } = useSearchHistory()
 
   const handleSearch = async (domain: string) => {
     setHasSearched(true)
@@ -31,14 +34,17 @@ export default function Home() {
 
       if (!response.ok) {
         setError(data)
+        addSearch(domain, false)
       } else {
         setResult(data)
+        addSearch(domain, true)
       }
     } catch {
       setError({
         code: 'NETWORK_ERROR',
         message: t.errors.failedToConnect
       })
+      addSearch(domain, false)
     } finally {
       setLoading(false)
     }
@@ -283,6 +289,18 @@ export default function Home() {
                         </details>
                       )}
                     </LiquidCard>
+                  </motion.div>
+                )}
+
+                {/* Search History - Show when not loading and no results */}
+                {!loading && !result && !error && recentSearches.length > 0 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="max-w-2xl mx-auto"
+                  >
+                    <SearchHistory onSelectDomain={handleSearch} />
                   </motion.div>
                 )}
 
