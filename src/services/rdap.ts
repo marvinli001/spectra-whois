@@ -30,7 +30,7 @@ export async function getBootstrapRegistry(): Promise<BootstrapRegistry> {
   try {
     const response = await fetch(IANA_BOOTSTRAP_URL, {
       headers: { 'Accept': 'application/json' },
-      next: { revalidate: 3600 } // Cache for 1 hour
+      next: { revalidate: 86400 } // Cache for 24 hours
     })
 
     if (!response.ok) {
@@ -39,10 +39,10 @@ export async function getBootstrapRegistry(): Promise<BootstrapRegistry> {
 
     const data: BootstrapRegistry = await response.json()
 
-    // Cache for 1 hour
+    // Cache for 24 hours
     bootstrapCache = {
       data,
-      expires: Date.now() + 3600 * 1000
+      expires: Date.now() + 86400 * 1000
     }
 
     return data
@@ -102,7 +102,7 @@ export async function queryRdap(domain: string): Promise<DomainResponse> {
           'Accept': 'application/rdap+json, application/json',
           'User-Agent': 'SpectraWHOIS/1.0'
         },
-        next: { revalidate: 300 } // Cache for 5 minutes
+        next: { revalidate: 1800 } // Cache for 30 minutes
       })
 
       if (response.status === 404) {

@@ -31,21 +31,23 @@ export function TabbedResultDisplay({ rdapResult, domain }: TabbedResultDisplayP
   // Check if WHOIS plugin URL is configured
   useEffect(() => {
     // Only show WHOIS tab for domains that support RDAP
-    const shouldShow = shouldShowWhoisTab(domain) && !needsWhoisOnly
+    const shouldShow = shouldShowWhoisTab() && !needsWhoisOnly
     setShowWhoisTab(shouldShow)
 
-    // Debug logging (always enabled to help troubleshoot production issues)
-    const config = checkWhoisWorkerConfig()
-    console.log('[SpectraWHOIS Debug] WHOIS Worker Config:', config)
-    console.log('[SpectraWHOIS Debug] Domain:', domain)
-    console.log('[SpectraWHOIS Debug] Needs Traditional WHOIS:', needsWhoisOnly)
-    console.log('[SpectraWHOIS Debug] Show WHOIS tab:', shouldShow)
+    // Debug logging (only in development)
+    if (process.env.NODE_ENV === 'development') {
+      const config = checkWhoisWorkerConfig()
+      console.log('[SpectraWHOIS Debug] WHOIS Worker Config:', config)
+      console.log('[SpectraWHOIS Debug] Domain:', domain)
+      console.log('[SpectraWHOIS Debug] Needs Traditional WHOIS:', needsWhoisOnly)
+      console.log('[SpectraWHOIS Debug] Show WHOIS tab:', shouldShow)
 
-    if (!shouldShow) {
-      console.log('[SpectraWHOIS Debug] WHOIS tab not shown - reason:',
-        needsWhoisOnly ? 'Domain requires traditional WHOIS only' :
-        !config.hasPluginUrl ? 'WHOIS plugin URL not configured' : 'Unknown reason'
-      )
+      if (!shouldShow) {
+        console.log('[SpectraWHOIS Debug] WHOIS tab not shown - reason:',
+          needsWhoisOnly ? 'Domain requires traditional WHOIS only' :
+          !config.hasPluginUrl ? 'WHOIS plugin URL not configured' : 'Unknown reason'
+        )
+      }
     }
   }, [domain, needsWhoisOnly])
 

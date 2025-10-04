@@ -128,11 +128,10 @@ export function checkWhoisWorkerConfig(): EnvCheck {
 
   // 4. Platform-specific defaults for development
   if (platform === 'local' && process.env.NODE_ENV === 'development') {
-    // Check if local WHOIS plugin is running
-    const defaultLocalUrl = 'http://localhost:3001/whois'
+    // No default URL - user needs to configure explicitly
     return {
-      hasPluginUrl: false, // Don't assume it's available
-      pluginUrl: undefined, // User needs to configure explicitly
+      hasPluginUrl: false,
+      pluginUrl: undefined,
       source: 'none',
       platform
     }
@@ -198,17 +197,11 @@ export function getConfigDebugInfo(): {
 }
 
 /**
- * Check if WHOIS tab should be shown for a given domain
- * @param domain - The domain to check
- * @param needsTraditionalWhois - Function to check if domain needs traditional WHOIS (unused, kept for compatibility)
+ * Check if WHOIS tab should be shown
+ * WHOIS tab is shown when the plugin URL is configured
+ * This allows users to compare RDAP vs traditional WHOIS results
  */
-export function shouldShowWhoisTab(
-  domain: string,
-  needsTraditionalWhois?: (domain: string) => boolean
-): boolean {
+export function shouldShowWhoisTab(): boolean {
   const config = checkWhoisWorkerConfig()
-
-  // Show WHOIS tab if WHOIS plugin URL is configured
-  // This allows users to compare RDAP vs traditional WHOIS results
   return config.hasPluginUrl
 }
