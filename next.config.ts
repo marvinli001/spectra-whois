@@ -6,6 +6,8 @@ const nextConfig: NextConfig = {
       allowedOrigins: ['*']
     }
   },
+  // Turbopack is default in Next 16; explicit config keeps builds quiet even with a custom webpack block.
+  turbopack: {},
   webpack: (config, { dev }) => {
     if (dev) {
       config.watchOptions = {

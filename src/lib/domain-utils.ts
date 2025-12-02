@@ -1,4 +1,4 @@
-import * as punycode from 'punycode'
+import * as punycode from 'punycode/'
 
 export function isValidDomain(domain: string): boolean {
   if (!domain || typeof domain !== 'string') return false

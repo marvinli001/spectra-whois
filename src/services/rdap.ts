@@ -207,7 +207,6 @@ export function parseRdapResponse(response: DomainResponse): WhoisResult {
   return result
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function extractEntityName(entity: any): string {
   // Try to get name from vCard
   if (entity.vcardArray && Array.isArray(entity.vcardArray)) {
@@ -226,7 +225,6 @@ function extractEntityName(entity: any): string {
   return entity.handle || ''
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function parseContactEntity(entity: any): ContactInfo {
   const contact: ContactInfo = {}
 

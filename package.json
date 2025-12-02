@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "dev:webpack": "next dev --webpack",
+    "build": "node scripts/next-silent-baseline.js build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "postinstall": "node scripts/patch-baseline-warn.js"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
@@ -17,7 +19,7 @@
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.21",
     "lucide-react": "^0.544.0",
-    "next": "15.5.4",
+    "next": "16.0.5",
     "punycode": "^2.3.1",
     "react": "19.1.0",
     "react-dom": "19.1.0"
@@ -28,8 +30,9 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "baseline-browser-mapping": "^2.8.32",
     "eslint": "^9",
-    "eslint-config-next": "15.5.4",
+    "eslint-config-next": "16.0.5",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

@@ -61,7 +61,6 @@ export interface Entity {
 }
 
 // VCard format: [version, properties]
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type VCard = any[]
 
 export interface Remark {
@@ -202,6 +201,5 @@ export interface ContactInfo {
 export interface WhoisError {
   code: 'INVALID_DOMAIN' | 'TLD_NOT_SUPPORTED' | 'RDAP_ERROR' | 'QUERY_ERROR' | 'RATE_LIMITED' | 'NETWORK_ERROR'
   message: string
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   details?: any
 }
