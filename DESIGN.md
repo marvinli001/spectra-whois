@@ -243,9 +243,9 @@ The palette is intentionally narrow: neutral fields do most of the work, blue ma
 
 The shell is a sticky 68px header over a centered content container capped at 1440px. Horizontal page padding is 16px by default, 24px from 640px, and 32px from 1024px. The header and main content share these edges so brand, workbench, and result ledger stay on one vertical grid.
 
-Idle topology depends on evidence. With no history, the compact search card owns the width and begins after a viewport-aware 48–128px top offset. With real history, the section becomes a 2:1 search/history grid at 1024px with a 24px gutter; below 1024px it is one content-aligned column with history immediately after search. History height follows its rows until more than five entries require a bounded scroll area. The search card's working content is capped at 1024px so the field/action row stays readable on wide screens.
+Idle topology depends on evidence. The workbench is optically centered inside an 1180px maximum width. At 1024px and above, a 0.62/1.45 asymmetric grid places the protocol identifier and large semantic field label in the narrow left column, with the unified input/action control in the wider right column. With real history, the history surface aligns beneath the input column instead of competing beside the lookup task. Below 1024px, the label, control, and optional history collapse to one content-aligned column. History height follows its rows until more than five entries require a bounded scroll area.
 
-At 640px and above, the labeled search field and primary action sit side by side; below 640px they stack and the action stretches to the row width. The idle control height is 56px, mobile button targets never fall below 44px, and compact post-search controls are 44px. The search action is 128px minimum width on wider screens.
+The idle input and primary action form one 64px control group rather than two floating pills. The action stays inside the group, uses a quiet neutral disabled state, and becomes the one blue action after input exists. Mobile button targets never fall below 44px, compact post-search controls are 44px, and the wordmark becomes screen-reader-only below 360px to protect header controls from horizontal overflow.
 
 After submission, the workbench compacts into a sticky strip 84px below the viewport top and the result region follows with an 8–12px gap. The result story is summary first, then detail tabs, then a 7/5 registration-versus-dates/nameservers grid at 1024px. Contact cards become two columns from 768px; raw protocol data is bounded to the lesser of 34rem or 64vh. Tabs may scroll horizontally rather than wrap or shrink below legibility.
 
@@ -288,7 +288,7 @@ The component foundation is the exact shadcn `base-luma` preset `b2D0wqNxT` on B
 - **Outline:** Paper or transparent dark ground with a semantic hairline; muted fill on hover. Use for theme, language, cancellation, and secondary recovery actions.
 - **Ghost:** visually quiet until hover; used for brand reset, history rows, copy, remove, and other subordinate icon actions.
 - **Destructive:** a low-opacity red field with red text rather than a solid alarm block.
-- **Hover / active:** translate upward 2px with a Surface Rest shadow, then compress to 97% with a 1px downward translation on press. Popup triggers do not compress. Disable all transforms and transitions for reduced motion.
+- **Hover / active:** adjust color, border, or shadow without moving the control. Press feedback is a restrained 98.5% compression; popup triggers do not compress. Disable transforms and transitions for reduced motion.
 - **Focus / disabled:** use a 3px ring at 30% ring color plus a semantic focus border. Disabled controls keep shape, remove elevation, block pointer input, and use 50% opacity.
 
 ### Badges
@@ -301,13 +301,13 @@ The component foundation is the exact shadcn `base-luma` preset `b2D0wqNxT` on B
 
 - **Corner style:** quiet container radius (18px), clipped overflow, semantic card ground, shallow shadow, and a 5%/10% foreground ring.
 - **Internal rhythm:** 24px default padding and gap; compact cards use 16px. A header divider receives matching bottom padding instead of a second nested surface.
-- **Workbench:** compact labeled form while idle; after search it retains 16px rhythm, translucent card ground, and Overlay shadow.
+- **Workbench:** an unenclosed asymmetric label/control composition while idle; after search it compacts into a 16px-rhythm translucent card with Overlay shadow.
 - **Result summary:** domain and source lead; verified badges and statuses follow; copy remains subordinate. The summary is always read before protocol detail.
 
 ### Inputs / Fields
 
-- **Style:** a labeled 56px input group with a 26px radius, globe icon, medium input text, transparent border, and 50% semantic input pigment over the page. The compact field is 44px high.
-- **Focus:** lift 2px, return to the full background color, apply Field Focus elevation, then show the shared semantic border/ring treatment.
+- **Style:** a labeled 64px unified input/action group with a 26px radius, globe icon, medium input text, semantic card ground, and quiet hairline. The compact field is 44px high.
+- **Focus:** keep the control spatially stable, strengthen the primary-tinted border, add a low-opacity 4px ring, and apply Field Focus elevation.
 - **Validation:** set `aria-invalid`, connect the message with `aria-describedby`, color border/ring/message destructively, and announce the field error as an alert. Clear stale error copy while the user edits.
 - **Disabled:** prevent input and use 50% opacity; the submit action is also disabled when the normalized value is empty.
 
@@ -327,7 +327,7 @@ Loading preserves the result layout with skeletons, a polite live region, and a 
 
 ### Motion
 
-The focal transition uses a workbench spring (stiffness 260, damping 30, mass 0.9). Controls use a faster spring (stiffness 420, damping 28, mass 0.55). General panels use 420ms exponential-out motion (`cubic-bezier(0.16, 1, 0.3, 1)`); the provider default is 280ms with the same easing. Panel sequences wait 80ms, then stagger by 55ms. Theme background and foreground changes run for 320ms and 240ms respectively. Loading progress cycles over 1.8s only when reduced motion is not requested.
+The focal transition uses a critically damped workbench spring (stiffness 340, damping 38, mass 0.82). Controls use a faster low-bounce spring (stiffness 460, damping 38, mass 0.5). Button and icon state changes use 180-200ms exponential-out motion (`cubic-bezier(0.16, 1, 0.3, 1)`); general panels use 420ms only when the result hierarchy benefits from a readable reveal. Panel sequences wait 80ms, then stagger by 55ms. Theme background and foreground changes run for 320ms and 240ms respectively. Loading progress cycles over 1.8s only when reduced motion is not requested.
 
 **The Spatial Continuity Rule.** Animate opacity and transform to explain state movement; never animate layout for spectacle, hide feedback behind motion, or run decorative loops.
 
@@ -339,7 +339,7 @@ The focal transition uses a workbench spring (stiffness 260, damping 30, mass 0.
 
 - **Do** begin with the labeled domain lookup and reveal information only when a loading, success, partial, empty, or error state exists.
 - **Do** reuse the `base-luma` Base UI primitives, semantic CSS variables, Geist roles, Hugeicons strokes, radius scale, and motion tokens before extending the system.
-- **Do** preserve the 68px shell, 1440px shared container, stable compact search strip, summary-first result story, and conditional history/protocol topology.
+- **Do** preserve the 68px shell, 1440px shared container, 1180px asymmetric idle workbench, stable compact search strip, summary-first result story, and conditional history/protocol topology.
 - **Do** keep English and Simplified Chinese layouts resilient to wrapping, long domains, long registrar names, and horizontal tab overflow.
 - **Do** retain visible focus, skip navigation, semantic labels, live loading/error announcements, 44px touch targets, and reduced-motion parity in every extension.
 - **Do** make new status colors prove a distinct semantic need and provide both light- and dark-mode behavior.

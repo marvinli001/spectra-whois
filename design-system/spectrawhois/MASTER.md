@@ -26,7 +26,8 @@ Use semantic tokens only for foundational surfaces: `background`, `foreground`, 
 - The only body content is the labeled domain search workbench and recent local history when history exists.
 - The audience is developers, webmasters, and site operators. Do not add a proposition headline, helper paragraph, example queries, or beginner-facing WHOIS/RDAP explanation.
 - No protocol cards, feature cards, result preview, marketing proof, or fabricated metrics appear before a lookup.
-- With history, use an 8/4 desktop split. Without history, the search workbench owns a centered maximum width. Both collapse to one column below 768px.
+- Center the idle workbench inside an 1180px maximum width. At 1024px and above, the large field label occupies the narrow left column and the unified input/action control occupies the wider right column.
+- When recent history exists, align it below the input column instead of placing a competing card beside the primary task. Collapse the entire composition to one column below 1024px.
 
 ### Lookup state
 
@@ -46,10 +47,10 @@ Use semantic tokens only for foundational surfaces: `background`, `foreground`, 
 
 ## Motion system
 
-- Motion intensity: 7, optimized for an Operate surface.
+- Motion intensity: 4, optimized for a calm Operate surface.
 - Focal transition: idle search workbench compacts while the result workspace enters below.
-- Every button uses a 300ms exponential ease for hover lift, focus emphasis, active compression, and return.
-- Routine transitions run 150-320ms; major layout continuity uses a controlled spring.
+- Buttons use a 200ms exponential ease for color, border, and shadow feedback. Hover never changes their position; press feedback is a restrained 98.5% compression.
+- Routine control transitions run 180-240ms; major layout continuity uses a critically damped spring.
 - Result panels enter in a capped 55ms sibling stagger. Tabs and disclosures crossfade with short directional movement.
 - Animate transforms, opacity, bounded blur, color, and shadow. Do not animate layout-driving dimensions in React.
 - `prefers-reduced-motion` removes spatial motion while preserving state and feedback.

@@ -20,7 +20,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useLanguage } from "@/contexts/language-context"
-import { controlSpring } from "@/lib/motion"
+import { microTransition } from "@/lib/motion"
 
 export function ThemeToggle() {
   const [mounted, setMounted] = useState(false)
@@ -50,10 +50,10 @@ export function ThemeToggle() {
         <AnimatePresence mode="wait" initial={false}>
           <motion.span
             key={mounted ? resolvedTheme : "system"}
-            initial={{ opacity: 0, rotate: -35, scale: 0.72 }}
-            animate={{ opacity: 1, rotate: 0, scale: 1 }}
-            exit={{ opacity: 0, rotate: 35, scale: 0.72 }}
-            transition={controlSpring}
+            initial={{ opacity: 0, scale: 0.92 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.92 }}
+            transition={microTransition}
             className="grid place-items-center"
           >
             <HugeiconsIcon icon={icon} strokeWidth={1.8} />

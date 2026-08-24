@@ -1,7 +1,8 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { AnimatePresence, motion } from "motion/react"
+import dynamic from "next/dynamic"
+import { AnimatePresence, motion, useReducedMotion } from "motion/react"
 
 import { AppHeader } from "@/components/ui/app-header"
 import {
@@ -10,13 +11,21 @@ import {
 } from "@/components/ui/card"
 import { LookupErrorState, LookupLoading } from "@/components/whois/lookup-states"
 import { SearchForm } from "@/components/whois/search-form"
-import { SearchHistory } from "@/components/whois/search-history"
-import { TabbedResultDisplay } from "@/components/whois/tabbed-result-display"
 import { useLanguage } from "@/contexts/language-context"
 import { useSearchHistory } from "@/hooks/use-search-history"
 import { panelTransition, workbenchSpring } from "@/lib/motion"
 import { cn } from "@/lib/utils"
 import type { WhoisError, WhoisResult } from "@/types/rdap"
+
+const SearchHistory = dynamic(() =>
+  import("@/components/whois/search-history").then((module) => module.SearchHistory)
+)
+
+const TabbedResultDisplay = dynamic(() =>
+  import("@/components/whois/tabbed-result-display").then(
+    (module) => module.TabbedResultDisplay
+  )
+)
 
 export default function Home() {
   const [inputDomain, setInputDomain] = useState("")
@@ -27,6 +36,7 @@ export default function Home() {
   const [searchedDomain, setSearchedDomain] = useState("")
   const requestRef = useRef<AbortController | null>(null)
   const resultsRegionRef = useRef<HTMLElement>(null)
+  const prefersReducedMotion = useReducedMotion()
   const { t } = useLanguage()
   const { addSearch, history, removeSearch, clearHistory } = useSearchHistory()
 
@@ -94,10 +104,25 @@ export default function Home() {
     setError(null)
     setSearchedDomain("")
     setInputDomain("")
-    window.scrollTo({ top: 0, behavior: "smooth" })
+    window.scrollTo({
+      top: 0,
+      behavior: prefersReducedMotion ? "auto" : "smooth",
+    })
   }
 
   const hasHistory = history.length > 0
+  const prominentSearch = !hasSearched
+
+  const searchForm = (
+    <SearchForm
+      value={inputDomain}
+      onValueChange={setInputDomain}
+      onSearch={handleSearch}
+      loading={loading}
+      compact={hasSearched}
+      prominent={prominentSearch}
+    />
+  )
 
   return (
     <div className="min-h-dvh bg-background">
@@ -121,40 +146,40 @@ export default function Home() {
           className={cn(
             hasSearched
               ? "sticky top-[84px] z-20 py-4 sm:py-5"
-              : hasHistory
-                ? "grid min-h-[calc(100dvh-68px)] content-start items-start gap-6 py-8 sm:py-12 lg:grid-cols-[minmax(0,2fr)_minmax(19rem,1fr)] lg:py-16"
-                : "flex min-h-[calc(100dvh-68px)] w-full items-start pt-[clamp(3rem,12vh,8rem)]"
+              : "mx-auto grid min-h-[calc(100dvh-68px)] w-full max-w-[1180px] content-center gap-y-8 py-12 sm:py-16 lg:grid-cols-[minmax(13rem,0.62fr)_minmax(0,1.45fr)] lg:gap-x-14"
           )}
         >
           <motion.div
             layout="position"
             transition={workbenchSpring}
-            className="w-full"
+            className={cn(
+              "w-full",
+              prominentSearch && "lg:col-span-2"
+            )}
           >
-            <Card
-              size={hasSearched ? "sm" : "default"}
-              className={cn(
-                "w-full transition-[box-shadow,background-color] duration-300",
-                hasSearched
-                  ? "bg-card/95 shadow-lg supports-[backdrop-filter]:bg-card/88"
-                  : "self-start"
-              )}
-            >
-              <CardContent className={cn(hasSearched ? "py-0" : "mx-auto w-full max-w-5xl py-2 sm:py-4")}>
-                <SearchForm
-                  value={inputDomain}
-                  onValueChange={setInputDomain}
-                  onSearch={handleSearch}
-                  loading={loading}
-                  compact={hasSearched}
-                />
-              </CardContent>
-            </Card>
+            {prominentSearch ? (
+              searchForm
+            ) : (
+              <Card
+                size={hasSearched ? "sm" : "default"}
+                className={cn(
+                  "w-full transition-[box-shadow,background-color] duration-300",
+                  hasSearched
+                    ? "bg-card/95 shadow-lg supports-[backdrop-filter]:bg-card/88"
+                    : "self-start"
+                )}
+              >
+                <CardContent className={cn(hasSearched ? "py-0" : "mx-auto w-full py-2 sm:py-4")}>
+                  {searchForm}
+                </CardContent>
+              </Card>
+            )}
           </motion.div>
 
           <AnimatePresence initial={false}>
             {!hasSearched && hasHistory && (
               <SearchHistory
+                className="w-full lg:col-start-2"
                 history={history}
                 onRemoveSearch={removeSearch}
                 onClearHistory={clearHistory}

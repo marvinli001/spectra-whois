@@ -146,7 +146,11 @@ export function ResultDisplay({
           className="gap-5"
         >
           <div className="overflow-x-auto pb-1">
-            <TabsList variant="line" aria-label={t.results.technicalDetails}>
+            <TabsList
+              variant="line"
+              aria-label={t.results.technicalDetails}
+              className="group-data-horizontal/tabs:h-11"
+            >
               <TabsTrigger value="overview" className="min-h-11">
                 <HugeiconsIcon icon={Database02Icon} strokeWidth={1.8} />
                 {t.results.overview}

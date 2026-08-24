@@ -35,7 +35,7 @@ export default function RootLayout({
 THESIS: Domain lookup is a fluid workbench that expands only when evidence exists; it refuses the always-on feature dashboard.
 OWN-WORLD: Luma neutral fields, one blue action, emerald verified states, Geist, Hugeicons, and the preset's rounded control language.
 STORY: Enter a domain, follow the lookup state, scan the summary, then open protocol detail only when needed.
-FIRST VIEWPORT: A 68px header above an 8/4 search-and-history composition; with no history, search owns the width. The primary action sits beside the labeled input.
+FIRST VIEWPORT: A 68px header above an asymmetric domain label and unified lookup control; recent history aligns beneath the input column when it exists.
 FORM: Luma Motion Workbench, grounded direction 4, seed 1850edf3.
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
 -->`,

@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useLanguage } from "@/contexts/language-context"
-import { controlSpring } from "@/lib/motion"
+import { microTransition } from "@/lib/motion"
 
 export function LanguageSwitcher() {
   const { language, setLanguage, t } = useLanguage()
@@ -27,7 +27,7 @@ export function LanguageSwitcher() {
             variant="outline"
             size="lg"
             className="h-10 min-w-[72px] px-3"
-            aria-label={t.language}
+            aria-label={`${t.language}: ${language === "zh" ? "EN" : "中文"}`}
           />
         }
       >
@@ -35,10 +35,10 @@ export function LanguageSwitcher() {
         <AnimatePresence mode="wait" initial={false}>
           <motion.span
             key={language}
-            initial={{ opacity: 0, y: 5 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -5 }}
-            transition={controlSpring}
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.96 }}
+            transition={microTransition}
           >
             {language === "zh" ? "EN" : "中文"}
           </motion.span>
