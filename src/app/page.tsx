@@ -1,331 +1,207 @@
-'use client'
+"use client"
 
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Globe, Zap, Shield, Search } from 'lucide-react'
-import { LiquidGlass, LiquidCard } from '@/components/ui/liquid-glass'
-import { SearchForm } from '@/components/whois/search-form'
-import { TabbedResultDisplay } from '@/components/whois/tabbed-result-display'
-import { SearchHistory } from '@/components/whois/search-history'
-import { WhoisResult, WhoisError } from '@/types/rdap'
-import { useLanguage } from '@/contexts/language-context'
-import { LanguageSwitcher } from '@/components/ui/language-switcher'
-import { useSearchHistory } from '@/hooks/use-search-history'
+import { useEffect, useRef, useState } from "react"
+import { AnimatePresence, motion } from "motion/react"
+
+import { AppHeader } from "@/components/ui/app-header"
+import {
+  Card,
+  CardContent,
+} from "@/components/ui/card"
+import { LookupErrorState, LookupLoading } from "@/components/whois/lookup-states"
+import { SearchForm } from "@/components/whois/search-form"
+import { SearchHistory } from "@/components/whois/search-history"
+import { TabbedResultDisplay } from "@/components/whois/tabbed-result-display"
+import { useLanguage } from "@/contexts/language-context"
+import { useSearchHistory } from "@/hooks/use-search-history"
+import { panelTransition, workbenchSpring } from "@/lib/motion"
+import { cn } from "@/lib/utils"
+import type { WhoisError, WhoisResult } from "@/types/rdap"
 
 export default function Home() {
+  const [inputDomain, setInputDomain] = useState("")
   const [result, setResult] = useState<WhoisResult | null>(null)
   const [error, setError] = useState<WhoisError | null>(null)
   const [loading, setLoading] = useState(false)
   const [hasSearched, setHasSearched] = useState(false)
-  const [searchedDomain, setSearchedDomain] = useState<string>('')
+  const [searchedDomain, setSearchedDomain] = useState("")
+  const requestRef = useRef<AbortController | null>(null)
+  const resultsRegionRef = useRef<HTMLElement>(null)
   const { t } = useLanguage()
-  const { addSearch, recentSearches } = useSearchHistory()
+  const { addSearch, history, removeSearch, clearHistory } = useSearchHistory()
+
+  useEffect(() => {
+    return () => requestRef.current?.abort()
+  }, [])
+
+  useEffect(() => {
+    if (hasSearched && !loading && (result || error)) {
+      const frame = window.requestAnimationFrame(() => {
+        resultsRegionRef.current?.focus({ preventScroll: true })
+      })
+      return () => window.cancelAnimationFrame(frame)
+    }
+  }, [error, hasSearched, loading, result])
 
   const handleSearch = async (domain: string) => {
+    requestRef.current?.abort()
+    const controller = new AbortController()
+    requestRef.current = controller
+
+    setInputDomain(domain)
+    setSearchedDomain(domain)
     setHasSearched(true)
     setLoading(true)
     setResult(null)
     setError(null)
-    setSearchedDomain(domain)
 
     try {
-      const response = await fetch(`/api/whois?domain=${encodeURIComponent(domain)}`)
+      const response = await fetch(`/api/whois?domain=${encodeURIComponent(domain)}`, {
+        signal: controller.signal,
+      })
       const data = await response.json()
 
       if (!response.ok) {
         setError(data)
         addSearch(domain, false)
-      } else {
-        setResult(data)
-        addSearch(domain, true)
+        return
       }
-    } catch {
+
+      setResult(data)
+      addSearch(domain, true)
+    } catch (requestError) {
+      if (requestError instanceof DOMException && requestError.name === "AbortError") {
+        return
+      }
+
       setError({
-        code: 'NETWORK_ERROR',
-        message: t.errors.failedToConnect
+        code: "NETWORK_ERROR",
+        message: t.errors.failedToConnect,
       })
       addSearch(domain, false)
     } finally {
-      setLoading(false)
+      if (!controller.signal.aborted) {
+        setLoading(false)
+      }
     }
   }
 
-  const handleNewSearch = () => {
+  const handleReset = () => {
+    requestRef.current?.abort()
     setHasSearched(false)
+    setLoading(false)
     setResult(null)
     setError(null)
-    setLoading(false)
-    setSearchedDomain('')
+    setSearchedDomain("")
+    setInputDomain("")
+    window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
+  const hasHistory = history.length > 0
+
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Language Switcher */}
-      <LanguageSwitcher />
-      {/* Background Effects */}
-      <div className="fixed inset-0 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900" />
-      <div className="fixed inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
+    <div className="min-h-dvh bg-background">
+      <a
+        href="#main-content"
+        className="fixed top-2 left-2 z-50 -translate-y-20 rounded-3xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-lg transition-transform focus:translate-y-0"
+      >
+        {t.actions.skipToContent}
+      </a>
 
-      {/* Animated background orbs - 优化移动端性能 */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        {/* 移动端使用静态渐变,桌面端使用动画 */}
-        <div className="md:hidden absolute -top-40 -left-40 w-80 h-80 bg-blue-500/15 rounded-full blur-2xl" />
-        <div className="md:hidden absolute -bottom-40 -right-40 w-96 h-96 bg-purple-500/15 rounded-full blur-2xl" />
+      <AppHeader onReset={handleReset} />
 
-        <motion.div
-          className="hidden md:block absolute -top-40 -left-40 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl"
-          animate={{
-            x: [0, 100, 0],
-            y: [0, -50, 0],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "linear",
-          }}
-        />
-        <motion.div
-          className="hidden md:block absolute -bottom-40 -right-40 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"
-          animate={{
-            x: [0, -120, 0],
-            y: [0, 80, 0],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: "linear",
-          }}
-        />
-      </div>
-
-      {/* Main Content */}
-      <div className="relative z-10 min-h-screen">
-
-        {/* Centered Search Interface (Default State) */}
-        <AnimatePresence>
-          {!hasSearched && (
-            <motion.div
-              className="fixed inset-0 flex items-center justify-center p-4"
-              initial={{ opacity: 1, y: 0 }}
-              exit={{
-                opacity: 0,
-                y: -100,
-                transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] }
-              }}
-            >
-              <div className="max-w-3xl w-full mx-auto">
-                <LiquidGlass className="p-4 sm:p-6 md:p-8 lg:p-12 text-center" blur={'none'} opacity={0.12}>
-                  {/* Logo and Title */}
-                  <motion.div
-                    className="mb-4 sm:mb-6 md:mb-8 lg:mb-10"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                  >
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 md:gap-4 mb-3 sm:mb-4 md:mb-6">
-                      <div className="p-3 md:p-4 rounded-2xl bg-gradient-to-br from-blue-500/30 to-purple-600/30 border border-white/30 shadow-xl backdrop-blur-sm">
-                        <Globe className="w-8 sm:w-10 md:w-12 h-8 sm:h-10 md:h-12 text-white" />
-                      </div>
-                      <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent text-center">
-                        {t.title}
-                      </h1>
-                    </div>
-                    <p className="text-sm sm:text-base md:text-lg text-white/70 max-w-xl mx-auto leading-relaxed text-center px-2">
-                      {t.subtitle}
-                    </p>
-                  </motion.div>
-
-                  {/* Search Form */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  >
-                    <SearchForm onSearch={handleSearch} loading={loading} />
-                  </motion.div>
-
-                  {/* Features - Hidden on mobile */}
-                  <motion.div
-                    className="hidden sm:grid grid-cols-3 gap-3 md:gap-4 mt-8 md:mt-10"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                  >
-                    <LiquidCard className="text-center" padding="sm" hover={true}>
-                      <div className="w-10 sm:w-12 h-10 sm:h-12 mx-auto mb-3 sm:mb-4 p-2 sm:p-2.5 rounded-xl bg-gradient-to-br from-blue-500/30 to-blue-600/30 border border-white/30 shadow-lg">
-                        <Zap className="w-full h-full text-blue-200" />
-                      </div>
-                      <h3 className="text-xs sm:text-sm font-bold text-white mb-2">{t.features.fastTitle}</h3>
-                      <p className="text-white/70 text-xs leading-relaxed">
-                        {t.features.fastDesc}
-                      </p>
-                    </LiquidCard>
-
-                    <LiquidCard className="text-center" padding="sm" hover={true}>
-                      <div className="w-10 sm:w-12 h-10 sm:h-12 mx-auto mb-3 sm:mb-4 p-2 sm:p-2.5 rounded-xl bg-gradient-to-br from-green-500/30 to-green-600/30 border border-white/30 shadow-lg">
-                        <Globe className="w-full h-full text-green-200" />
-                      </div>
-                      <h3 className="text-xs sm:text-sm font-bold text-white mb-2">{t.features.globalTitle}</h3>
-                      <p className="text-white/70 text-xs leading-relaxed">
-                        {t.features.globalDesc}
-                      </p>
-                    </LiquidCard>
-
-                    <LiquidCard className="text-center" padding="sm" hover={true}>
-                      <div className="w-10 sm:w-12 h-10 sm:h-12 mx-auto mb-3 sm:mb-4 p-2 sm:p-2.5 rounded-xl bg-gradient-to-br from-purple-500/30 to-purple-600/30 border border-white/30 shadow-lg">
-                        <Shield className="w-full h-full text-purple-200" />
-                      </div>
-                      <h3 className="text-xs sm:text-sm font-bold text-white mb-2">{t.features.privacyTitle}</h3>
-                      <p className="text-white/70 text-xs leading-relaxed">
-                        {t.features.privacyDesc}
-                      </p>
-                    </LiquidCard>
-                  </motion.div>
-                </LiquidGlass>
-              </div>
-            </motion.div>
+      <main
+        id="main-content"
+        className="mx-auto w-full max-w-[1440px] px-4 pb-16 sm:px-6 lg:px-8"
+      >
+        {!hasSearched && <h1 className="sr-only">{t.title}</h1>}
+        <motion.section
+          layout
+          transition={workbenchSpring}
+          className={cn(
+            hasSearched
+              ? "sticky top-[84px] z-20 py-4 sm:py-5"
+              : hasHistory
+                ? "grid min-h-[calc(100dvh-68px)] content-start items-start gap-6 py-8 sm:py-12 lg:grid-cols-[minmax(0,2fr)_minmax(19rem,1fr)] lg:py-16"
+                : "flex min-h-[calc(100dvh-68px)] w-full items-start pt-[clamp(3rem,12vh,8rem)]"
           )}
-        </AnimatePresence>
+        >
+          <motion.div
+            layout="position"
+            transition={workbenchSpring}
+            className="w-full"
+          >
+            <Card
+              size={hasSearched ? "sm" : "default"}
+              className={cn(
+                "w-full transition-[box-shadow,background-color] duration-300",
+                hasSearched
+                  ? "bg-card/95 shadow-lg supports-[backdrop-filter]:bg-card/88"
+                  : "self-start"
+              )}
+            >
+              <CardContent className={cn(hasSearched ? "py-0" : "mx-auto w-full max-w-5xl py-2 sm:py-4")}>
+                <SearchForm
+                  value={inputDomain}
+                  onValueChange={setInputDomain}
+                  onSearch={handleSearch}
+                  loading={loading}
+                  compact={hasSearched}
+                />
+              </CardContent>
+            </Card>
+          </motion.div>
 
-        {/* Top Search Bar (After Search) - Floating Window Style */}
-        <AnimatePresence>
+          <AnimatePresence initial={false}>
+            {!hasSearched && hasHistory && (
+              <SearchHistory
+                history={history}
+                onRemoveSearch={removeSearch}
+                onClearHistory={clearHistory}
+                onSelectDomain={(domain) => {
+                  setInputDomain(domain)
+                  void handleSearch(domain)
+                }}
+              />
+            )}
+          </AnimatePresence>
+        </motion.section>
+
+        <AnimatePresence mode="wait" initial={false}>
           {hasSearched && (
-            <motion.div
-              className="fixed top-3 sm:top-4 left-1/2 z-50 w-full max-w-4xl px-3 sm:px-4"
-              style={{
-                x: '-50%', // 使用framer-motion的x属性来居中
-                willChange: 'auto', // 移除will-change避免影响fixed定位
-              }}
-              initial={{ opacity: 0, y: -50, scale: 0.95 }}
-              animate={{
-                opacity: 1,
-                y: 0,
-                scale: 1,
-                transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] }
-              }}
-              exit={{ opacity: 0, y: -50, scale: 0.95 }}
-            >
-              <LiquidGlass className="p-3 sm:p-4 md:p-6" blur={'none'} opacity={0.12}>
-                <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-2 sm:gap-4 md:gap-6">
-                  <button
-                    onClick={handleNewSearch}
-                    className="flex items-center gap-1.5 sm:gap-3 text-white/90 hover:text-white transition-all duration-300 hover:scale-105 shrink-0"
-                  >
-                    <div className="p-1 sm:p-2 rounded-xl bg-gradient-to-br from-blue-500/30 to-purple-600/30 border border-white/30 shadow-lg">
-                      <Globe className="w-4 sm:w-5 md:w-6 h-4 sm:h-5 md:h-6" />
-                    </div>
-                    <span className="text-base sm:text-xl md:text-2xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent text-center">
-                      {t.title}
-                    </span>
-                  </button>
-                  <div className="w-full sm:flex-1 max-w-sm sm:max-w-md flex justify-center">
-                    <SearchForm onSearch={handleSearch} loading={loading} compact />
-                  </div>
-                </div>
-              </LiquidGlass>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Results Area */}
-        <AnimatePresence>
-          {hasSearched && (
-            <motion.div
-              className="pt-32 sm:pt-32 md:pt-36 pb-8 sm:pb-12"
-              initial={{ opacity: 0 }}
-              animate={{
-                opacity: 1,
-                transition: { delay: 0.3, duration: 0.8 }
-              }}
-              exit={{ opacity: 0 }}
-            >
-              <div className="container mx-auto px-4 md:px-6">
-                {/* Loading State */}
-                {loading && (
-                  <motion.div
-                    className="flex justify-center items-center mb-12 w-full"
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                  >
-                    <LiquidGlass className="px-8 py-6" blur={'none'}>
-                      <div className="flex items-center justify-center gap-3">
-                        <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                        <span className="text-white/90">{t.queryingServers}</span>
-                      </div>
-                    </LiquidGlass>
-                  </motion.div>
-                )}
-
-                {/* Error Display */}
-                {error && (
-                  <motion.div
-                    className="flex justify-center mb-12"
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                  >
-                    <LiquidCard className="text-center border-red-500/30 bg-red-500/10 max-w-2xl" padding="lg">
-                      <div className="w-16 h-16 mx-auto mb-4 p-4 rounded-full bg-red-500/20 border border-red-500/30">
-                        <Search className="w-full h-full text-red-300" />
-                      </div>
-                      <h3 className="text-xl font-semibold text-red-300 mb-2">
-                        {error.code === 'INVALID_DOMAIN' && t.errors.domainNotFound}
-                        {error.code === 'TLD_NOT_SUPPORTED' && t.errors.tldNotSupported}
-                        {error.code === 'RDAP_ERROR' && t.errors.rdapError}
-                        {error.code === 'QUERY_ERROR' && t.errors.queryError}
-                        {error.code === 'RATE_LIMITED' && t.errors.rateLimited}
-                        {error.code === 'NETWORK_ERROR' && t.errors.networkError}
-                      </h3>
-                      <p className="text-white/70">{error.message}</p>
-                      {process.env.NODE_ENV === 'development' && error.details && (
-                        <details className="mt-4 text-left">
-                          <summary className="cursor-pointer text-red-300/70 text-sm">
-                            Technical Details
-                          </summary>
-                          <pre className="mt-2 p-3 bg-black/20 rounded-lg text-xs text-white/50 overflow-auto">
-                            {error.details}
-                          </pre>
-                        </details>
-                      )}
-                    </LiquidCard>
-                  </motion.div>
-                )}
-
-                {/* Search History - Show when not loading and no results */}
-                {!loading && !result && !error && recentSearches.length > 0 && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                    className="max-w-2xl mx-auto"
-                  >
-                    <SearchHistory onSelectDomain={handleSearch} />
-                  </motion.div>
-                )}
-
-                {/* Results */}
-                {result && <TabbedResultDisplay rdapResult={result} domain={searchedDomain} />}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Footer - Only show in default state */}
-        <AnimatePresence>
-          {!hasSearched && (
-            <motion.footer
-              className="fixed bottom-0 left-0 right-0 text-center py-6 text-white/40 text-sm"
+            <motion.section
+              ref={resultsRegionRef}
+              key="results-region"
+              tabIndex={-1}
+              aria-label={searchedDomain}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ delay: 0.8 }}
+              transition={panelTransition}
+              className="mt-2 outline-none sm:mt-3"
             >
-              <p>{t.footer}</p>
-            </motion.footer>
+              <AnimatePresence mode="wait" initial={false}>
+                {loading && <LookupLoading key="loading" domain={searchedDomain} />}
+                {!loading && error && (
+                  <LookupErrorState
+                    key="error"
+                    error={error}
+                    onRetry={() => void handleSearch(searchedDomain)}
+                    onReset={handleReset}
+                  />
+                )}
+                {!loading && result && (
+                  <TabbedResultDisplay
+                    key={`result-${searchedDomain}`}
+                    rdapResult={result}
+                    domain={searchedDomain}
+                  />
+                )}
+              </AnimatePresence>
+            </motion.section>
           )}
         </AnimatePresence>
-      </div>
+      </main>
     </div>
   )
 }

@@ -2,7 +2,7 @@
 
 **中文** | [English](./README.md)
 
-基于 Next.js 15 构建的现代化、高速 WHOIS 查询服务，采用 RDAP（注册数据访问协议）技术。具有精美的液体玻璃 UI 设计，并通过 Railway Node.js 插件支持传统 WHOIS 查询。
+基于 Next.js 16 构建的现代化、高速 WHOIS 查询服务，采用 RDAP（注册数据访问协议）技术。界面完整使用 shadcn/ui Luma 设计系统和 Motion 丝滑交互，并通过 Railway Node.js 插件支持传统 WHOIS 查询。
 
 ## 🚀 快速部署
 
@@ -20,7 +20,7 @@
 - 🌐 **IDN 支持**：完全支持国际化域名，包含 Punycode 转换
 - 🔄 **双协议支持**：现代域名使用 RDAP + 传统 WHOIS 通过 Railway 插件
 - ⚡ **IANA 发现**：动态 WHOIS 服务器发现，24 小时缓存
-- 🎨 **液体玻璃 UI**：现代设计语言，配合 Framer Motion 动画
+- 🎨 **shadcn Luma UI**：可访问、源码可控的组件与统一 Motion 过渡
 - 📱 **响应式设计**：在所有设备上完美运行
 - 🔒 **隐私合规**：使用 RDAP 实现现代隐私标准
 - 🚀 **Railway 插件**：原生 Node.js TCP 连接处理传统 WHOIS
@@ -269,7 +269,7 @@ npm run dev      # 开发服务器（热重载）
 
 ## 🌟 核心技术
 
-- **前端**：Next.js 15、React 18、Tailwind CSS、Framer Motion
+- **前端**：Next.js 16、React 19、Tailwind CSS 4、shadcn/ui Luma、Motion
 - **后端**：Node.js、Express.js、原生 TCP Socket
 - **部署**：Vercel（前端）+ Railway（后端）
 - **协议**：RDAP（HTTPS）、传统 WHOIS（TCP 43 端口）
@@ -293,8 +293,9 @@ npm run dev      # 开发服务器（热重载）
 - [Vercel](https://vercel.com/) 提供优秀的 Next.js 托管服务
 - [Railway](https://railway.app/) 提供可靠的后端部署平台
 - [Tailwind CSS](https://tailwindcss.com/) 提供实用优先的 CSS 框架
-- [Framer Motion](https://www.framer.com/motion/) 提供精美的动画效果
+- [Motion](https://motion.dev/) 提供丝滑且尊重无障碍偏好的交互动画
+- [shadcn/ui](https://ui.shadcn.com/) 提供 Luma 组件系统
 
 ---
 
-**使用 Next.js 15 和 Railway 用心构建 ❤️**
+**使用 Next.js 16 和 Railway 构建**

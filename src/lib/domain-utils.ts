@@ -10,13 +10,13 @@ export function isValidDomain(domain: string): boolean {
     // Try with IDN conversion
     try {
       const ascii = punycode.toASCII(domain.toLowerCase())
-      return domainRegex.test(ascii)
+      return domainRegex.test(ascii) && ascii.includes('.')
     } catch {
       return false
     }
   }
 
-  return true
+  return domain.includes('.')
 }
 
 export function normalizeDomain(domain: string): string {

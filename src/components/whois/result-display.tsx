@@ -1,406 +1,533 @@
-'use client'
+"use client"
 
-import { motion } from 'framer-motion'
+import { useMemo, useState } from "react"
+import { AnimatePresence, motion } from "motion/react"
+import { HugeiconsIcon } from "@hugeicons/react"
 import {
-  Calendar,
-  Globe,
-  Shield,
-  Building,
-  Mail,
-  Phone,
-  MapPin,
-  Server,
-  CheckCircle,
-  XCircle,
-  AlertCircle,
-  Copy,
-  ExternalLink
-} from 'lucide-react'
-import { LiquidCard } from '@/components/ui/liquid-glass'
-import { WhoisResult, ContactInfo, Notice } from '@/types/rdap'
-import { formatDate, formatRelativeTime } from '@/lib/utils'
-import { useLanguage } from '@/contexts/language-context'
-import { useState } from 'react'
+  AlertCircleIcon,
+  Building03Icon,
+  Calendar03Icon,
+  Call02Icon,
+  CodeIcon,
+  Database02Icon,
+  ExternalLinkIcon,
+  Globe02Icon,
+  InformationCircleIcon,
+  Location01Icon,
+  Mail01Icon,
+  ServerStack01Icon,
+  Shield02Icon,
+  UserGroupIcon,
+} from "@hugeicons/core-free-icons"
+
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Badge } from "@/components/ui/badge"
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Separator } from "@/components/ui/separator"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+} from "@/components/ui/table"
+import { useLanguage } from "@/contexts/language-context"
+import { panelTransition, panelVariants, staggerContainer } from "@/lib/motion"
+import { cn, formatDate, formatRelativeTime } from "@/lib/utils"
+import type { ContactInfo, Notice, WhoisResult } from "@/types/rdap"
+import { CopyButton } from "./copy-button"
 
 interface ResultDisplayProps {
   result: WhoisResult
+  sourceDetail?: string
+  rawText?: string
 }
 
-export function ResultDisplay({ result }: ResultDisplayProps) {
-  const [copiedField, setCopiedField] = useState<string | null>(null)
-  const { t } = useLanguage()
+type ResultView = "overview" | "entities" | "notices" | "raw"
 
-  const translateStatus = (status: string) => {
-    const statusLower = status.toLowerCase().trim()
-    const translations = t.domainStatus as Record<string, string>
-    return translations[statusLower] || status
-  }
+export function ResultDisplay({
+  result,
+  sourceDetail,
+  rawText,
+}: ResultDisplayProps) {
+  const [view, setView] = useState<ResultView>("overview")
+  const { language, t } = useLanguage()
 
-  const copyToClipboard = async (text: string, field: string) => {
-    try {
-      await navigator.clipboard.writeText(text)
-      setCopiedField(field)
-      setTimeout(() => setCopiedField(null), 2000)
-    } catch {
-      // Fallback for older browsers
-      const textArea = document.createElement('textarea')
-      textArea.value = text
-      document.body.appendChild(textArea)
-      textArea.select()
-      document.execCommand('copy')
-      document.body.removeChild(textArea)
-      setCopiedField(field)
-      setTimeout(() => setCopiedField(null), 2000)
-    }
-  }
+  const contacts = useMemo(
+    () =>
+      [
+        [t.results.registrant, result.registrant],
+        [t.results.administrative, result.admin],
+        [t.results.technical, result.tech],
+        [t.results.billing, result.billing],
+      ].filter((entry): entry is [string, ContactInfo] => Boolean(entry[1])),
+    [result, t]
+  )
 
-  const getStatusColor = (status?: string[]) => {
-    if (!status || status.length === 0) return 'text-gray-400'
+  const translatedStatuses = (result.status ?? []).map((status) => ({
+    raw: status,
+    label: translateStatus(status, t.domainStatus as Record<string, string>),
+  }))
 
-    const hasActive = status.some(s => s.includes('active') || s.includes('ok'))
-    const hasInactive = status.some(s => s.includes('inactive') || s.includes('expired'))
-
-    if (hasActive) return 'text-green-400'
-    if (hasInactive) return 'text-red-400'
-    return 'text-yellow-400'
-  }
-
-  const getStatusIcon = (status?: string[]) => {
-    if (!status || status.length === 0) return <AlertCircle className="w-4 h-4" />
-
-    const hasActive = status.some(s => s.includes('active') || s.includes('ok'))
-    const hasInactive = status.some(s => s.includes('inactive') || s.includes('expired'))
-
-    if (hasActive) return <CheckCircle className="w-4 h-4" />
-    if (hasInactive) return <XCircle className="w-4 h-4" />
-    return <AlertCircle className="w-4 h-4" />
-  }
+  const rawContent =
+    rawText ?? (result.raw ? JSON.stringify(result.raw, null, 2) : "")
+  const source = (result.source ?? "rdap").toUpperCase()
 
   return (
     <motion.div
-      className="w-full max-w-6xl mx-auto space-y-4 sm:space-y-6 text-center"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      variants={staggerContainer}
+      initial="hidden"
+      animate="visible"
+      className="space-y-5 sm:space-y-6"
     >
-      {/* Header */}
-      <LiquidCard className="text-center" padding="lg">
-        <div className="flex items-center justify-center gap-3 mb-4">
-          <Globe className="w-8 h-8 text-blue-400" />
-          <h1 className="text-3xl font-bold text-white">{result.domain}</h1>
-        </div>
-
-        <div className={`flex items-center justify-center gap-2 ${getStatusColor(result.status)}`}>
-          {getStatusIcon(result.status)}
-          <span className="font-medium">
-            {result.status?.map(status => translateStatus(status)).join(', ') || t.results.statusUnknown}
-          </span>
-        </div>
-      </LiquidCard>
-
-      <div className="grid lg:grid-cols-2 gap-4 sm:gap-6">
-        {/* Domain Info */}
-        <LiquidCard>
-          <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-            <Globe className="w-5 h-5" />
-            {t.results.domainInfo}
-          </h2>
-
-          <div className="space-y-3">
-            {result.registrar && (
-              <InfoRow
-                label={t.results.registrar}
-                value={result.registrar}
-                icon={<Building className="w-4 h-4" />}
-                onCopy={() => copyToClipboard(result.registrar!, 'registrar')}
-                copied={copiedField === 'registrar'}
-                copyButtonTitle={t.results.copyToClipboard}
-              />
-            )}
-
-            {result.created && (
-              <InfoRow
-                label={t.results.created}
-                value={formatDate(result.created)}
-                subValue={formatRelativeTime(result.created)}
-                icon={<Calendar className="w-4 h-4" />}
-              />
-            )}
-
-            {result.updated && (
-              <InfoRow
-                label={t.results.updated}
-                value={formatDate(result.updated)}
-                subValue={formatRelativeTime(result.updated)}
-                icon={<Calendar className="w-4 h-4" />}
-              />
-            )}
-
-            {result.expires && (
-              <InfoRow
-                label={t.results.expires}
-                value={formatDate(result.expires)}
-                subValue={formatRelativeTime(result.expires)}
-                icon={<Calendar className="w-4 h-4" />}
-                highlight={new Date(result.expires) < new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)}
-              />
-            )}
-
-            {result.dnssec !== undefined && (
-              <InfoRow
-                label={t.results.dnssec}
-                value={result.dnssec ? t.results.enabled : t.results.disabled}
-                icon={<Shield className="w-4 h-4" />}
-                valueClassName={result.dnssec ? 'text-green-400' : 'text-red-400'}
-              />
-            )}
-          </div>
-        </LiquidCard>
-
-        {/* Nameservers */}
-        {result.nameservers && result.nameservers.length > 0 && (
-          <LiquidCard>
-            <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-              <Server className="w-5 h-5" />
-              {t.results.nameServers}
-            </h2>
-
-            <div className="space-y-2">
-              {result.nameservers.map((ns, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
-                >
-                  <span className="text-white/90 font-mono text-sm flex-1 text-center">{ns}</span>
-                  <button
-                    onClick={() => copyToClipboard(ns, `ns-${index}`)}
-                    title={t.results.copyToClipboard}
-                    className="text-white/60 hover:text-white/90 transition-colors ml-3 p-1 rounded hover:bg-white/10"
-                  >
-                    {copiedField === `ns-${index}` ? (
-                      <CheckCircle className="w-4 h-4 text-green-400" />
-                    ) : (
-                      <Copy className="w-4 h-4" />
-                    )}
-                  </button>
+      <motion.div variants={panelVariants} transition={panelTransition}>
+        <Card>
+          <CardHeader className="border-b sm:grid-cols-[1fr_auto]">
+            <div className="flex min-w-0 items-start gap-3 sm:gap-4">
+              <span className="grid size-11 shrink-0 place-items-center rounded-3xl bg-primary/10 text-primary sm:size-12">
+                <HugeiconsIcon icon={Globe02Icon} strokeWidth={1.75} className="size-6" />
+              </span>
+              <div className="min-w-0 space-y-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  <h1 className="break-all font-heading text-2xl font-semibold tracking-[-0.035em] sm:text-3xl">
+                    {result.domain}
+                  </h1>
+                  <Badge variant="outline">{source}</Badge>
+                  {result.dnssec !== undefined && (
+                    <Badge
+                      variant="secondary"
+                      className={result.dnssec ? "bg-chart-1/28 text-chart-4 dark:text-chart-2" : undefined}
+                    >
+                      <HugeiconsIcon icon={Shield02Icon} strokeWidth={1.8} />
+                      DNSSEC {result.dnssec ? t.results.enabled : t.results.disabled}
+                    </Badge>
+                  )}
                 </div>
-              ))}
+                {sourceDetail && (
+                  <CardDescription className="break-all">
+                    {sourceDetail}
+                  </CardDescription>
+                )}
+              </div>
             </div>
-          </LiquidCard>
-        )}
-      </div>
+            <CardAction className="hidden sm:block">
+              <CopyButton value={result.domain} />
+            </CardAction>
+          </CardHeader>
 
-      {/* Contacts Grid */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        {result.registrant && (
-          <ContactCard title={t.results.registrant} contact={result.registrant} />
-        )}
-        {result.admin && (
-          <ContactCard title={t.results.administrative} contact={result.admin} />
-        )}
-        {result.tech && (
-          <ContactCard title={t.results.technical} contact={result.tech} />
-        )}
-        {result.billing && (
-          <ContactCard title={t.results.billing} contact={result.billing} />
-        )}
-      </div>
+          {translatedStatuses.length > 0 && (
+            <CardContent className="flex flex-wrap gap-2 pt-1">
+              {translatedStatuses.map(({ raw, label }) => (
+                <StatusBadge key={raw} status={raw} label={label} />
+              ))}
+            </CardContent>
+          )}
+        </Card>
+      </motion.div>
 
-      {/* Notices */}
-      {result.notices && result.notices.length > 0 && (
-        <LiquidCard>
-          <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-            <AlertCircle className="w-5 h-5" />
-            {t.results.registryNotices}
-          </h2>
-
-          <div className="space-y-4">
-            {result.notices.map((notice, index) => (
-              <NoticeCard key={index} notice={notice} />
-            ))}
+      <motion.div variants={panelVariants} transition={panelTransition}>
+        <Tabs
+          value={view}
+          onValueChange={(nextValue) => setView(nextValue as ResultView)}
+          className="gap-5"
+        >
+          <div className="overflow-x-auto pb-1">
+            <TabsList variant="line" aria-label={t.results.technicalDetails}>
+              <TabsTrigger value="overview" className="min-h-11">
+                <HugeiconsIcon icon={Database02Icon} strokeWidth={1.8} />
+                {t.results.overview}
+              </TabsTrigger>
+              <TabsTrigger value="entities" disabled={contacts.length === 0} className="min-h-11">
+                <HugeiconsIcon icon={UserGroupIcon} strokeWidth={1.8} />
+                {t.results.entities}
+              </TabsTrigger>
+              <TabsTrigger value="notices" disabled={!result.notices?.length} className="min-h-11">
+                <HugeiconsIcon icon={InformationCircleIcon} strokeWidth={1.8} />
+                {t.results.notices}
+              </TabsTrigger>
+              <TabsTrigger value="raw" disabled={!rawContent} className="min-h-11">
+                <HugeiconsIcon icon={CodeIcon} strokeWidth={1.8} />
+                {t.results.rawData}
+              </TabsTrigger>
+            </TabsList>
           </div>
-        </LiquidCard>
-      )}
 
-      {/* Raw Data */}
-      <details className="group">
-        <summary className="cursor-pointer text-white/70 hover:text-white/90 transition-colors">
-          <span className="text-sm">{t.results.viewRawResponse}</span>
-        </summary>
-        <LiquidCard className="mt-4">
-          <pre className="text-xs text-white/70 overflow-auto max-h-96 whitespace-pre-wrap">
-            {JSON.stringify(result.raw, null, 2)}
-          </pre>
-        </LiquidCard>
-      </details>
+          <TabsContent value={view}>
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={view}
+                initial={{ opacity: 0, x: 14, filter: "blur(6px)" }}
+                animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                exit={{ opacity: 0, x: -10, filter: "blur(4px)" }}
+                transition={panelTransition}
+              >
+                {view === "overview" && (
+                  <OverviewPanels result={result} language={language} />
+                )}
+                {view === "entities" && (
+                  <EntityPanels contacts={contacts} />
+                )}
+                {view === "notices" && (
+                  <NoticePanels notices={result.notices ?? []} />
+                )}
+                {view === "raw" && (
+                  <RawPanel value={rawContent} />
+                )}
+              </motion.div>
+            </AnimatePresence>
+          </TabsContent>
+        </Tabs>
+      </motion.div>
     </motion.div>
   )
 }
 
-interface InfoRowProps {
-  label: string
-  value: string
-  subValue?: string
-  icon?: React.ReactNode
-  onCopy?: () => void
-  copied?: boolean
-  highlight?: boolean
-  valueClassName?: string
-  copyButtonTitle?: string
+function OverviewPanels({
+  result,
+  language,
+}: {
+  result: WhoisResult
+  language: "zh" | "en"
+}) {
+  const { t } = useLanguage()
+
+  const registrationRows = [
+    result.registrar && {
+      label: t.results.registrar,
+      value: result.registrar,
+      copy: true,
+    },
+    {
+      label: t.results.source,
+      value: (result.source ?? "rdap").toUpperCase(),
+    },
+    result.dnssec !== undefined && {
+      label: t.results.dnssec,
+      value: result.dnssec ? t.results.enabled : t.results.disabled,
+    },
+  ].filter(Boolean) as Array<{ label: string; value: string; copy?: boolean }>
+
+  const dates = [
+    result.created && { label: t.results.created, value: result.created },
+    result.updated && { label: t.results.updated, value: result.updated },
+    result.expires && { label: t.results.expires, value: result.expires },
+  ].filter(Boolean) as Array<{ label: string; value: string }>
+
+  return (
+    <motion.div
+      variants={staggerContainer}
+      initial="hidden"
+      animate="visible"
+      className="grid gap-5 lg:grid-cols-12"
+    >
+      <motion.div variants={panelVariants} className="self-start lg:col-span-7">
+        <Card>
+          <CardHeader className="border-b">
+            <CardTitle className="flex items-center gap-2.5">
+              <h2 className="flex items-center gap-2.5">
+                <HugeiconsIcon icon={Building03Icon} strokeWidth={1.8} className="size-4.5 text-muted-foreground" />
+                {t.results.registrationDetails}
+              </h2>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="px-3 sm:px-5">
+            <Table>
+              <TableBody>
+                {registrationRows.map((row) => (
+                  <TableRow key={row.label}>
+                    <TableCell className="w-[38%] whitespace-normal text-muted-foreground">
+                      {row.label}
+                    </TableCell>
+                    <TableCell className="whitespace-normal font-medium">
+                      <span className="flex items-center justify-between gap-3">
+                        <span className="min-w-0 break-words">{row.value}</span>
+                        {row.copy && <CopyButton value={row.value} />}
+                      </span>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      <motion.div variants={panelVariants} className="space-y-5 lg:col-span-5">
+        {dates.length > 0 && (
+          <Card>
+            <CardHeader className="border-b">
+              <CardTitle className="flex items-center gap-2.5">
+                <h2 className="flex items-center gap-2.5">
+                  <HugeiconsIcon icon={Calendar03Icon} strokeWidth={1.8} className="size-4.5 text-muted-foreground" />
+                  {t.results.keyDates}
+                </h2>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-0 pt-1">
+              {dates.map((date, index) => (
+                <div key={date.label}>
+                  {index > 0 && <Separator />}
+                  <div className="grid gap-1 py-3 sm:grid-cols-[8rem_1fr] sm:items-center">
+                    <span className="text-sm text-muted-foreground">{date.label}</span>
+                    <span className="sm:text-right">
+                      <span className="block font-medium tabular-nums">
+                        {formatDate(date.value, language)}
+                      </span>
+                      <span className="block text-xs tabular-nums text-muted-foreground">
+                        {formatRelativeTime(date.value, language)}
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        )}
+
+        {result.nameservers && result.nameservers.length > 0 && (
+          <Card>
+            <CardHeader className="border-b">
+              <CardTitle className="flex items-center gap-2.5">
+                <h2 className="flex items-center gap-2.5">
+                  <HugeiconsIcon icon={ServerStack01Icon} strokeWidth={1.8} className="size-4.5 text-muted-foreground" />
+                  {t.results.nameServers}
+                </h2>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-1 pt-1">
+              {result.nameservers.map((nameserver) => (
+                <div
+                  key={nameserver}
+                  className="flex min-h-11 items-center justify-between gap-3 rounded-2xl px-2.5 transition-colors duration-200 hover:bg-muted/70"
+                >
+                  <span className="min-w-0 break-all text-sm font-medium">
+                    {nameserver}
+                  </span>
+                  <CopyButton value={nameserver} className="shrink-0" />
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        )}
+      </motion.div>
+    </motion.div>
+  )
 }
 
-function InfoRow({
-  label,
-  value,
-  subValue,
-  icon,
-  onCopy,
-  copied,
-  highlight,
-  valueClassName,
-  copyButtonTitle
-}: InfoRowProps) {
-  if (onCopy) {
-    // Layout with copy button on the right side, content truly centered
+function EntityPanels({ contacts }: { contacts: Array<[string, ContactInfo]> }) {
+  const { t } = useLanguage()
+
+  if (contacts.length === 0) {
     return (
-      <div className={`relative p-3 rounded-lg border ${
-        highlight ? 'bg-yellow-500/10 border-yellow-500/30' : 'bg-white/5 border-white/10'
-      }`}>
-        {/* Content centered in the full container */}
-        <div className="text-center pr-8">
-          <div className="flex justify-center items-center gap-2 mb-1">
-            {icon && <span className="text-white/60">{icon}</span>}
-            <div className="text-white/70 text-sm">{label}</div>
-          </div>
-          <div className={`font-medium ${valueClassName || 'text-white/90'}`}>
-            {value}
-          </div>
-          {subValue && (
-            <div className="text-white/50 text-xs mt-1">{subValue}</div>
-          )}
-        </div>
-        {/* Copy button positioned absolutely on the right */}
-        <button
-          onClick={onCopy}
-          title={copyButtonTitle}
-          className="absolute top-3 right-3 text-white/60 hover:text-white/90 transition-colors p-1 rounded hover:bg-white/10"
-        >
-          {copied ? <CheckCircle className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
-        </button>
-      </div>
+      <Alert>
+        <HugeiconsIcon icon={InformationCircleIcon} strokeWidth={1.8} />
+        <AlertTitle>{t.results.entities}</AlertTitle>
+        <AlertDescription>{t.results.noContactDetails}</AlertDescription>
+      </Alert>
     )
   }
 
-  // Default centered layout for fields without copy button
   return (
-    <div className={`p-3 rounded-lg border ${
-      highlight ? 'bg-yellow-500/10 border-yellow-500/30' : 'bg-white/5 border-white/10'
-    }`}>
-      <div className="text-center">
-        <div className="flex justify-center items-center gap-2 mb-1">
-          {icon && <span className="text-white/60">{icon}</span>}
-          <div className="text-white/70 text-sm">{label}</div>
-        </div>
-        <div className={`font-medium ${valueClassName || 'text-white/90'}`}>
-          {value}
-        </div>
-        {subValue && (
-          <div className="text-white/50 text-xs mt-1">{subValue}</div>
-        )}
-      </div>
-    </div>
+    <motion.div
+      variants={staggerContainer}
+      initial="hidden"
+      animate="visible"
+      className="grid gap-5 md:grid-cols-2"
+    >
+      {contacts.map(([title, contact]) => (
+        <motion.div key={title} variants={panelVariants}>
+          <ContactCard title={title} contact={contact} />
+        </motion.div>
+      ))}
+    </motion.div>
   )
 }
 
-interface ContactCardProps {
-  title: string
-  contact: ContactInfo
-}
+function ContactCard({ title, contact }: { title: string; contact: ContactInfo }) {
+  const entries = Object.entries(contact).filter(([, value]) => {
+    if (Array.isArray(value)) return value.length > 0
+    return Boolean(value)
+  })
 
-function ContactCard({ title, contact }: ContactCardProps) {
   return (
-    <LiquidCard padding="sm">
-      <h3 className="font-semibold text-white mb-3">{title}</h3>
-
-      <div className="space-y-2 text-sm">
-        {contact.name && (
-          <div className="text-white/90">{contact.name}</div>
-        )}
-
-        {contact.organization && (
-          <div className="text-white/70">{contact.organization}</div>
-        )}
-
-        {contact.email && (
-          <div className="flex items-center gap-2 text-white/80">
-            <Mail className="w-3 h-3" />
-            <span className="break-all">{contact.email}</span>
-          </div>
-        )}
-
-        {contact.phone && (
-          <div className="flex items-center gap-2 text-white/80">
-            <Phone className="w-3 h-3" />
-            <span>{contact.phone}</span>
-          </div>
-        )}
-
-        {contact.address && contact.address.length > 0 && (
-          <div className="flex items-start gap-2 text-white/80">
-            <MapPin className="w-3 h-3 mt-0.5 flex-shrink-0" />
-            <div>
-              {contact.address.map((line, index) => (
-                <div key={index}>{line}</div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {contact.country && (
-          <div className="text-white/60 text-xs uppercase tracking-wider">
-            {contact.country}
-          </div>
-        )}
-      </div>
-    </LiquidCard>
+    <Card className="h-full">
+      <CardHeader className="border-b">
+        <CardTitle className="flex items-center gap-2.5">
+          <h2 className="flex items-center gap-2.5">
+            <HugeiconsIcon icon={UserGroupIcon} strokeWidth={1.8} className="size-4.5 text-muted-foreground" />
+            {title}
+          </h2>
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-3 pt-1">
+        {entries.map(([key, value]) => (
+          <ContactRow key={key} field={key} value={value as string | string[]} />
+        ))}
+      </CardContent>
+    </Card>
   )
 }
 
-interface NoticeCardProps {
-  notice: Notice
+function ContactRow({ field, value }: { field: string; value: string | string[] }) {
+  const displayValue = Array.isArray(value) ? value.join(", ") : value
+  const icon =
+    field === "email"
+      ? Mail01Icon
+      : field === "phone"
+        ? Call02Icon
+        : field === "address" || field === "country"
+          ? Location01Icon
+          : Building03Icon
+
+  const content = (
+    <>
+      <HugeiconsIcon icon={icon} strokeWidth={1.75} className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
+      <span className="min-w-0">
+        <span className="block text-xs capitalize text-muted-foreground">
+          {humanizeField(field)}
+        </span>
+        <span className="block break-words text-sm font-medium">{displayValue}</span>
+      </span>
+    </>
+  )
+
+  if (field === "email") {
+    return (
+      <a href={`mailto:${displayValue}`} className="flex gap-2.5 rounded-2xl p-2 transition-colors hover:bg-muted/70">
+        {content}
+      </a>
+    )
+  }
+
+  if (field === "phone") {
+    return (
+      <a href={`tel:${displayValue}`} className="flex gap-2.5 rounded-2xl p-2 transition-colors hover:bg-muted/70">
+        {content}
+      </a>
+    )
+  }
+
+  return <div className="flex gap-2.5 rounded-2xl p-2">{content}</div>
 }
 
-function NoticeCard({ notice }: NoticeCardProps) {
-  return (
-    <div className="p-4 rounded-lg bg-blue-500/10 border border-blue-500/20">
-      {notice.title && (
-        <h3 className="font-medium text-white mb-2">{notice.title}</h3>
-      )}
+function NoticePanels({ notices }: { notices: Notice[] }) {
+  const { t } = useLanguage()
 
-      {notice.description && (
-        <div className="text-white/80 text-sm space-y-1">
-          {notice.description.map((desc, index) => (
-            <p key={index}>{desc}</p>
+  return (
+    <Card>
+      <CardHeader className="border-b">
+        <CardTitle className="flex items-center gap-2.5">
+          <h2 className="flex items-center gap-2.5">
+            <HugeiconsIcon icon={InformationCircleIcon} strokeWidth={1.8} className="size-4.5 text-muted-foreground" />
+            {t.results.registryNotices}
+          </h2>
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="pt-1">
+        <Accordion defaultValue={notices.length ? ["notice-0"] : []}>
+          {notices.map((notice, index) => (
+            <AccordionItem key={`${notice.title ?? "notice"}-${index}`} value={`notice-${index}`}>
+              <AccordionTrigger>{notice.title ?? t.results.notices}</AccordionTrigger>
+              <AccordionContent>
+                <div className="space-y-3 text-muted-foreground">
+                  {notice.description?.map((description) => (
+                    <p key={description}>{description}</p>
+                  ))}
+                  {notice.links?.map((link) =>
+                    link.href ? (
+                      <a
+                        key={link.href}
+                        href={link.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1.5 text-primary"
+                      >
+                        {link.title || link.href}
+                        <HugeiconsIcon icon={ExternalLinkIcon} strokeWidth={1.8} className="size-3.5" />
+                        <span className="sr-only">{t.results.openExternalLink}</span>
+                      </a>
+                    ) : null
+                  )}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
           ))}
-        </div>
-      )}
-
-      {notice.links && notice.links.length > 0 && (
-        <div className="mt-3 space-y-2">
-          {notice.links.map((link, index) => (
-            <a
-              key={index}
-              href={link.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-blue-300 hover:text-blue-200 text-sm transition-colors"
-            >
-              {link.title || link.href}
-              <ExternalLink className="w-3 h-3" />
-            </a>
-          ))}
-        </div>
-      )}
-    </div>
+        </Accordion>
+      </CardContent>
+    </Card>
   )
+}
+
+function RawPanel({ value }: { value: string }) {
+  const { t } = useLanguage()
+
+  return (
+    <Card>
+      <CardHeader className="border-b">
+        <CardTitle className="flex items-center gap-2.5">
+          <h2 className="flex items-center gap-2.5">
+            <HugeiconsIcon icon={CodeIcon} strokeWidth={1.8} className="size-4.5 text-muted-foreground" />
+            {t.results.rawData}
+          </h2>
+        </CardTitle>
+        <CardAction>
+          <CopyButton value={value} />
+        </CardAction>
+      </CardHeader>
+      <CardContent className="pt-1">
+        <ScrollArea className="h-[min(34rem,64vh)] rounded-2xl border bg-muted/35">
+          <pre className="min-w-max p-4 text-xs leading-relaxed text-foreground/80">
+            {value}
+          </pre>
+        </ScrollArea>
+      </CardContent>
+    </Card>
+  )
+}
+
+function StatusBadge({ status, label }: { status: string; label: string }) {
+  const normalized = status.toLowerCase()
+  const positive = normalized === "ok" || normalized.includes("active")
+  const negative = normalized.includes("expired") || normalized.includes("inactive")
+
+  return (
+    <Badge
+      variant={negative ? "destructive" : "secondary"}
+      className={cn(
+        positive && "bg-chart-1/28 text-chart-4 dark:text-chart-2",
+        !positive && !negative && "bg-muted text-muted-foreground"
+      )}
+    >
+      <HugeiconsIcon
+        icon={negative ? AlertCircleIcon : positive ? Shield02Icon : InformationCircleIcon}
+        strokeWidth={1.8}
+      />
+      {label}
+    </Badge>
+  )
+}
+
+function translateStatus(status: string, translations: Record<string, string>) {
+  return translations[status.toLowerCase().trim()] ?? status
+}
+
+function humanizeField(value: string) {
+  return value
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/[_-]+/g, " ")
+    .trim()
 }

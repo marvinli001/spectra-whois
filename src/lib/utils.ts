@@ -1,51 +1,58 @@
-import { clsx, type ClassValue } from 'clsx'
+import { clsx, type ClassValue } from "clsx"
+import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
-  return clsx(inputs)
+  return twMerge(clsx(inputs))
 }
 
-export function formatDate(date: string): string {
-  if (!date) return ''
+export function formatDate(value: string, language: "zh" | "en" = "en") {
+  const date = new Date(value)
 
-  try {
-    return new Date(date).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      timeZoneName: 'short'
-    })
-  } catch {
-    return date
+  if (Number.isNaN(date.getTime())) {
+    return value
   }
+
+  return new Intl.DateTimeFormat(language === "zh" ? "zh-CN" : "en", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    timeZone: "UTC",
+  }).format(date)
 }
 
-export function formatRelativeTime(date: string): string {
-  if (!date) return ''
+export function formatRelativeTime(
+  value: string,
+  language: "zh" | "en" = "en"
+) {
+  const timestamp = new Date(value).getTime()
 
-  try {
-    const now = new Date()
-    const target = new Date(date)
-    const diff = target.getTime() - now.getTime()
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-
-    if (days < 0) {
-      return `${Math.abs(days)} days ago`
-    } else if (days === 0) {
-      return 'Today'
-    } else if (days === 1) {
-      return 'Tomorrow'
-    } else if (days < 30) {
-      return `In ${days} days`
-    } else if (days < 365) {
-      const months = Math.floor(days / 30)
-      return `In ${months} month${months > 1 ? 's' : ''}`
-    } else {
-      const years = Math.floor(days / 365)
-      return `In ${years} year${years > 1 ? 's' : ''}`
-    }
-  } catch {
-    return date
+  if (Number.isNaN(timestamp)) {
+    return ""
   }
+
+  const delta = timestamp - Date.now()
+  const absolute = Math.abs(delta)
+  const minute = 60_000
+  const hour = 60 * minute
+  const day = 24 * hour
+  const month = 30 * day
+  const year = 365 * day
+  const formatter = new Intl.RelativeTimeFormat(
+    language === "zh" ? "zh-CN" : "en",
+    { numeric: "auto" }
+  )
+
+  if (absolute < hour) {
+    return formatter.format(Math.round(delta / minute), "minute")
+  }
+  if (absolute < day) {
+    return formatter.format(Math.round(delta / hour), "hour")
+  }
+  if (absolute < month) {
+    return formatter.format(Math.round(delta / day), "day")
+  }
+  if (absolute < year) {
+    return formatter.format(Math.round(delta / month), "month")
+  }
+  return formatter.format(Math.round(delta / year), "year")
 }

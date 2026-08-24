@@ -2,7 +2,7 @@
 
 [中文](./README_CN.md) | **English**
 
-A modern, fast WHOIS lookup service built with Next.js 15 and powered by RDAP (Registration Data Access Protocol). Features a beautiful Liquid Glass UI design and supports traditional WHOIS queries through Railway Node.js plugin.
+A modern, fast WHOIS lookup service built with Next.js 16 and powered by RDAP (Registration Data Access Protocol). It uses the shadcn/ui Luma design system with fluid Motion interactions and supports traditional WHOIS queries through a Railway Node.js plugin.
 
 ## 🚀 Quick Deploy
 
@@ -20,7 +20,7 @@ A modern, fast WHOIS lookup service built with Next.js 15 and powered by RDAP (R
 - 🌐 **IDN Support**: Full support for internationalized domain names with Punycode conversion
 - 🔄 **Dual Protocol Support**: RDAP for modern domains + traditional WHOIS via Railway plugin
 - ⚡ **IANA Discovery**: Dynamic WHOIS server discovery with 24-hour caching
-- 🎨 **Liquid Glass UI**: Modern design language with Framer Motion animations
+- 🎨 **shadcn Luma UI**: Accessible, source-owned components with fluid Motion transitions
 - 📱 **Responsive Design**: Optimized for mobile with smooth performance
 - 🔒 **Privacy Compliant**: Uses RDAP for modern privacy standards
 - 🚀 **Railway Plugin**: Native Node.js TCP connections for traditional WHOIS
@@ -303,7 +303,7 @@ npm run dev      # Development server with watch
 
 ## 🌟 Key Technologies
 
-- **Frontend**: Next.js 15, React 18, Tailwind CSS, Framer Motion
+- **Frontend**: Next.js 16, React 19, Tailwind CSS 4, shadcn/ui Luma, Motion
 - **Backend**: Node.js, Express.js, Native TCP Sockets
 - **Deployment**: Vercel (Frontend) + Railway (Backend)
 - **Protocols**: RDAP (HTTPS), Traditional WHOIS (TCP Port 43)
@@ -332,8 +332,8 @@ Change the brand name displayed throughout the application:
 The project uses Tailwind CSS 4. Key customization points:
 
 - **Colors**: Edit `tailwind.config.ts` for theme colors
-- **Animations**: Modify Framer Motion variants in components
-- **Glass Effects**: Adjust `LiquidGlass` component in `src/components/ui/liquid-glass.tsx`
+- **Animations**: Adjust shared motion tokens in `src/lib/motion.ts`
+- **Luma theme**: Update the shadcn preset configuration in `components.json` and semantic tokens in `src/app/globals.css`
 
 ## 🚀 Performance Optimizations
 
@@ -371,8 +371,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Vercel](https://vercel.com/) for excellent Next.js hosting
 - [Railway](https://railway.app/) for reliable backend deployment
 - [Tailwind CSS](https://tailwindcss.com/) for the utility-first CSS framework
-- [Framer Motion](https://www.framer.com/motion/) for beautiful animations
+- [Motion](https://motion.dev/) for fluid, accessible interactions
+- [shadcn/ui](https://ui.shadcn.com/) for the Luma component system
 
 ---
 
-**Built with ❤️ using Next.js 15 and Railway**
+**Built with Next.js 16 and Railway**

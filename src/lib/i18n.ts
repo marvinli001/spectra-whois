@@ -10,32 +10,29 @@ export function getBrandName(): string {
 
 export const translations = {
   zh: {
-    // 主标题和描述
     title: getBrandName(),
-    description: '基于RDAP协议的现代域名查询服务，支持全球TLD和国际化域名',
-    subtitle: '基于RDAP协议的现代域名查询，支持全球TLD和国际化域名',
 
     // 搜索相关
-    searchPlaceholder: '输入域名（例如：example.com）',
-    searchPlaceholderCompact: '搜索域名...',
+    searchLabel: '域名',
+    searchPlaceholder: 'example.com',
+    searchPlaceholderCompact: 'example.com',
     searchButton: '查询',
     searching: '查询中',
-    queryingServers: '正在查询RDAP服务器...',
+    queryingServers: '正在查询注册数据',
 
-    // 功能特性
-    features: {
-      fastTitle: '闪电般快速',
-      fastDesc: '边缘缓存RDAP查询，全球CDN分发，提供即时结果',
-      globalTitle: '全球覆盖',
-      globalDesc: '通过IANA引导注册表支持所有TLD，完整IDN转换',
-      privacyTitle: '隐私优先',
-      privacyDesc: '符合RDAP标准，现代隐私标准和结构化数据'
+    actions: {
+      skipToContent: '跳到主要内容',
+      returnHome: '返回域名查询',
+      newSearch: '重新查询',
+      retry: '重试',
+      close: '关闭'
     },
 
-    // 示例域名
-    exampleDomains: {
-      title: '试试这些示例：',
-      domains: ['baidu.com', 'github.com', 'vercel.com']
+    appearance: {
+      theme: '外观主题',
+      light: '浅色',
+      dark: '深色',
+      system: '跟随系统'
     },
 
     // 错误信息
@@ -93,9 +90,18 @@ export const translations = {
       whoisQueryFailed: 'WHOIS查询失败',
       retry: '重试',
       whoisRestricted: 'WHOIS查询受限',
-      manualCheckAvailable: '您可以手动查询：',
       manualCheck: '手动查询',
-      restrictionNotice: '的注册局实施了严格的WHOIS查询限制，阻止了自动化API访问。这是为了防止滥用和保护隐私。'
+      restrictionNotice: '注册局禁止自动WHOIS查询。',
+      source: '数据来源',
+      registrationDetails: '注册信息',
+      keyDates: '关键日期',
+      overview: '概览',
+      entities: '联系人',
+      notices: '通知',
+      rawData: '原始数据',
+      noContactDetails: '注册表未公开联系人信息。',
+      openExternalLink: '在新窗口打开',
+      lookupFailed: '查询失败'
     },
 
     // 域名状态翻译
@@ -128,47 +134,42 @@ export const translations = {
       title: '最近搜索',
       clearAll: '清空',
       remove: '删除',
+      clearTitle: '清空搜索记录？',
+      clearDescription: '这会删除此设备上的全部本地搜索记录。',
+      cancel: '取消',
+      confirmClear: '确认清空',
       justNow: '刚刚',
       minutesAgo: '分钟前',
       hoursAgo: '小时前',
       daysAgo: '天前'
     },
 
-    // 页脚
-    footer: '基于RDAP • 使用Next.js 15构建 • 液体玻璃设计',
-
-    // 语言切换
-    language: '语言',
-    switchToEnglish: 'English',
-    switchToChinese: '中文'
+    language: '语言'
   },
   en: {
-    // Main title and description
     title: getBrandName(),
-    description: 'A modern, fast WHOIS lookup service using RDAP with support for all global TLDs and internationalized domain names',
-    subtitle: 'Modern domain lookup powered by RDAP with support for all global TLDs and internationalized domain names',
 
     // Search related
-    searchPlaceholder: 'Enter domain name (e.g., example.com)',
-    searchPlaceholderCompact: 'Search domain...',
+    searchLabel: 'Domain name',
+    searchPlaceholder: 'example.com',
+    searchPlaceholderCompact: 'example.com',
     searchButton: 'Search',
     searching: 'Searching',
-    queryingServers: 'Querying RDAP servers...',
+    queryingServers: 'Querying registration data',
 
-    // Features
-    features: {
-      fastTitle: 'Lightning Fast',
-      fastDesc: 'Edge-cached RDAP queries with global CDN distribution for instant results',
-      globalTitle: 'Global Coverage',
-      globalDesc: 'Supports all TLDs via IANA bootstrap registry with full IDN conversion',
-      privacyTitle: 'Privacy First',
-      privacyDesc: 'RDAP compliant with modern privacy standards and structured data'
+    actions: {
+      skipToContent: 'Skip to main content',
+      returnHome: 'Return to domain lookup',
+      newSearch: 'New search',
+      retry: 'Try again',
+      close: 'Close'
     },
 
-    // Example domains
-    exampleDomains: {
-      title: 'Try these examples:',
-      domains: ['google.com', 'github.com', 'vercel.com']
+    appearance: {
+      theme: 'Appearance',
+      light: 'Light',
+      dark: 'Dark',
+      system: 'System'
     },
 
     // Error messages
@@ -226,9 +227,18 @@ export const translations = {
       whoisQueryFailed: 'WHOIS query failed',
       retry: 'Retry',
       whoisRestricted: 'WHOIS Query Restricted',
-      manualCheckAvailable: 'You can check manually:',
       manualCheck: 'Manual Check',
-      restrictionNotice: ' registry implements strict WHOIS query restrictions that block automated API access. This is to prevent abuse and protect privacy.'
+      restrictionNotice: ' registry blocks automated WHOIS queries.',
+      source: 'Source',
+      registrationDetails: 'Registration details',
+      keyDates: 'Key dates',
+      overview: 'Overview',
+      entities: 'Contacts',
+      notices: 'Notices',
+      rawData: 'Raw data',
+      noContactDetails: 'The registry did not publish contact details.',
+      openExternalLink: 'Open in a new window',
+      lookupFailed: 'Lookup failed'
     },
 
     // Domain status translations
@@ -261,19 +271,17 @@ export const translations = {
       title: 'Recent Searches',
       clearAll: 'Clear all',
       remove: 'Remove',
+      clearTitle: 'Clear search history?',
+      clearDescription: 'This removes every locally stored lookup from this device.',
+      cancel: 'Cancel',
+      confirmClear: 'Clear history',
       justNow: 'Just now',
       minutesAgo: 'm ago',
       hoursAgo: 'h ago',
       daysAgo: 'd ago'
     },
 
-    // Footer
-    footer: 'Powered by RDAP • Built with Next.js 15 • Liquid Glass Design',
-
-    // Language switching
-    language: 'Language',
-    switchToEnglish: 'English',
-    switchToChinese: '中文'
+    language: 'Language'
   }
 }
 

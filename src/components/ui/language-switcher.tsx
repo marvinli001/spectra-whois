@@ -1,35 +1,66 @@
-'use client'
+"use client"
 
-import { motion } from 'framer-motion'
-import { Languages } from 'lucide-react'
-import { useLanguage } from '@/contexts/language-context'
-import { LiquidButton } from './liquid-glass'
+import { AnimatePresence, motion } from "motion/react"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { CheckmarkCircle02Icon, LanguagesIcon } from "@hugeicons/core-free-icons"
+
+import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { useLanguage } from "@/contexts/language-context"
+import { controlSpring } from "@/lib/motion"
 
 export function LanguageSwitcher() {
-  const { language, setLanguage } = useLanguage()
-
-  const toggleLanguage = () => {
-    setLanguage(language === 'zh' ? 'en' : 'zh')
-  }
+  const { language, setLanguage, t } = useLanguage()
 
   return (
-    <motion.div
-      className="fixed top-3 right-3 sm:top-4 sm:right-4 z-50"
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ delay: 0.5, duration: 0.3 }}
-    >
-      <LiquidButton
-        onClick={toggleLanguage}
-        variant="ghost"
-        size="sm"
-        className="px-3 py-2 text-sm"
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        render={
+          <Button
+            variant="outline"
+            size="lg"
+            className="h-10 min-w-[72px] px-3"
+            aria-label={t.language}
+          />
+        }
       >
-        <div className="flex items-center gap-2">
-          <Languages className="w-4 h-4" />
-          <span>{language === 'zh' ? 'EN' : '中文'}</span>
-        </div>
-      </LiquidButton>
-    </motion.div>
+        <HugeiconsIcon icon={LanguagesIcon} strokeWidth={1.8} />
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.span
+            key={language}
+            initial={{ opacity: 0, y: 5 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -5 }}
+            transition={controlSpring}
+          >
+            {language === "zh" ? "EN" : "中文"}
+          </motion.span>
+        </AnimatePresence>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-44">
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>{t.language}</DropdownMenuLabel>
+          <DropdownMenuItem onClick={() => setLanguage("zh")}>
+            <span className="flex-1">中文</span>
+            {language === "zh" && (
+              <HugeiconsIcon icon={CheckmarkCircle02Icon} strokeWidth={1.8} />
+            )}
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setLanguage("en")}>
+            <span className="flex-1">English</span>
+            {language === "en" && (
+              <HugeiconsIcon icon={CheckmarkCircle02Icon} strokeWidth={1.8} />
+            )}
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }

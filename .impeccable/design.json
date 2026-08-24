@@ -1,0 +1,637 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-24T06:43:20Z",
+  "title": "Design System: SpectraWHOIS",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "oklch(1 0 0)",
+        "tonalRamp": [
+          "oklch(0.15 0 0)",
+          "oklch(0.27 0 0)",
+          "oklch(0.39 0 0)",
+          "oklch(0.51 0 0)",
+          "oklch(0.63 0 0)",
+          "oklch(0.75 0 0)",
+          "oklch(0.87 0 0)",
+          "oklch(0.95 0 0)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "oklch(0.145 0 0)",
+        "tonalRamp": [
+          "oklch(0.15 0 0)",
+          "oklch(0.27 0 0)",
+          "oklch(0.39 0 0)",
+          "oklch(0.51 0 0)",
+          "oklch(0.63 0 0)",
+          "oklch(0.75 0 0)",
+          "oklch(0.87 0 0)",
+          "oklch(0.95 0 0)"
+        ]
+      },
+      "near-paper": {
+        "role": "neutral",
+        "displayName": "Near Paper",
+        "canonical": "oklch(0.985 0 0)",
+        "tonalRamp": [
+          "oklch(0.15 0 0)",
+          "oklch(0.27 0 0)",
+          "oklch(0.39 0 0)",
+          "oklch(0.51 0 0)",
+          "oklch(0.63 0 0)",
+          "oklch(0.75 0 0)",
+          "oklch(0.87 0 0)",
+          "oklch(0.95 0 0)"
+        ]
+      },
+      "coal": {
+        "role": "neutral",
+        "displayName": "Coal",
+        "canonical": "oklch(0.205 0 0)",
+        "tonalRamp": [
+          "oklch(0.15 0 0)",
+          "oklch(0.27 0 0)",
+          "oklch(0.39 0 0)",
+          "oklch(0.51 0 0)",
+          "oklch(0.63 0 0)",
+          "oklch(0.75 0 0)",
+          "oklch(0.87 0 0)",
+          "oklch(0.95 0 0)"
+        ]
+      },
+      "charcoal": {
+        "role": "neutral",
+        "displayName": "Charcoal",
+        "canonical": "oklch(0.269 0 0)",
+        "tonalRamp": [
+          "oklch(0.15 0 0)",
+          "oklch(0.27 0 0)",
+          "oklch(0.39 0 0)",
+          "oklch(0.51 0 0)",
+          "oklch(0.63 0 0)",
+          "oklch(0.75 0 0)",
+          "oklch(0.87 0 0)",
+          "oklch(0.95 0 0)"
+        ]
+      },
+      "quiet": {
+        "role": "neutral",
+        "displayName": "Quiet Neutral",
+        "canonical": "oklch(0.97 0 0)",
+        "tonalRamp": [
+          "oklch(0.15 0 0)",
+          "oklch(0.27 0 0)",
+          "oklch(0.39 0 0)",
+          "oklch(0.51 0 0)",
+          "oklch(0.63 0 0)",
+          "oklch(0.75 0 0)",
+          "oklch(0.87 0 0)",
+          "oklch(0.95 0 0)"
+        ]
+      },
+      "quiet-ink": {
+        "role": "neutral",
+        "displayName": "Quiet Ink",
+        "canonical": "oklch(0.556 0 0)",
+        "tonalRamp": [
+          "oklch(0.15 0 0)",
+          "oklch(0.27 0 0)",
+          "oklch(0.39 0 0)",
+          "oklch(0.51 0 0)",
+          "oklch(0.63 0 0)",
+          "oklch(0.75 0 0)",
+          "oklch(0.87 0 0)",
+          "oklch(0.95 0 0)"
+        ]
+      },
+      "mid-ink": {
+        "role": "neutral",
+        "displayName": "Mid Ink",
+        "canonical": "oklch(0.708 0 0)",
+        "tonalRamp": [
+          "oklch(0.15 0 0)",
+          "oklch(0.27 0 0)",
+          "oklch(0.39 0 0)",
+          "oklch(0.51 0 0)",
+          "oklch(0.63 0 0)",
+          "oklch(0.75 0 0)",
+          "oklch(0.87 0 0)",
+          "oklch(0.95 0 0)"
+        ]
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Light Hairline",
+        "canonical": "oklch(0.922 0 0)",
+        "tonalRamp": [
+          "oklch(0.15 0 0)",
+          "oklch(0.27 0 0)",
+          "oklch(0.39 0 0)",
+          "oklch(0.51 0 0)",
+          "oklch(0.63 0 0)",
+          "oklch(0.75 0 0)",
+          "oklch(0.87 0 0)",
+          "oklch(0.95 0 0)"
+        ]
+      },
+      "cool-quiet": {
+        "role": "neutral",
+        "displayName": "Cool Quiet",
+        "canonical": "oklch(0.967 0.001 286.375)",
+        "tonalRamp": [
+          "oklch(0.15 0.001 286.375)",
+          "oklch(0.27 0.001 286.375)",
+          "oklch(0.39 0.001 286.375)",
+          "oklch(0.51 0.001 286.375)",
+          "oklch(0.63 0.001 286.375)",
+          "oklch(0.75 0.001 286.375)",
+          "oklch(0.87 0.001 286.375)",
+          "oklch(0.95 0.001 286.375)"
+        ]
+      },
+      "cool-ink": {
+        "role": "neutral",
+        "displayName": "Cool Ink",
+        "canonical": "oklch(0.21 0.006 285.885)",
+        "tonalRamp": [
+          "oklch(0.15 0.006 285.885)",
+          "oklch(0.27 0.006 285.885)",
+          "oklch(0.39 0.006 285.885)",
+          "oklch(0.51 0.006 285.885)",
+          "oklch(0.63 0.006 285.885)",
+          "oklch(0.75 0.006 285.885)",
+          "oklch(0.87 0.006 285.885)",
+          "oklch(0.95 0.006 285.885)"
+        ]
+      },
+      "cool-charcoal": {
+        "role": "neutral",
+        "displayName": "Cool Charcoal",
+        "canonical": "oklch(0.274 0.006 286.033)",
+        "tonalRamp": [
+          "oklch(0.15 0.006 286.033)",
+          "oklch(0.27 0.006 286.033)",
+          "oklch(0.39 0.006 286.033)",
+          "oklch(0.51 0.006 286.033)",
+          "oklch(0.63 0.006 286.033)",
+          "oklch(0.75 0.006 286.033)",
+          "oklch(0.87 0.006 286.033)",
+          "oklch(0.95 0.006 286.033)"
+        ]
+      },
+      "primary-blue": {
+        "role": "primary",
+        "displayName": "Action Blue",
+        "canonical": "oklch(0.488 0.243 264.376)",
+        "tonalRamp": [
+          "oklch(0.15 0.243 264.376)",
+          "oklch(0.27 0.243 264.376)",
+          "oklch(0.39 0.243 264.376)",
+          "oklch(0.51 0.243 264.376)",
+          "oklch(0.63 0.243 264.376)",
+          "oklch(0.75 0.243 264.376)",
+          "oklch(0.87 0.243 264.376)",
+          "oklch(0.95 0.243 264.376)"
+        ]
+      },
+      "primary-blue-dark": {
+        "role": "primary",
+        "displayName": "Dark Action Blue",
+        "canonical": "oklch(0.424 0.199 265.638)",
+        "tonalRamp": [
+          "oklch(0.15 0.199 265.638)",
+          "oklch(0.27 0.199 265.638)",
+          "oklch(0.39 0.199 265.638)",
+          "oklch(0.51 0.199 265.638)",
+          "oklch(0.63 0.199 265.638)",
+          "oklch(0.75 0.199 265.638)",
+          "oklch(0.87 0.199 265.638)",
+          "oklch(0.95 0.199 265.638)"
+        ]
+      },
+      "primary-on": {
+        "role": "primary",
+        "displayName": "Blue White",
+        "canonical": "oklch(0.97 0.014 254.604)",
+        "tonalRamp": [
+          "oklch(0.15 0.014 254.604)",
+          "oklch(0.27 0.014 254.604)",
+          "oklch(0.39 0.014 254.604)",
+          "oklch(0.51 0.014 254.604)",
+          "oklch(0.63 0.014 254.604)",
+          "oklch(0.75 0.014 254.604)",
+          "oklch(0.87 0.014 254.604)",
+          "oklch(0.95 0.014 254.604)"
+        ]
+      },
+      "destructive": {
+        "role": "destructive",
+        "displayName": "Failure Red",
+        "canonical": "oklch(0.577 0.245 27.325)",
+        "tonalRamp": [
+          "oklch(0.15 0.245 27.325)",
+          "oklch(0.27 0.245 27.325)",
+          "oklch(0.39 0.245 27.325)",
+          "oklch(0.51 0.245 27.325)",
+          "oklch(0.63 0.245 27.325)",
+          "oklch(0.75 0.245 27.325)",
+          "oklch(0.87 0.245 27.325)",
+          "oklch(0.95 0.245 27.325)"
+        ]
+      },
+      "destructive-dark": {
+        "role": "destructive",
+        "displayName": "Dark Failure Red",
+        "canonical": "oklch(0.704 0.191 22.216)",
+        "tonalRamp": [
+          "oklch(0.15 0.191 22.216)",
+          "oklch(0.27 0.191 22.216)",
+          "oklch(0.39 0.191 22.216)",
+          "oklch(0.51 0.191 22.216)",
+          "oklch(0.63 0.191 22.216)",
+          "oklch(0.75 0.191 22.216)",
+          "oklch(0.87 0.191 22.216)",
+          "oklch(0.95 0.191 22.216)"
+        ]
+      },
+      "dark-hairline": {
+        "role": "neutral",
+        "displayName": "Dark Hairline",
+        "canonical": "oklch(1 0 0 / 10%)",
+        "tonalRamp": [
+          "oklch(0.15 0 0 / 10%)",
+          "oklch(0.27 0 0 / 10%)",
+          "oklch(0.39 0 0 / 10%)",
+          "oklch(0.51 0 0 / 10%)",
+          "oklch(0.63 0 0 / 10%)",
+          "oklch(0.75 0 0 / 10%)",
+          "oklch(0.87 0 0 / 10%)",
+          "oklch(0.95 0 0 / 10%)"
+        ]
+      },
+      "dark-input": {
+        "role": "neutral",
+        "displayName": "Dark Input Pigment",
+        "canonical": "oklch(1 0 0 / 15%)",
+        "tonalRamp": [
+          "oklch(0.15 0 0 / 15%)",
+          "oklch(0.27 0 0 / 15%)",
+          "oklch(0.39 0 0 / 15%)",
+          "oklch(0.51 0 0 / 15%)",
+          "oklch(0.63 0 0 / 15%)",
+          "oklch(0.75 0 0 / 15%)",
+          "oklch(0.87 0 0 / 15%)",
+          "oklch(0.95 0 0 / 15%)"
+        ]
+      },
+      "verified-wash": {
+        "role": "secondary",
+        "displayName": "Verified Wash",
+        "canonical": "oklch(0.845 0.143 164.978)",
+        "tonalRamp": [
+          "oklch(0.15 0.143 164.978)",
+          "oklch(0.27 0.143 164.978)",
+          "oklch(0.39 0.143 164.978)",
+          "oklch(0.51 0.143 164.978)",
+          "oklch(0.63 0.143 164.978)",
+          "oklch(0.75 0.143 164.978)",
+          "oklch(0.87 0.143 164.978)",
+          "oklch(0.95 0.143 164.978)"
+        ]
+      },
+      "verified-highlight": {
+        "role": "secondary",
+        "displayName": "Verified Highlight",
+        "canonical": "oklch(0.696 0.17 162.48)",
+        "tonalRamp": [
+          "oklch(0.15 0.17 162.48)",
+          "oklch(0.27 0.17 162.48)",
+          "oklch(0.39 0.17 162.48)",
+          "oklch(0.51 0.17 162.48)",
+          "oklch(0.63 0.17 162.48)",
+          "oklch(0.75 0.17 162.48)",
+          "oklch(0.87 0.17 162.48)",
+          "oklch(0.95 0.17 162.48)"
+        ]
+      },
+      "verified-signal": {
+        "role": "secondary",
+        "displayName": "Verified Signal",
+        "canonical": "oklch(0.596 0.145 163.225)",
+        "tonalRamp": [
+          "oklch(0.15 0.145 163.225)",
+          "oklch(0.27 0.145 163.225)",
+          "oklch(0.39 0.145 163.225)",
+          "oklch(0.51 0.145 163.225)",
+          "oklch(0.63 0.145 163.225)",
+          "oklch(0.75 0.145 163.225)",
+          "oklch(0.87 0.145 163.225)",
+          "oklch(0.95 0.145 163.225)"
+        ]
+      },
+      "verified-ink": {
+        "role": "secondary",
+        "displayName": "Verified Ink",
+        "canonical": "oklch(0.508 0.118 165.612)",
+        "tonalRamp": [
+          "oklch(0.15 0.118 165.612)",
+          "oklch(0.27 0.118 165.612)",
+          "oklch(0.39 0.118 165.612)",
+          "oklch(0.51 0.118 165.612)",
+          "oklch(0.63 0.118 165.612)",
+          "oklch(0.75 0.118 165.612)",
+          "oklch(0.87 0.118 165.612)",
+          "oklch(0.95 0.118 165.612)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Reserved token; the shipped idle surface intentionally uses no visible proposition headline."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Returned domain identity; responsive from 1.5rem to 1.875rem."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Card and result-group headings."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Search input and ordinary readable content."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Fields, actions, tabs, tables, and menus."
+      },
+      "metadata": {
+        "displayName": "Metadata",
+        "purpose": "Timestamps, relative dates, badges, counts, and protocol annotations."
+      }
+    },
+    "shadows": [
+      {
+        "name": "field-rest",
+        "value": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+        "purpose": "Idle search field."
+      },
+      {
+        "name": "surface-rest",
+        "value": "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
+        "purpose": "Cards and button hover."
+      },
+      {
+        "name": "field-focus",
+        "value": "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+        "purpose": "Focused lookup field."
+      },
+      {
+        "name": "overlay",
+        "value": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
+        "purpose": "Sticky compact workbench, skip link, and menus."
+      },
+      {
+        "name": "dialog",
+        "value": "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+        "purpose": "Destructive confirmation dialog only."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Shared state-transition easing."
+      },
+      {
+        "name": "provider-default",
+        "value": "280ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "MotionConfig default."
+      },
+      {
+        "name": "workbench-spring",
+        "value": "spring(stiffness: 260, damping: 30, mass: 0.9)",
+        "purpose": "Idle workbench to compact lookup strip."
+      },
+      {
+        "name": "control-spring",
+        "value": "spring(stiffness: 420, damping: 28, mass: 0.55)",
+        "purpose": "Control feedback and icon swaps."
+      },
+      {
+        "name": "panel-transition",
+        "value": "420ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Loading, errors, results, tabs, and panels."
+      },
+      {
+        "name": "panel-stagger",
+        "value": "80ms initial delay; 55ms between children",
+        "purpose": "Summary-first result reveal."
+      },
+      {
+        "name": "button-state",
+        "value": "300ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Button transform, shadow, color, border, and opacity."
+      },
+      {
+        "name": "theme-background",
+        "value": "320ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Theme background transition."
+      },
+      {
+        "name": "theme-foreground",
+        "value": "240ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Theme foreground transition."
+      },
+      {
+        "name": "loading-progress",
+        "value": "1.8s repeating cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Nonessential loading progress accent."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "0.01ms duration; one iteration; 0ms delay",
+        "purpose": "Global reduced-motion fallback with smooth scrolling disabled."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Lookup Button",
+      "kind": "button",
+      "refersTo": "button-lookup",
+      "description": "The single dominant action beside or beneath the domain field.",
+      "html": "<button class=\"ds-btn-primary\" type=\"button\"><svg class=\"ds-icon\" viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\"><path d=\"M17 17L21 21\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.8\"/><path d=\"M19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19C15.4183 19 19 15.4183 19 11Z\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.8\"/></svg><span class=\"ds-btn-label\">Lookup domain</span></button>",
+      "css": ".ds-btn-primary{display:inline-flex;height:56px;min-width:128px;align-items:center;justify-content:center;gap:8px;padding:0 20px;border:1px solid transparent;border-radius:26px;background:var(--primary,oklch(0.488 0.243 264.376));color:var(--primary-foreground,oklch(0.97 0.014 254.604));font:500 14px/1.25 \"Geist\",\"Geist Fallback\",ui-sans-serif,system-ui,sans-serif;transition:transform 300ms cubic-bezier(.16,1,.3,1),box-shadow 300ms cubic-bezier(.16,1,.3,1),background-color 300ms cubic-bezier(.16,1,.3,1),opacity 300ms cubic-bezier(.16,1,.3,1)}.ds-btn-primary .ds-icon{width:16px;height:16px}.ds-btn-primary:hover{transform:translateY(-2px);background:color-mix(in oklch,var(--primary,oklch(0.488 0.243 264.376)) 80%,transparent);box-shadow:0 1px 3px rgb(0 0 0/.1),0 1px 2px -1px rgb(0 0 0/.1)}.ds-btn-primary:focus-visible{border-color:var(--ring,oklch(0.708 0 0));outline:3px solid color-mix(in oklch,var(--ring,oklch(0.708 0 0)) 30%,transparent)}.ds-btn-primary:active{transform:translateY(1px) scale(.97)}.ds-btn-primary:disabled{pointer-events:none;transform:none;box-shadow:none;opacity:.5}@media(prefers-reduced-motion:reduce){.ds-btn-primary{transition:none}.ds-btn-primary:hover,.ds-btn-primary:active{transform:none}}"
+    },
+    {
+      "name": "Outline Utility Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "A subordinate action for cancellation, theme controls, and secondary recovery paths.",
+      "html": "<button class=\"ds-btn-outline\" type=\"button\"><span class=\"ds-btn-label\">Cancel</span></button>",
+      "css": ".ds-btn-outline{display:inline-flex;min-height:40px;align-items:center;gap:4px;padding:0 16px;border:1px solid var(--border,oklch(0.922 0 0));border-radius:26px;background:var(--background,oklch(1 0 0));color:var(--foreground,oklch(0.145 0 0));font:400 14px/1.25 \"Geist\",\"Geist Fallback\",ui-sans-serif,system-ui,sans-serif;transition:transform 300ms cubic-bezier(.16,1,.3,1),box-shadow 300ms cubic-bezier(.16,1,.3,1),background-color 300ms cubic-bezier(.16,1,.3,1)}.ds-btn-outline .ds-icon{width:16px;height:16px}.ds-btn-outline:hover{transform:translateY(-2px);background:var(--muted,oklch(0.97 0 0));box-shadow:0 1px 3px rgb(0 0 0/.1),0 1px 2px -1px rgb(0 0 0/.1)}.ds-btn-outline:focus-visible{border-color:var(--ring,oklch(0.708 0 0));outline:3px solid color-mix(in oklch,var(--ring,oklch(0.708 0 0)) 30%,transparent)}.ds-btn-outline:active{transform:translateY(1px) scale(.97)}@media(max-width:639px){.ds-btn-outline{min-width:44px;min-height:44px}}@media(prefers-reduced-motion:reduce){.ds-btn-outline{transition:none}.ds-btn-outline:hover,.ds-btn-outline:active{transform:none}}"
+    },
+    {
+      "name": "Labeled Search Field",
+      "kind": "input",
+      "refersTo": "search-input",
+      "description": "The primary domain entry field with a visible idle-state label and grouped globe affordance.",
+      "html": "<label class=\"ds-search-field\"><span class=\"ds-search-label\">Domain name</span><span class=\"ds-search-group\"><svg class=\"ds-icon\" viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\" stroke=\"currentColor\" stroke-width=\"1.8\"/><path d=\"M8 12C8 18 12 22 12 22C12 22 16 18 16 12C16 6 12 2 12 2C12 2 8 6 8 12Z\" stroke=\"currentColor\" stroke-linejoin=\"round\" stroke-width=\"1.8\"/><path d=\"M21 15H3M21 9H3\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.8\"/></svg><input class=\"ds-search-input\" inputmode=\"url\" autocomplete=\"off\" placeholder=\"example.com\"/></span></label>",
+      "css": ".ds-search-field{display:grid;gap:12px;color:var(--foreground,oklch(0.145 0 0));font-family:\"Geist\",\"Geist Fallback\",ui-sans-serif,system-ui,sans-serif}.ds-search-label{font-size:14px;font-weight:500}.ds-search-group{display:flex;height:56px;align-items:center;gap:8px;padding:0 16px;border:1px solid transparent;border-radius:26px;background:color-mix(in oklch,var(--input,oklch(0.922 0 0)) 50%,transparent);box-shadow:0 1px 2px rgb(0 0 0/.05);transition:transform 300ms cubic-bezier(.16,1,.3,1),box-shadow 300ms cubic-bezier(.16,1,.3,1),background-color 300ms cubic-bezier(.16,1,.3,1)}.ds-search-group .ds-icon{width:20px;height:20px;color:var(--muted-foreground,oklch(0.556 0 0))}.ds-search-input{min-width:0;flex:1;border:0;outline:0;background:transparent;color:inherit;font:500 18px/1.5 \"Geist\",\"Geist Fallback\",ui-sans-serif,system-ui,sans-serif;letter-spacing:-.01em}.ds-search-input::placeholder{color:var(--muted-foreground,oklch(0.556 0 0));font-weight:400}.ds-search-group:focus-within{transform:translateY(-2px);border-color:var(--ring,oklch(0.708 0 0));background:var(--background,oklch(1 0 0));box-shadow:0 4px 6px -1px rgb(0 0 0/.1),0 2px 4px -2px rgb(0 0 0/.1),0 0 0 3px color-mix(in oklch,var(--ring,oklch(0.708 0 0)) 30%,transparent)}.ds-search-group:has(.ds-search-input[aria-invalid=true]){border-color:var(--destructive,oklch(0.577 0.245 27.325));box-shadow:0 0 0 3px color-mix(in oklch,var(--destructive,oklch(0.577 0.245 27.325)) 20%,transparent)}@media(max-width:639px){.ds-search-input{font-size:16px}}@media(prefers-reduced-motion:reduce){.ds-search-group{transition:none}.ds-search-group:focus-within{transform:none}}"
+    },
+    {
+      "name": "Workbench Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "The quiet rounded container used for search, history, and information groups.",
+      "html": "<section class=\"ds-card\"><header class=\"ds-card-header\"><h3 class=\"ds-card-title\">Registration details</h3></header><div class=\"ds-card-body\"><div class=\"ds-card-row\"><span class=\"ds-card-key\">Registrar</span><strong class=\"ds-card-value\">Example Registrar</strong></div><div class=\"ds-card-row\"><span class=\"ds-card-key\">Source</span><strong class=\"ds-card-value\">RDAP</strong></div></div></section>",
+      "css": ".ds-card{overflow:hidden;width:min(100%,420px);border-radius:18px;background:var(--card,oklch(1 0 0));color:var(--card-foreground,oklch(0.145 0 0));font:400 14px/1.5 \"Geist\",\"Geist Fallback\",ui-sans-serif,system-ui,sans-serif;box-shadow:0 1px 3px rgb(0 0 0/.1),0 1px 2px -1px rgb(0 0 0/.1),0 0 0 1px color-mix(in oklch,var(--foreground,oklch(0.145 0 0)) 5%,transparent)}.ds-card-header{padding:24px;border-bottom:1px solid var(--border,oklch(0.922 0 0))}.ds-card-title{margin:0;font-size:16px;font-weight:500}.ds-card-body{padding:8px 20px}.ds-card-row{display:grid;grid-template-columns:38% 1fr;gap:12px;padding:14px 0}.ds-card-row+.ds-card-row{border-top:1px solid var(--border,oklch(0.922 0 0))}.ds-card-key{color:var(--muted-foreground,oklch(0.556 0 0))}.ds-card-value{font-weight:500;overflow-wrap:anywhere}"
+    },
+    {
+      "name": "Verified Badge",
+      "kind": "chip",
+      "refersTo": "badge-verified",
+      "description": "A compact emerald status used only for confirmed positive evidence.",
+      "html": "<span class=\"ds-badge-verified\"><svg class=\"ds-icon\" viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\"><path d=\"M18.7 3.5C16.8 2.6 14.5 2 12 2S7.2 2.6 5.3 3.5C3 4.6 3 5.6 3 7.7v3.5c0 5.7 4.5 8.8 7.2 10.2.7.4 1.1.6 1.8.6s1.1-.2 1.8-.6c2.7-1.4 7.2-4.5 7.2-10.2V7.7c0-2.1 0-3.1-2.3-4.2Z\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.8\"/><circle cx=\"12\" cy=\"11\" r=\"3\" stroke=\"currentColor\" stroke-width=\"1.8\"/></svg><span class=\"ds-badge-label\">DNSSEC enabled</span></span>",
+      "css": ".ds-badge-verified{display:inline-flex;height:20px;width:max-content;align-items:center;gap:4px;padding:2px 8px;border-radius:22px;background:color-mix(in oklch,var(--chart-1,oklch(0.845 0.143 164.978)) 28%,transparent);color:var(--chart-4,oklch(0.508 0.118 165.612));font:500 12px/1 \"Geist\",\"Geist Fallback\",ui-sans-serif,system-ui,sans-serif;white-space:nowrap}.ds-badge-verified .ds-icon{width:12px;height:12px}@media(prefers-color-scheme:dark){.ds-badge-verified{color:var(--chart-2,oklch(0.696 0.17 162.48))}}"
+    },
+    {
+      "name": "Detail Tabs",
+      "kind": "nav",
+      "refersTo": "tabs-detail",
+      "description": "Evidence-aware result navigation with a line indicator and disabled unavailable views.",
+      "html": "<div class=\"ds-tabs\" role=\"tablist\" aria-label=\"Technical details\"><button class=\"ds-tab ds-tab-active\" role=\"tab\" aria-selected=\"true\">Overview</button><button class=\"ds-tab\" role=\"tab\">Entities</button><button class=\"ds-tab\" role=\"tab\" disabled>Notices</button><button class=\"ds-tab\" role=\"tab\">Raw data</button></div>",
+      "css": ".ds-tabs{display:flex;width:max-content;gap:4px;font-family:\"Geist\",\"Geist Fallback\",ui-sans-serif,system-ui,sans-serif}.ds-tab{position:relative;display:inline-flex;min-height:44px;align-items:center;padding:4px 12px;border:1px solid transparent;border-radius:9999px;background:transparent;color:color-mix(in oklch,var(--foreground,oklch(0.145 0 0)) 60%,transparent);font-size:14px;font-weight:500;white-space:nowrap}.ds-tab:hover,.ds-tab-active{color:var(--foreground,oklch(0.145 0 0))}.ds-tab:focus-visible{border-color:var(--ring,oklch(0.708 0 0));outline:3px solid color-mix(in oklch,var(--ring,oklch(0.708 0 0)) 50%,transparent)}.ds-tab::after{position:absolute;inset:auto 0 -5px;height:2px;background:var(--foreground,oklch(0.145 0 0));content:\"\";opacity:0}.ds-tab-active::after{opacity:1}.ds-tab:disabled{pointer-events:none;opacity:.5}"
+    },
+    {
+      "name": "App Header",
+      "kind": "nav",
+      "refersTo": "app-header",
+      "description": "The 68px sticky shell tying brand reset, language, and appearance controls to the shared grid.",
+      "html": "<header class=\"ds-app-header\"><div class=\"ds-app-header-inner\"><button class=\"ds-brand\"><span class=\"ds-brand-icon\"><svg class=\"ds-icon\" viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\" stroke=\"currentColor\" stroke-width=\"1.8\"/><path d=\"M8 12C8 18 12 22 12 22C12 22 16 18 16 12C16 6 12 2 12 2C12 2 8 6 8 12Z\" stroke=\"currentColor\" stroke-linejoin=\"round\" stroke-width=\"1.8\"/><path d=\"M21 15H3M21 9H3\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.8\"/></svg></span><span class=\"ds-brand-name\">SpectraWHOIS</span></button><div class=\"ds-header-actions\"><button class=\"ds-header-control\">EN</button><button class=\"ds-header-control ds-header-icon\" aria-label=\"Theme\"><span class=\"ds-theme-glyph\">☼</span></button></div></div></header>",
+      "css": ".ds-app-header{height:68px;border-bottom:1px solid var(--border,oklch(0.922 0 0));background:color-mix(in oklch,var(--background,oklch(1 0 0)) 78%,transparent);color:var(--foreground,oklch(0.145 0 0));backdrop-filter:blur(24px);font-family:\"Geist\",\"Geist Fallback\",ui-sans-serif,system-ui,sans-serif}.ds-app-header-inner{display:flex;height:68px;align-items:center;justify-content:space-between;gap:16px;padding:0 16px}.ds-brand{display:inline-flex;height:44px;align-items:center;gap:10px;padding:0 8px;border:1px solid transparent;border-radius:26px;background:transparent;color:inherit;font-size:18px;font-weight:600;letter-spacing:-.02em}.ds-brand-icon{display:grid;width:32px;height:32px;place-items:center;border-radius:18px;background:color-mix(in oklch,var(--primary,oklch(0.488 0.243 264.376)) 10%,transparent);color:var(--primary,oklch(0.488 0.243 264.376))}.ds-brand-icon .ds-icon{width:20px;height:20px}.ds-header-actions{display:flex;gap:8px}.ds-header-control{display:inline-flex;height:40px;min-width:44px;align-items:center;justify-content:center;padding:0 12px;border:1px solid var(--border,oklch(0.922 0 0));border-radius:26px;background:var(--background,oklch(1 0 0));color:inherit;font-size:14px;font-weight:500}.ds-header-icon{width:40px;padding:0}.ds-brand:focus-visible,.ds-header-control:focus-visible{border-color:var(--ring,oklch(0.708 0 0));outline:3px solid color-mix(in oklch,var(--ring,oklch(0.708 0 0)) 30%,transparent)}"
+    },
+    {
+      "name": "Inverted Translucent Menu",
+      "kind": "nav",
+      "refersTo": "menu-inverted",
+      "description": "The forced-dark translucent menu used for language, theme, and development configuration choices.",
+      "html": "<div class=\"ds-menu\" role=\"menu\"><div class=\"ds-menu-label\">Theme</div><button class=\"ds-menu-item\"><span class=\"ds-menu-icon\">☼</span><span class=\"ds-menu-text\">Light</span></button><button class=\"ds-menu-item ds-menu-item-active\"><span class=\"ds-menu-icon\">◐</span><span class=\"ds-menu-text\">Dark</span><span class=\"ds-menu-check\">✓</span></button><button class=\"ds-menu-item\"><span class=\"ds-menu-icon\">▣</span><span class=\"ds-menu-text\">System</span></button></div>",
+      "css": ".ds-menu{width:208px;padding:6px;border-radius:22px;background:oklch(0.205 0 0/.7);color:oklch(0.985 0 0);font-family:\"Geist\",\"Geist Fallback\",ui-sans-serif,system-ui,sans-serif;box-shadow:0 10px 15px -3px rgb(0 0 0/.1),0 4px 6px -4px rgb(0 0 0/.1),0 0 0 1px oklch(0.985 0 0/.1);backdrop-filter:blur(40px) saturate(150%)}.ds-menu-label{padding:10px 12px;color:oklch(0.708 0 0);font-size:12px}.ds-menu-item{display:flex;width:100%;min-height:44px;align-items:center;gap:10px;padding:8px 12px;border:0;border-radius:18px;background:transparent;color:inherit;font-size:14px;font-weight:500;text-align:left}.ds-menu-item:hover,.ds-menu-item:focus-visible,.ds-menu-item-active{outline:0;background:oklch(0.985 0 0/.1)}.ds-menu-icon{width:16px;text-align:center}.ds-menu-text{flex:1}.ds-menu-check{margin-left:auto}"
+    },
+    {
+      "name": "Result Summary",
+      "kind": "custom",
+      "refersTo": "result-summary",
+      "description": "The summary-first domain identity surface shown before protocol details.",
+      "html": "<section class=\"ds-result-summary\"><div class=\"ds-result-main\"><span class=\"ds-result-icon\"><svg class=\"ds-icon\" viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"10\" stroke=\"currentColor\" stroke-width=\"1.8\"/><path d=\"M8 12C8 18 12 22 12 22C12 22 16 18 16 12C16 6 12 2 12 2C12 2 8 6 8 12Z\" stroke=\"currentColor\" stroke-linejoin=\"round\" stroke-width=\"1.8\"/><path d=\"M21 15H3M21 9H3\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.8\"/></svg></span><div class=\"ds-result-copy\"><div class=\"ds-result-title-row\"><h2 class=\"ds-result-domain\">EXAMPLE.COM</h2><span class=\"ds-result-source\">RDAP</span><span class=\"ds-result-verified\"><svg class=\"ds-icon\" viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\"><path d=\"M18.7 3.5C16.8 2.6 14.5 2 12 2S7.2 2.6 5.3 3.5C3 4.6 3 5.6 3 7.7v3.5c0 5.7 4.5 8.8 7.2 10.2.7.4 1.1.6 1.8.6s1.1-.2 1.8-.6c2.7-1.4 7.2-4.5 7.2-10.2V7.7c0-2.1 0-3.1-2.3-4.2Z\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.8\"/><circle cx=\"12\" cy=\"11\" r=\"3\" stroke=\"currentColor\" stroke-width=\"1.8\"/></svg><span class=\"ds-result-verified-label\">DNSSEC enabled</span></span></div></div></div><div class=\"ds-result-statuses\"><span class=\"ds-result-status\">Client delete prohibited</span><span class=\"ds-result-status\">Client transfer prohibited</span></div></section>",
+      "css": ".ds-result-summary{overflow:hidden;border-radius:18px;background:var(--card,oklch(1 0 0));color:var(--card-foreground,oklch(0.145 0 0));font-family:\"Geist\",\"Geist Fallback\",ui-sans-serif,system-ui,sans-serif;box-shadow:0 1px 3px rgb(0 0 0/.1),0 1px 2px -1px rgb(0 0 0/.1),0 0 0 1px color-mix(in oklch,var(--foreground,oklch(0.145 0 0)) 5%,transparent)}.ds-result-main{display:flex;gap:16px;padding:24px;border-bottom:1px solid var(--border,oklch(0.922 0 0))}.ds-result-icon{display:grid;width:48px;height:48px;flex:none;place-items:center;border-radius:22px;background:color-mix(in oklch,var(--primary,oklch(0.488 0.243 264.376)) 10%,transparent);color:var(--primary,oklch(0.488 0.243 264.376))}.ds-result-icon .ds-icon{width:24px;height:24px}.ds-result-title-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px}.ds-result-domain{margin:0;overflow-wrap:anywhere;font-size:30px;line-height:1.2;font-weight:600;letter-spacing:-.035em}.ds-result-source,.ds-result-verified,.ds-result-status{display:inline-flex;align-items:center;gap:4px;border-radius:22px;padding:2px 8px;font-size:12px;line-height:1}.ds-result-source{border:1px solid var(--border,oklch(0.922 0 0))}.ds-result-verified{background:color-mix(in oklch,var(--chart-1,oklch(0.845 0.143 164.978)) 28%,transparent);color:var(--chart-4,oklch(0.508 0.118 165.612))}.ds-result-verified .ds-icon{width:12px;height:12px}.ds-result-statuses{display:flex;flex-wrap:wrap;gap:8px;padding:16px 24px}.ds-result-status{background:var(--muted,oklch(0.97 0 0));color:var(--muted-foreground,oklch(0.556 0 0))}@media(max-width:639px){.ds-result-main{gap:12px;padding:16px}.ds-result-icon{width:44px;height:44px}.ds-result-domain{font-size:24px}.ds-result-statuses{padding:16px}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Luma Motion Workbench",
+    "overview": "SpectraWHOIS is a calm technical instrument for developers, webmasters, and site operators, not an always-on analytics dashboard. Its visual world comes from the exact shadcn/ui preset `b2D0wqNxT`: `base-luma` style, neutral base, blue theme, Base UI primitives, subtle menu accents, inverted translucent menus, Geist typography, and Hugeicons. Neutral fields carry the work; one blue action establishes priority; emerald appears only when the interface has positive evidence.\n\nIdle contains only the labeled lookup control plus real recent history when it exists. It does not explain WHOIS/RDAP, narrate obvious controls, or offer tutorial examples. A search compacts the control into a stable strip, then reveals the result summary before protocol-specific tabs, entities, notices, and raw data. Light and dark modes preserve the same hierarchy rather than becoming separate visual identities.",
+    "keyCharacteristics": [
+      "Evidence-gated disclosure instead of a permanent feature dashboard.",
+      "Near-achromatic Luma surfaces with one blue action and emerald verified states.",
+      "Rounded, tactile controls inside quieter rounded containers.",
+      "A spatially continuous idle-to-result transition with reduced-motion parity.",
+      "Bilingual, keyboard-operable controls using Geist and Hugeicons throughout.",
+      "No beginner-facing proposition, helper paragraph, or example-query strip."
+    ],
+    "rules": [
+      {
+        "name": "The Evidence Earns Space Rule",
+        "body": "Rich panels appear only after lookup produces a state to explain; idle space never advertises capability, teaches the tool, or repeats what the labeled control already says.",
+        "section": "overview"
+      },
+      {
+        "name": "The One Blue Action Rule",
+        "body": "A task cluster gets one visually dominant blue action; neighboring actions remain outline, secondary, or ghost.",
+        "section": "colors"
+      },
+      {
+        "name": "The Verified Means Verified Rule",
+        "body": "Emerald is evidence, not decoration. Never use it for neutral protocol labels, navigation, or unconfirmed availability.",
+        "section": "colors"
+      },
+      {
+        "name": "The One-Family Rule",
+        "body": "Extend hierarchy within Geist; do not add a decorative display, serif, or monospace family to create artificial personality.",
+        "section": "typography"
+      },
+      {
+        "name": "The Stable Input Rule",
+        "body": "A lookup changes the workbench's size and position, not its identity; the entered domain remains editable in the compact strip while results enter below.",
+        "section": "layout"
+      },
+      {
+        "name": "The Touch Floor Rule",
+        "body": "Interactive targets are at least 44×44px below 640px, including icon-only controls.",
+        "section": "layout"
+      },
+      {
+        "name": "The Flat Until Active Rule",
+        "body": "Information remains near-flat at rest. Stronger elevation belongs to focus, sticky continuity, or an overlay that genuinely sits above the page.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Rounded Controls, Quiet Containers Rule",
+        "body": "Controls may feel pill-like; information surfaces stop at the 18px container radius so the page retains structure.",
+        "section": "shapes"
+      },
+      {
+        "name": "The One Divider Rule",
+        "body": "Use a single semantic separator between logical regions; do not stack border, ring, and decorative grid lines to explain the same boundary.",
+        "section": "shapes"
+      },
+      {
+        "name": "The Spatial Continuity Rule",
+        "body": "Animate opacity and transform to explain state movement; never animate layout for spectacle, hide feedback behind motion, or run decorative loops.",
+        "section": "components"
+      },
+      {
+        "name": "The Reduced-Motion Parity Rule",
+        "body": "`prefers-reduced-motion` collapses nonessential animation and smooth scrolling to effectively instant behavior; content, focus, validation, and progress meaning remain available.",
+        "section": "components"
+      }
+    ],
+    "dos": [
+      "Do begin with only the labeled domain lookup and real history when present; reveal information only when a loading, success, partial, empty, or error state exists.",
+      "Do reuse the `base-luma` Base UI primitives, semantic CSS variables, Geist roles, Hugeicons strokes, radius scale, and motion tokens before extending the system.",
+      "Do preserve the 68px shell, 1440px shared container, stable compact search strip, summary-first result story, and conditional history/protocol topology.",
+      "Do keep English and Simplified Chinese layouts resilient to wrapping, long domains, long registrar names, and horizontal tab overflow.",
+      "Do retain visible focus, skip navigation, semantic labels, live loading/error announcements, 44px touch targets, and reduced-motion parity in every extension.",
+      "Do make new status colors prove a distinct semantic need and provide both light- and dark-mode behavior."
+    ],
+    "donts": [
+      "Don't turn idle space into a headline, helper paragraph, example queries, feature cards, metrics, fake history, result previews, protocol marketing, or an always-on dashboard.",
+      "Don't add accent colors, gradients, decorative grids, glass cards, imagery, customer proof, or new type/icon families that are absent from the shipped world.",
+      "Don't use blue for multiple competing actions or emerald for neutral decoration.",
+      "Don't make cards pill-shaped, mix arbitrary radii, stack redundant enclosures, or use strong shadows on resting information.",
+      "Don't expose WHOIS comparison when runtime evidence says it is unavailable, or enable detail tabs when their data is absent.",
+      "Don't ship hover-only actions, unlabeled icon buttons, color-only state, focus suppression, motion-dependent feedback, or sub-44px mobile targets."
+    ]
+  }
+}
